@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+MetaTrader5
+pydantic
+requests
+python-dotenv
+google-generativeai
+langchain
+langchain-openai
+openai
+pandas
+numpy
+websockets
+aiofiles
+pywin32
+wmi
+# Add others as needed

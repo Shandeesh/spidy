@@ -1,0 +1,3015 @@
+[17:56:36] INFO: MT5 Connected. Account: 5042587631
+[17:56:36] INFO: HFT Scalper Engine Started (Interval: 1s)
+[17:56:36] INFO: Profit Guardian (ATR Trailing) Started.
+[17:56:42] INFO: MT5 Connected. Account: 5042587631
+[18:02:14] INFO: MT5 Connected. Account: 5042587631
+[18:02:14] INFO: HFT Scalper Engine Started (Interval: 1s)
+[18:02:14] INFO: Profit Guardian (ATR Trailing) Started.
+[18:02:31] INFO: MT5 Connected. Account: 5042587631
+[18:03:10] SETTINGS: Auto-Secure ENABLED (Target: $10.0)
+[18:03:22] COMMAND: Starting Close All (Profitable Only: True)...
+[18:03:22] CLOSING: Ticket 54391147159 (Profit: 0.13)
+[18:03:22] SUCCESS: Closed Position 54391147159 @ 1.17113
+[18:03:22] COMMAND: Close All Completed. Total Closed: 1
+[18:03:32] COMMAND: Starting Close All (Profitable Only: True)...
+[18:03:32] COMMAND: Close All Completed. Total Closed: 0
+[18:03:39] ERROR: Position 54391147159 not found to close.
+[18:03:47] COMMAND: Starting Close All (Profitable Only: True)...
+[18:03:47] COMMAND: Close All Completed. Total Closed: 0
+[18:03:59] INFO: MT5 Connected. Account: 5042587631
+[18:09:35] INFO: Auto-Trading DISABLED
+[18:09:39] INFO: Auto-Trading ENABLED
+[18:12:24] INFO: MT5 Connected. Account: 5042587631
+[18:12:24] INFO: HFT Scalper Engine Started (Interval: 1s)
+[18:12:24] INFO: Profit Guardian (ATR Trailing) Started.
+[18:13:37] INFO: MT5 Connected. Account: 5042587631
+[18:20:48] TRADE: Received Manual ORDER on EURUSD (Vol: 0.01)
+[18:20:48] TRADE: Received Manual ORDER on EURUSD (Vol: 0.01)
+[18:20:48] SUCCESS: Auto-Trade ORDER Filled @ 1.17119
+[18:24:02] COMMAND: Starting Close All (Profitable Only: True)...
+[18:24:02] CLOSING: Ticket 54392097731 (Profit: 0.06)
+[18:24:03] SUCCESS: Closed Position 54392097731 @ 1.17113
+[18:24:03] COMMAND: Close All Completed. Total Closed: 1
+[18:24:21] INFO: Auto-Trading DISABLED
+[18:24:23] INFO: Auto-Trading ENABLED
+[18:28:26] INFO: MT5 Connected. Account: 5042587631
+[18:28:26] INFO: HFT Scalper Engine Started (Interval: 1s)
+[18:28:26] INFO: Profit Guardian (ATR Trailing) Started.
+[18:28:43] INFO: Standard Initialize failed ((-6, 'Terminal: Authorization failed')), attempting specific paths...
+[18:28:43] INFO: Found MT5 at C:\Program Files\MetaTrader 5\terminal64.exe, launching...
+[18:28:43] INFO: Standard Initialize failed ((-6, 'Terminal: Authorization failed')). Attempting FORCE LAUNCH via subprocess...
+[18:28:43] INFO: Process launched. Waiting 15s for MT5 to warm up...
+[18:28:58] ERROR: Force Launch failed: Still failed after launch: (-6, 'Terminal: Authorization failed')
+[18:29:37] INFO: Standard Initialize failed ((-6, 'Terminal: Authorization failed')), attempting specific paths...
+[18:29:37] INFO: Found MT5 at C:\Program Files\MetaTrader 5\terminal64.exe, launching...
+[18:29:37] INFO: Standard Initialize failed ((-6, 'Terminal: Authorization failed')). Attempting FORCE LAUNCH via subprocess...
+[18:29:37] INFO: Process launched. Waiting 15s for MT5 to warm up...
+[18:29:52] ERROR: Force Launch failed: Still failed after launch: (-6, 'Terminal: Authorization failed')
+[18:34:43] INFO: Smart Connect: Already connected to MT5.
+[18:34:43] INFO: MT5 Connected. Account: 5042587631
+[18:34:43] INFO: HFT Scalper Engine Started (Interval: 1s)
+[18:34:43] INFO: Profit Guardian (ATR Trailing) Started.
+[18:34:50] INFO: Smart Connect: Already connected to MT5.
+[18:34:50] INFO: MT5 Connected. Account: 5042587631
+[18:35:17] INFO: Auto-Trading DISABLED
+[18:35:18] INFO: Auto-Trading ENABLED
+[18:35:22] TRADE: Received Manual SELL on EURUSD (Vol: 0.01)
+[18:35:22] TRADE: Received Manual SELL on EURUSD (Vol: 0.01)
+[18:35:22] SUCCESS: Auto-Trade SELL Filled @ 1.17083
+[18:35:42] TRADE: Received Manual BUY on EURUSD (Vol: 0.01)
+[18:35:42] TRADE: Received Manual BUY on EURUSD (Vol: 0.01)
+[18:35:42] SUCCESS: Auto-Trade BUY Filled @ 1.17084
+[18:36:39] INFO: Auto-Trading DISABLED
+[18:36:41] INFO: Auto-Trading ENABLED
+[18:36:48] SUCCESS: Closed Position 54392229595 @ 1.17096
+[18:36:53] COMMAND: Starting Close All (Profitable Only: True)...
+[18:36:53] COMMAND: Close All Completed. Total Closed: 0
+[18:37:04] SUCCESS: Closed Position 54392220947 @ 1.17105
+[20:57:26] INFO: Standard Initialize failed ((-10005, 'IPC timeout')), attempting specific paths...
+[20:57:26] INFO: Found MT5 at C:\Program Files\MetaTrader 5\terminal64.exe, launching...
+[07:23:40] INFO: Smart Connect: Already connected to MT5.
+[07:23:41] INFO: MT5 Connected. Account: 5042587631
+[07:23:41] INFO: HFT Scalper Engine Started (Interval: 1s)
+[07:23:41] INFO: Profit Guardian (ATR Trailing) Started.
+[07:23:47] INFO: Smart Connect: Already connected to MT5.
+[07:23:47] INFO: MT5 Connected. Account: 5042587631
+[10:12:05] INFO: Smart Connect: Already connected to MT5.
+[10:12:05] INFO: MT5 Connected. Account: 5042587631
+[10:12:05] INFO: HFT Scalper Engine Started (Interval: 1s)
+[10:12:05] INFO: Profit Guardian (ATR Trailing) Started.
+[10:12:07] INFO: Smart Connect: Already connected to MT5.
+[10:12:07] INFO: MT5 Connected. Account: 5042587631
+[10:23:10] INFO: Smart Connect: Already connected to MT5.
+[10:23:10] INFO: MT5 Connected. Account: 5042587631
+[10:23:10] INFO: HFT Scalper Engine Started (Interval: 1s)
+[10:23:10] INFO: Profit Guardian (ATR Trailing) Started.
+[10:23:24] INFO: Smart Connect: Already connected to MT5.
+[10:23:24] INFO: MT5 Connected. Account: 5042587631
+[10:30:05] INFO: Smart Connect: Already connected to MT5.
+[10:30:05] INFO: MT5 Connected. Account: 5042587631
+[10:30:05] INFO: HFT Scalper Engine Started (Interval: 1s)
+[10:30:05] INFO: Profit Guardian (ATR Trailing) Started.
+[10:31:28] INFO: Smart Connect: Already connected to MT5.
+[10:31:28] INFO: MT5 Connected. Account: 5042587631
+[10:31:28] INFO: HFT Scalper Engine Started (Interval: 1s)
+[10:31:28] INFO: Profit Guardian (ATR Trailing) Started.
+[10:31:40] INFO: Smart Connect: Already connected to MT5.
+[10:31:40] INFO: MT5 Connected. Account: 5042587631
+[10:31:55] SETTINGS: Auto-Secure ENABLED (Target: $10.0)
+[10:32:04] INFO: Smart Connect: Already connected to MT5.
+[10:32:04] INFO: MT5 Connected. Account: 5042587631
+[18:42:59] INFO: Smart Connect: Already connected to MT5.
+[18:42:59] INFO: MT5 Connected. Account: 5042587631
+[18:42:59] INFO: HFT Scalper Engine Started (Interval: 1s)
+[18:42:59] INFO: Profit Guardian (ATR Trailing) Started.
+[18:43:00] INFO: Smart Connect: Already connected to MT5.
+[18:43:00] INFO: MT5 Connected. Account: 5042587631
+[18:54:25] SETTINGS: Auto-Secure ENABLED (Target: $10.0)
+[19:01:20] INFO: Smart Connect: Already connected to MT5.
+[19:01:20] INFO: MT5 Connected. Account: 5042587631
+[19:01:40] INFO: Smart Connect: Already connected to MT5.
+[19:01:40] INFO: MT5 Connected. Account: 5042587631
+[19:01:40] INFO: HFT Scalper Engine Started (Interval: 1s)
+[19:01:40] INFO: Profit Guardian (ATR Trailing) Started.
+[19:01:48] INFO: Smart Connect: Already connected to MT5.
+[19:01:48] INFO: MT5 Connected. Account: 5042587631
+[19:01:58] SETTINGS: Auto-Secure ENABLED (Target: $10.0)
+[19:02:18] INFO: Smart Connect: Already connected to MT5.
+[19:02:19] INFO: MT5 Connected. Account: 5042587631
+[19:02:19] INFO: HFT Scalper Engine Started (Interval: 1s)
+[19:02:19] INFO: Profit Guardian (ATR Trailing) Started.
+[19:02:25] INFO: Smart Connect: Already connected to MT5.
+[19:02:25] INFO: MT5 Connected. Account: 5042587631
+[19:02:39] SETTINGS: Auto-Secure ENABLED (Target: $10.0)
+[19:06:15] INFO: Smart Connect: Already connected to MT5.
+[19:06:15] INFO: MT5 Connected. Account: 5042587631
+[19:06:15] INFO: HFT Scalper Engine Started (Interval: 1s)
+[19:06:15] INFO: Profit Guardian (ATR Trailing) Started.
+[19:06:22] INFO: Smart Connect: Already connected to MT5.
+[19:06:22] INFO: MT5 Connected. Account: 5042587631
+[19:06:29] SETTINGS: Auto-Secure ENABLED (Target: $10.0)
+[19:06:50] INFO: Smart Connect: Already connected to MT5.
+[19:06:50] INFO: MT5 Connected. Account: 5042587631
+[19:06:50] INFO: HFT Scalper Engine Started (Interval: 1s)
+[19:06:50] INFO: Profit Guardian (ATR Trailing) Started.
+[19:06:56] INFO: Smart Connect: Already connected to MT5.
+[19:06:56] INFO: MT5 Connected. Account: 5042587631
+[19:09:02] SETTINGS: Auto-Secure ENABLED (Target: $10.0)
+[19:09:17] INFO: Smart Connect: Already connected to MT5.
+[19:09:17] INFO: MT5 Connected. Account: 5042587631
+[19:09:17] INFO: HFT Scalper Engine Started (Interval: 1s)
+[19:09:17] INFO: Profit Guardian (ATR Trailing) Started.
+[19:09:24] INFO: Smart Connect: Already connected to MT5.
+[19:09:24] INFO: MT5 Connected. Account: 5042587631
+[10:41:11] INFO: Smart Connect: Already connected to MT5.
+[10:41:11] INFO: MT5 Connected. Account: 5042587631
+[10:41:11] INFO: HFT Scalper Engine Started (Interval: 1s)
+[10:41:11] INFO: Profit Guardian (ATR Trailing) Started.
+[10:41:18] INFO: Smart Connect: Already connected to MT5.
+[10:41:18] INFO: MT5 Connected. Account: 5042587631
+[10:45:22] INFO: Smart Connect: Already connected to MT5.
+[10:45:22] INFO: MT5 Connected. Account: 5042587631
+[10:45:22] INFO: HFT Scalper Engine Started (Interval: 1s)
+[10:45:22] INFO: Profit Guardian (ATR Trailing) Started.
+[10:45:30] INFO: Smart Connect: Already connected to MT5.
+[10:45:31] INFO: MT5 Connected. Account: 5042587631
+[21:57:36] INFO: Smart Connect: Already connected to MT5.
+[21:57:36] INFO: MT5 Connected. Account: 5042587631
+[21:57:36] INFO: HFT Scalper Engine Started (Interval: 1s)
+[21:57:36] INFO: Profit Guardian (ATR Trailing) Started.
+[21:57:37] INFO: Smart Connect: Already connected to MT5.
+[21:57:37] INFO: MT5 Connected. Account: 5042587631
+[21:57:53] INFO: Auto-Trading DISABLED
+[21:57:55] INFO: Auto-Trading ENABLED
+[22:07:06] INFO: Smart Connect: Already connected to MT5.
+[22:07:06] INFO: MT5 Connected. Account: 5042587631
+[22:07:06] INFO: HFT Scalper Engine Started (Interval: 1s)
+[22:07:06] SMART CONNECT: Found 6 valid symbols for this broker.
+[22:07:06] INFO: Profit Guardian (ATR Trailing) Started.
+[22:07:56] INFO: Smart Connect: Already connected to MT5.
+[22:07:56] INFO: MT5 Connected. Account: 5042587631
+[22:07:56] INFO: Smart Connect: Already connected to MT5.
+[22:07:56] INFO: MT5 Connected. Account: 5042587631
+[22:07:56] INFO: Smart Connect: Already connected to MT5.
+[22:07:57] INFO: MT5 Connected. Account: 5042587631
+[22:07:57] INFO: Smart Connect: Already connected to MT5.
+[22:07:57] INFO: MT5 Connected. Account: 5042587631
+[22:08:11] SETTINGS: Auto-Secure ENABLED (Target: $10.0)
+[22:08:17] SETTINGS: Auto-Secure DISABLED (Target: $10.0)
+[22:08:25] SETTINGS: Auto-Secure DISABLED (Target: $10.0)
+[22:08:25] SETTINGS: Auto-Secure ENABLED (Target: $10.0)
+[22:08:41] SETTINGS: Auto-Secure ENABLED (Target: $100000.0)
+[22:08:41] SETTINGS: Auto-Secure DISABLED (Target: $100000.0)
+[22:08:46] SETTINGS: Auto-Secure ENABLED (Target: $100000.0)
+[22:13:59] INFO: Smart Connect: Already connected to MT5.
+[22:13:59] INFO: MT5 Connected. Account: 5042587631
+[22:13:59] INFO: HFT Scalper Engine Started (Interval: 1s)
+[22:13:59] SMART CONNECT: Found 6 valid symbols for this broker.
+[22:13:59] INFO: Profit Guardian (ATR Trailing) Started.
+[22:14:10] INFO: Smart Connect: Already connected to MT5.
+[22:14:10] INFO: MT5 Connected. Account: 5042587631
+[22:14:48] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 14.58)
+[22:15:38] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 22.47)
+[22:16:28] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 29.41)
+[22:17:18] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 27.78)
+[22:18:08] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 29.76)
+[22:18:58] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 27.78)
+[22:19:48] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 25.51)
+[22:20:38] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 20.18)
+[22:21:25] SETTINGS: Auto-Secure ENABLED (Target: $10.0)
+[22:21:27] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 31.46)
+[22:22:17] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 26.19)
+[22:23:07] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 25.27)
+[22:23:57] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 32.0)
+[22:24:47] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 31.07)
+[22:25:37] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 33.33)
+[22:26:27] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 29.41)
+[22:27:17] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 29.41)
+[22:28:07] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 33.75)
+[22:28:57] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 34.62)
+[22:29:47] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 23.88)
+[22:30:37] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 48.19)
+[22:31:27] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 59.79)
+[22:32:17] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 58.7)
+[22:33:06] SIGNAL: SELL EURUSD (RSI 74.3, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[22:33:07] SUCCESS: Auto-Trade SELL Filled @ 1.17533
+[22:33:07] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 74.32)
+[22:33:08] SIGNAL: SELL EURUSD (RSI 73.3, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[22:33:09] SUCCESS: Auto-Trade SELL Filled @ 1.17532
+[22:33:10] SIGNAL: SELL EURUSD (RSI 74.3, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[22:33:11] SUCCESS: Auto-Trade SELL Filled @ 1.17533
+[22:33:13] SIGNAL: SELL EURUSD (RSI 74.3, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[22:33:14] SUCCESS: Auto-Trade SELL Filled @ 1.17533
+[22:33:15] SIGNAL: SELL EURUSD (RSI 73.3, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[22:33:16] SUCCESS: Auto-Trade SELL Filled @ 1.17532
+[22:33:18] SIGNAL: SELL EURUSD (RSI 75.0, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[22:33:18] SUCCESS: Auto-Trade SELL Filled @ 1.17535
+[22:33:20] SIGNAL: SELL EURUSD (RSI 73.3, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[22:33:21] SUCCESS: Auto-Trade SELL Filled @ 1.17532
+[22:33:23] SIGNAL: SELL EURUSD (RSI 73.3, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[22:33:23] SUCCESS: Auto-Trade SELL Filled @ 1.17532
+[22:33:25] SIGNAL: SELL EURUSD (RSI 72.4, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[22:33:26] SUCCESS: Auto-Trade SELL Filled @ 1.17531
+[22:33:28] SIGNAL: SELL EURUSD (RSI 72.4, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[22:33:28] SUCCESS: Auto-Trade SELL Filled @ 1.17531
+[22:33:31] SIGNAL: SELL EURUSD (RSI 72.4, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[22:33:31] SUCCESS: Auto-Trade SELL Filled @ 1.17531
+[22:33:34] SIGNAL: SELL EURUSD (RSI 71.4, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[22:33:34] SUCCESS: Auto-Trade SELL Filled @ 1.1753
+[22:33:37] SIGNAL: SELL EURUSD (RSI 73.3, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[22:33:37] SUCCESS: Auto-Trade SELL Filled @ 1.17532
+[08:05:21] INFO: Smart Connect: Already connected to MT5.
+[08:05:21] INFO: MT5 Connected. Account: 5042587631
+[08:05:21] INFO: HFT Scalper Engine Started (Interval: 1s)
+[08:05:21] SMART CONNECT: Found 6 valid symbols for this broker.
+[08:05:21] INFO: Profit Guardian (ATR Trailing) Started.
+[08:05:26] INFO: Smart Connect: Already connected to MT5.
+[08:05:26] INFO: MT5 Connected. Account: 5042587631
+[08:06:11] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 50.0)
+[08:07:01] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 50.0)
+[08:08:00] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 53.7)
+[08:08:50] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 70.18)
+[08:09:40] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 61.29)
+[08:10:30] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 68.97)
+[08:11:20] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 75.44)
+[08:12:10] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 72.88)
+[08:13:00] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 75.86)
+[08:13:50] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 68.63)
+[08:14:39] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 66.67)
+[08:15:29] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 65.31)
+[08:16:19] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 77.19)
+[08:17:09] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 76.79)
+[08:17:59] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 80.0)
+[08:18:35] INFO: Smart Connect: Already connected to MT5.
+[08:18:35] INFO: MT5 Connected. Account: 5042587631
+[08:18:35] INFO: HFT Scalper Engine Started (Interval: 1s)
+[08:18:35] SMART CONNECT: Found 6 valid symbols for this broker.
+[08:18:35] INFO: Profit Guardian (ATR Trailing) Started.
+[08:18:46] INFO: Smart Connect: Already connected to MT5.
+[08:18:46] INFO: MT5 Connected. Account: 5042587631
+[08:19:19] SETTINGS: Auto-Secure ENABLED (Target: $10.0)
+[08:19:24] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 65.91)
+[08:20:14] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 71.76)
+[08:21:04] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 76.34)
+[08:21:54] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 75.28)
+[08:22:44] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 72.29)
+[08:23:34] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 73.56)
+[08:24:24] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 68.13)
+[08:25:07] SIGNAL: BUY XAUUSD (RSI 25.8, Trend BULLISH, Sent NEUTRAL) Vol: 0.01
+[08:25:07] SUCCESS: Auto-Trade BUY Filled @ 4490.87
+[08:25:09] SIGNAL: BUY XAUUSD (RSI 26.7, Trend BULLISH, Sent NEUTRAL) Vol: 0.01
+[08:25:09] SUCCESS: Auto-Trade BUY Filled @ 4490.96
+[08:25:11] SIGNAL: BUY XAUUSD (RSI 27.2, Trend BULLISH, Sent NEUTRAL) Vol: 0.01
+[08:25:11] SUCCESS: Auto-Trade BUY Filled @ 4491.03
+[08:25:13] SIGNAL: BUY XAUUSD (RSI 26.7, Trend BULLISH, Sent NEUTRAL) Vol: 0.01
+[08:25:13] SUCCESS: Auto-Trade BUY Filled @ 4490.93
+[08:25:15] SIGNAL: BUY XAUUSD (RSI 28.0, Trend BULLISH, Sent NEUTRAL) Vol: 0.01
+[08:25:15] SUCCESS: Auto-Trade BUY Filled @ 4491.12
+[08:25:16] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 68.18)
+[09:55:37] INFO: Smart Connect: Already connected to MT5.
+[09:55:37] INFO: MT5 Connected. Account: 5042587631
+[09:55:37] INFO: HFT Scalper Engine Started (Interval: 1s)
+[09:55:37] SMART CONNECT: Found 6 valid symbols for this broker.
+[09:55:37] INFO: Profit Guardian (ATR Trailing) Started.
+[09:55:38] INFO: Smart Connect: Already connected to MT5.
+[09:55:38] INFO: MT5 Connected. Account: 5042587631
+[09:56:26] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 43.94)
+[09:57:16] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 41.54)
+[09:58:06] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 43.94)
+[09:58:09] SIGNAL: SELL USDJPY (RSI 70.1, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[09:58:10] SUCCESS: Auto-Trade SELL Filled @ 156.058
+[09:58:44] SIGNAL: SELL USDJPY (RSI 70.2, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[09:58:46] SUCCESS: Auto-Trade SELL Filled @ 156.059
+[09:59:00] SIGNAL: SELL USDJPY (RSI 70.6, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[09:59:00] SUCCESS: Auto-Trade SELL Filled @ 156.061
+[09:59:00] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 38.33)
+[09:59:02] SIGNAL: SELL USDJPY (RSI 70.4, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[09:59:02] SUCCESS: Auto-Trade SELL Filled @ 156.06
+[09:59:04] SIGNAL: SELL USDJPY (RSI 70.4, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[09:59:04] SUCCESS: Auto-Trade SELL Filled @ 156.06
+[09:59:06] SIGNAL: SELL USDJPY (RSI 70.4, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[09:59:06] SUCCESS: Auto-Trade SELL Filled @ 156.06
+[10:11:46] INFO: Smart Connect: Already connected to MT5.
+[10:11:46] INFO: MT5 Connected. Account: 5042587631
+[10:11:46] INFO: HFT Scalper Engine Started (Interval: 1s)
+[10:11:46] SMART CONNECT: Found 6 valid symbols for this broker.
+[10:11:46] INFO: Profit Guardian (ATR Trailing) Started.
+[10:11:55] INFO: Smart Connect: Already connected to MT5.
+[10:11:55] INFO: MT5 Connected. Account: 5042587631
+[15:07:59] INFO: Smart Connect: Already connected to MT5.
+[15:07:59] INFO: MT5 Connected. Account: 5042587631
+[15:07:59] INFO: HFT Scalper Engine Started (Interval: 1s)
+[15:07:59] SMART CONNECT: Found 6 valid symbols for this broker.
+[15:07:59] INFO: Profit Guardian (ATR Trailing) Started.
+[15:08:09] INFO: Smart Connect: Already connected to MT5.
+[15:08:09] INFO: MT5 Connected. Account: 5042587631
+[15:08:48] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 55.88)
+[15:09:38] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 66.45)
+[15:10:28] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 59.18)
+[15:11:18] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 60.4)
+[15:12:08] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 63.04)
+[15:12:32] SIGNAL: SELL GBPUSD (RSI 70.0, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[15:12:32] SUCCESS: Auto-Trade SELL Filled @ 1.3508
+[15:12:43] SIGNAL: SELL GBPUSD (RSI 70.7, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[15:12:43] SUCCESS: Auto-Trade SELL Filled @ 1.35084
+[15:12:45] SIGNAL: SELL GBPUSD (RSI 70.7, Trend BEARISH, Sent NEUTRAL) Vol: 0.01
+[15:12:45] SUCCESS: Auto-Trade SELL Filled @ 1.35084
+[15:12:59] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 69.09)
+[15:13:48] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 65.29)
+[15:14:07] SIGNAL: BUY USDJPY (RSI 27.3, Trend BULLISH, Sent NEUTRAL) Vol: 0.01
+[15:14:07] SUCCESS: Auto-Trade BUY Filled @ 155.875
+[15:14:08] SIGNAL: BUY USDJPY (RSI 28.3, Trend BULLISH, Sent NEUTRAL) Vol: 0.01
+[15:14:09] SUCCESS: Auto-Trade BUY Filled @ 155.879
+[17:21:44] INFO: Smart Connect: Already connected to MT5.
+[17:21:44] INFO: MT5 Connected. Account: 5042587631
+[17:21:44] INFO: HFT Scalper Engine Started (Interval: 1s)
+[17:21:44] SMART CONNECT: Found 6 valid symbols for this broker.
+[17:21:44] INFO: Profit Guardian (ATR Trailing) Started.
+[17:21:54] INFO: Smart Connect: Already connected to MT5.
+[17:21:54] INFO: MT5 Connected. Account: 5042587631
+[17:32:50] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 61.42)
+[17:33:40] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 60.48)
+[17:34:30] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 52.54)
+[17:35:19] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 61.54)
+[17:36:09] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 76.4)
+[17:36:59] SCANNER: Active. Scanned 6 markets. (EURUSD RSI: 71.58)
+[17:37:07] SIGNAL: BUY XAUUSD (RSI 24.2, Trend BULLISH, Sent NEUTRAL) Vol: 0.01
+[17:37:07] SUCCESS: Auto-Trade BUY Filled @ 4488.14
+[17:37:09] SIGNAL: BUY XAUUSD (RSI 24.4, Trend BULLISH, Sent NEUTRAL) Vol: 0.01
+[17:37:09] SUCCESS: Auto-Trade BUY Filled @ 4488.12
+[17:37:11] SIGNAL: BUY XAUUSD (RSI 24.5, Trend BULLISH, Sent NEUTRAL) Vol: 0.01
+[17:37:11] SUCCESS: Auto-Trade BUY Filled @ 4488.13
+[17:37:12] SIGNAL: BUY XAUUSD (RSI 24.6, Trend BULLISH, Sent NEUTRAL) Vol: 0.01
+[17:37:13] SUCCESS: Auto-Trade BUY Filled @ 4488.13
+[17:37:14] SIGNAL: BUY XAUUSD (RSI 24.7, Trend BULLISH, Sent NEUTRAL) Vol: 0.01
+[17:37:15] SUCCESS: Auto-Trade BUY Filled @ 4488.22
+[17:37:16] SIGNAL: BUY XAUUSD (RSI 24.6, Trend BULLISH, Sent NEUTRAL) Vol: 0.01
+[17:37:17] SUCCESS: Auto-Trade BUY Filled @ 4488.14
+[17:37:18] SIGNAL: BUY XAUUSD (RSI 23.6, Trend BULLISH, Sent NEUTRAL) Vol: 0.01
+[17:37:19] SUCCESS: Auto-Trade BUY Filled @ 4487.9
+[17:37:20] SIGNAL: BUY XAUUSD (RSI 23.1, Trend BULLISH, Sent NEUTRAL) Vol: 0.01
+[17:37:20] SUCCESS: Auto-Trade BUY Filled @ 4487.72
+[17:52:07] INFO: Auto-Trading DISABLED
+[18:01:20] INFO: Smart Connect: Already connected to MT5.
+[18:01:20] INFO: MT5 Connected. Account: 5042587631
+[18:01:20] INFO: Spidy Advanced AI Trader Started (Interval: 1s)
+[18:01:21] SMART CONNECT: Found 6 valid symbols. DXY: DX
+[18:01:21] INFO: Profit Guardian (ATR Trailing) Started.
+[18:01:33] INFO: Smart Connect: Already connected to MT5.
+[18:01:33] INFO: MT5 Connected. Account: 5042587631
+[18:04:25] INFO: Auto-Trading DISABLED
+[18:04:27] INFO: Auto-Trading ENABLED
+[18:07:47] INFO: Smart Connect: Already connected to MT5.
+[18:07:47] INFO: MT5 Connected. Account: 5042587631
+[18:12:08] INFO: Smart Connect: Already connected to MT5.
+[18:12:08] INFO: MT5 Connected. Account: 5042587631
+[18:12:08] INFO: Spidy Advanced AI Trader (General + Soldier) Started
+[18:12:08] SMART CONNECT: Found 6 valid symbols. DXY: DX
+[18:12:08] INFO: Profit Guardian (ATR Trailing) Started.
+[18:12:18] INFO: Smart Connect: Already connected to MT5.
+[18:12:18] INFO: MT5 Connected. Account: 5042587631
+[18:37:04] SETTINGS: Auto-Secure DISABLED (Target: $10.0)
+[18:37:06] SETTINGS: Auto-Secure ENABLED (Target: $10.0)
+[18:37:23] INFO: Smart Connect: Already connected to MT5.
+[18:37:23] INFO: MT5 Connected. Account: 5042587631
+[18:37:23] INFO: Spidy Advanced AI Trader (General + Soldier) Started
+[18:37:23] SMART CONNECT: Found 6 valid symbols. DXY: DX
+[18:37:23] INFO: Profit Guardian (ATR Trailing) Started.
+[18:37:28] INFO: Smart Connect: Already connected to MT5.
+[18:37:28] INFO: MT5 Connected. Account: 5042587631
+[18:39:25] SETTINGS: Auto-Secure ENABLED (Target: $10.0)
+[13:50:15] INFO: Smart Connect: Already connected to MT5.
+[13:50:15] INFO: MT5 Connected. Account: 5042587631
+[13:50:15] INFO: Spidy Advanced AI Trader (General + Soldier) Started
+[13:50:15] SMART CONNECT: Found 6 valid symbols. DXY: DX
+[13:50:15] INFO: Profit Guardian (ATR Trailing) Started.
+[13:50:16] INFO: Smart Connect: Already connected to MT5.
+[13:50:16] INFO: MT5 Connected. Account: 5042587631
+[13:57:05] COMMAND: Starting Close All (Profitable Only: True)...
+[13:57:05] CLOSING: Ticket 54426313211 (Profit: 1.26)
+[13:57:05] SUCCESS: Closed Position 54426313211 @ 4489.4
+[13:57:05] CLOSING: Ticket 54426314036 (Profit: 1.26)
+[13:57:06] SUCCESS: Closed Position 54426314036 @ 4489.38
+[13:57:06] CLOSING: Ticket 54426314735 (Profit: 1.27)
+[13:57:06] SUCCESS: Closed Position 54426314735 @ 4489.4
+[13:57:06] CLOSING: Ticket 54426315245 (Profit: 1.27)
+[13:57:07] SUCCESS: Closed Position 54426315245 @ 4489.55
+[13:57:07] CLOSING: Ticket 54426315940 (Profit: 1.18)
+[13:57:08] SUCCESS: Closed Position 54426315940 @ 4489.37
+[13:57:09] CLOSING: Ticket 54426316448 (Profit: 1.26)
+[13:57:09] SUCCESS: Closed Position 54426316448 @ 4489.35
+[13:57:09] SIGNAL: SELL XAUUSD (RSI 72.2, M15 BEARISH, Vol 0.00154) Lot: 0.01
+[13:57:09] SUCCESS: Auto-Trade SELL Filled @ 4489.35
+[13:57:10] CLOSING: Ticket 54426317167 (Profit: 1.6099999999999999)
+[13:57:10] SUCCESS: Closed Position 54426317167 @ 4489.36
+[13:57:10] CLOSING: Ticket 54426318024 (Profit: 1.92)
+[13:57:10] SUCCESS: Closed Position 54426318024 @ 4489.38
+[13:57:11] COMMAND: Close All Completed. Total Closed: 8
+[13:57:15] SIGNAL: SELL XAUUSD (RSI 70.6, M15 BEARISH, Vol 0.00151) Lot: 0.01
+[13:57:15] SUCCESS: Auto-Trade SELL Filled @ 4489.05
+[13:57:28] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[13:57:37] COMMAND: Starting Close All (Profitable Only: True)...
+[13:57:37] CLOSING: Ticket 54424479448 (Profit: 0.06)
+[13:57:38] SUCCESS: Closed Position 54424479448 @ 1.35074
+[13:57:38] CLOSING: Ticket 54424480779 (Profit: 0.1)
+[13:57:38] SUCCESS: Closed Position 54424480779 @ 1.35074
+[13:57:38] CLOSING: Ticket 54424481525 (Profit: 0.1)
+[13:57:38] SUCCESS: Closed Position 54424481525 @ 1.35074
+[13:57:39] CLOSING: Ticket 54439808518 (Profit: 0.39)
+[13:57:39] SUCCESS: Closed Position 54439808518 @ 4488.89
+[13:57:39] COMMAND: Close All Completed. Total Closed: 4
+[13:57:58] COMMAND: Starting Close All (Profitable Only: True)...
+[13:57:58] CLOSING: Ticket 54439809920 (Profit: 0.65)
+[13:57:59] SUCCESS: Closed Position 54439809920 @ 4488.11
+[13:57:59] COMMAND: Close All Completed. Total Closed: 1
+[13:58:15] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[13:59:02] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[13:59:49] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:00:33] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:01:16] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:02:00] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:02:45] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:03:32] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:04:19] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:05:05] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:05:52] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:06:39] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:07:26] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:08:12] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:08:59] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:09:46] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:10:32] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:11:19] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:12:06] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:12:52] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[14:13:00] SIGNAL: SELL XAUUSD (RSI 71.4, M15 BEARISH, Vol 0.00214) Lot: 0.01
+[14:13:00] SUCCESS: Auto-Trade SELL Filled @ 4491.27
+[14:13:02] SIGNAL: SELL XAUUSD (RSI 71.4, M15 BEARISH, Vol 0.00214) Lot: 0.01
+[14:13:02] SUCCESS: Auto-Trade SELL Filled @ 4491.28
+[14:13:04] SIGNAL: SELL XAUUSD (RSI 71.8, M15 BEARISH, Vol 0.00215) Lot: 0.01
+[14:13:04] SUCCESS: Auto-Trade SELL Filled @ 4491.48
+[14:13:05] SIGNAL: SELL XAUUSD (RSI 71.8, M15 BEARISH, Vol 0.00215) Lot: 0.01
+[14:13:06] SUCCESS: Auto-Trade SELL Filled @ 4491.48
+[14:13:07] SIGNAL: SELL XAUUSD (RSI 71.9, M15 BEARISH, Vol 0.00216) Lot: 0.01
+[14:13:07] SUCCESS: Auto-Trade SELL Filled @ 4491.52
+[14:13:09] SIGNAL: SELL XAUUSD (RSI 71.7, M15 BEARISH, Vol 0.00215) Lot: 0.01
+[14:13:09] SUCCESS: Auto-Trade SELL Filled @ 4491.41
+[14:13:11] SIGNAL: SELL XAUUSD (RSI 72.9, M15 BEARISH, Vol 0.00220) Lot: 0.01
+[14:13:11] SUCCESS: Auto-Trade SELL Filled @ 4492.07
+[14:13:13] SIGNAL: SELL XAUUSD (RSI 73.0, M15 BEARISH, Vol 0.00220) Lot: 0.01
+[14:13:13] SUCCESS: Auto-Trade SELL Filled @ 4492.15
+[14:13:15] SIGNAL: SELL XAUUSD (RSI 72.5, M15 BEARISH, Vol 0.00218) Lot: 0.01
+[14:13:15] SUCCESS: Auto-Trade SELL Filled @ 4491.83
+[14:13:16] SIGNAL: SELL XAUUSD (RSI 72.3, M15 BEARISH, Vol 0.00217) Lot: 0.01
+[14:13:17] SUCCESS: Auto-Trade SELL Filled @ 4491.74
+[14:13:18] SIGNAL: SELL XAUUSD (RSI 72.3, M15 BEARISH, Vol 0.00217) Lot: 0.01
+[14:13:19] SUCCESS: Auto-Trade SELL Filled @ 4491.73
+[14:22:46] COMMAND: Starting Close All (Profitable Only: True)...
+[14:22:46] COMMAND: Close All Completed. Total Closed: 0
+[15:28:39] INFO: Smart Connect: Already connected to MT5.
+[15:28:39] INFO: MT5 Connected. Account: 5042587631
+[15:28:39] INFO: Spidy Advanced AI Trader (General + Soldier) Started
+[15:28:39] SMART CONNECT: Found 6 valid symbols. DXY: DX
+[15:28:39] INFO: Profit Guardian (ATR Trailing) Started.
+[15:28:41] INFO: Smart Connect: Already connected to MT5.
+[15:28:41] INFO: MT5 Connected. Account: 5042587631
+[15:59:43] INFO: Auto-Trading DISABLED
+[16:01:17] COMMAND: Starting Close All (Profitable Only: True)...
+[16:01:17] CLOSING: Ticket 54440015141 (Profit: 0.27)
+[16:01:18] SUCCESS: Closed Position 54440015141 @ 4491.64
+[16:01:18] CLOSING: Ticket 54440015697 (Profit: 0.43)
+[16:01:18] SUCCESS: Closed Position 54440015697 @ 4491.71
+[16:01:18] CLOSING: Ticket 54440016177 (Profit: 0.43)
+[16:01:18] SUCCESS: Closed Position 54440016177 @ 4491.67
+[16:01:18] CLOSING: Ticket 54440016557 (Profit: 0.2)
+[16:01:19] SUCCESS: Closed Position 54440016557 @ 4491.67
+[16:01:19] CLOSING: Ticket 54440017044 (Profit: 0.1)
+[16:01:19] SUCCESS: Closed Position 54440017044 @ 4491.67
+[16:01:19] CLOSING: Ticket 54440017403 (Profit: 0.09)
+[16:01:20] SUCCESS: Closed Position 54440017403 @ 4491.67
+[16:01:20] COMMAND: Close All Completed. Total Closed: 6
+[16:01:29] COMMAND: Starting Close All (Profitable Only: True)...
+[16:01:29] CLOSING: Ticket 54440013970 (Profit: 0.18)
+[16:01:29] SUCCESS: Closed Position 54440013970 @ 4491.3
+[16:01:29] CLOSING: Ticket 54440014286 (Profit: 0.18)
+[16:01:30] SUCCESS: Closed Position 54440014286 @ 4491.49
+[16:01:30] CLOSING: Ticket 54440014623 (Profit: 0.21)
+[16:01:30] SUCCESS: Closed Position 54440014623 @ 4491.06
+[16:01:30] COMMAND: Close All Completed. Total Closed: 3
+[16:01:34] COMMAND: Starting Close All (Profitable Only: True)...
+[16:01:34] CLOSING: Ticket 54440013269 (Profit: 0.3)
+[16:01:34] SUCCESS: Closed Position 54440013269 @ 4490.98
+[16:01:34] CLOSING: Ticket 54440013644 (Profit: 0.3)
+[16:01:35] SUCCESS: Closed Position 54440013644 @ 4490.98
+[16:01:35] COMMAND: Close All Completed. Total Closed: 2
+[16:02:06] TRADE: Received Manual BUY on EURUSD (Vol: 0.01)
+[16:02:06] TRADE: Received Manual BUY on EURUSD (Vol: 0.01)
+[16:02:06] SUCCESS: Auto-Trade BUY Filled @ 1.17986
+[16:02:20] TRADE: Received Manual SELL on EURUSD (Vol: 0.01)
+[16:02:20] TRADE: Received Manual SELL on EURUSD (Vol: 0.01)
+[16:02:20] SUCCESS: Auto-Trade SELL Filled @ 1.17984
+[16:02:39] COMMAND: Starting Close All (Profitable Only: True)...
+[16:02:39] CLOSING: Ticket 54441307573 (Profit: 0.05)
+[16:02:39] SUCCESS: Closed Position 54441307573 @ 1.17991
+[16:02:40] COMMAND: Close All Completed. Total Closed: 1
+[16:03:15] INFO: Auto-Trading ENABLED
+[16:03:37] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:04:14] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:04:51] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:05:27] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:06:04] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:06:41] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:07:18] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:07:55] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:08:32] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:09:10] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:09:50] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:10:30] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:11:10] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:11:50] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:12:30] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:13:11] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:13:51] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:14:31] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:15:12] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:15:57] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:16:43] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:17:30] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:17:59] INFO: Smart Connect: Already connected to MT5.
+[16:17:59] INFO: MT5 Connected. Account: 5042587631
+[16:18:01] SIGNAL: SELL XAUUSD (RSI 71.8, M15 BEARISH, Vol 0.00247) Lot: 0.02
+[16:18:02] SUCCESS: Auto-Trade SELL Filled @ 4488.06
+[16:18:02] INFO: Smart Connect: Already connected to MT5.
+[16:18:02] INFO: MT5 Connected. Account: 5042587631
+[16:18:02] INFO: Spidy HFT Scalper Started (Speed: 0.1s)
+[16:18:02] INFO: Profit Guardian (ATR Trailing) Started.
+[16:18:03] SIGNAL: SELL XAUUSD (RSI 71.8, M15 BEARISH, Vol 0.00246) Lot: 0.02
+[16:18:08] SUCCESS: Auto-Trade SELL Filled @ 4488.05
+[16:18:10] SIGNAL: SELL XAUUSD (RSI 71.6, M15 BEARISH, Vol 0.00246) Lot: 0.02
+[16:18:10] SUCCESS: Auto-Trade SELL Filled @ 4488.02
+[16:18:12] SIGNAL: SELL XAUUSD (RSI 71.6, M15 BEARISH, Vol 0.00246) Lot: 0.02
+[16:18:12] SUCCESS: Auto-Trade SELL Filled @ 4488.02
+[16:18:14] SIGNAL: SELL XAUUSD (RSI 70.4, M15 BEARISH, Vol 0.00246) Lot: 0.02
+[16:18:15] SUCCESS: Auto-Trade SELL Filled @ 4487.88
+[16:18:16] SIGNAL: SELL XAUUSD (RSI 70.2, M15 BEARISH, Vol 0.00246) Lot: 0.02
+[16:18:17] SUCCESS: Auto-Trade SELL Filled @ 4487.85
+[16:18:25] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:19:12] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:19:58] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:20:44] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[16:21:01] SIGNAL: SELL XAUUSD (RSI 71.6, M15 BEARISH, Vol 0.00136) Lot: 0.02
+[16:21:02] SUCCESS: Auto-Trade SELL Filled @ 4487.96
+[16:21:03] SIGNAL: SELL XAUUSD (RSI 73.4, M15 BEARISH, Vol 0.00140) Lot: 0.02
+[16:21:03] SUCCESS: Auto-Trade SELL Filled @ 4488.5
+[16:21:05] SIGNAL: SELL XAUUSD (RSI 73.4, M15 BEARISH, Vol 0.00140) Lot: 0.02
+[16:21:05] SUCCESS: Auto-Trade SELL Filled @ 4488.49
+[19:01:41] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[19:02:21] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[19:03:01] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[19:03:41] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[19:04:21] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[19:05:01] SCANNER V2: Active. 6 mkts. DXY: BEARISH
+[22:08:15] INFO: Smart Connect: Already connected to MT5.
+[22:08:15] INFO: MT5 Connected. Account: 5042587631
+[22:08:15] INFO: Spidy HFT Scalper Started (Speed: 0.1s)
+[22:08:15] INFO: Profit Guardian (ATR Trailing) Started.
+[22:08:16] HFT: SELL XAUUSD (Vel -0.00223%)
+[22:08:16] SUCCESS: Auto-Trade SELL Filled @ 4475.69
+[22:08:17] HFT: SELL XAUUSD (Vel -0.00737%)
+[22:08:17] SUCCESS: Auto-Trade SELL Filled @ 4475.36
+[22:08:18] INFO: Smart Connect: Already connected to MT5.
+[22:08:18] INFO: MT5 Connected. Account: 5042587631
+[22:08:19] HFT: SELL XAUUSD (Vel -0.00134%)
+[22:08:19] SUCCESS: Auto-Trade SELL Filled @ 4475.32
+[22:08:20] HFT: BUY EURUSD (Vel 0.00170%)
+[22:08:20] SUCCESS: Auto-Trade BUY Filled @ 1.178
+[22:08:24] HFT: BUY EURUSD (Vel 0.00170%)
+[22:08:24] SUCCESS: Auto-Trade BUY Filled @ 1.17801
+[22:08:25] HFT: BUY GBPUSD (Vel 0.00148%)
+[22:08:25] SUCCESS: Auto-Trade BUY Filled @ 1.35111
+[22:08:26] HFT: BUY XAUUSD (Vel 0.01251%)
+[22:08:26] SUCCESS: Auto-Trade BUY Filled @ 4475.5
+[22:08:27] HFT: BUY EURUSD (Vel 0.00170%)
+[22:08:27] SUCCESS: Auto-Trade BUY Filled @ 1.17802
+[22:08:30] HFT: SELL GBPUSD (Vel -0.00222%)
+[22:08:30] SUCCESS: Auto-Trade SELL Filled @ 1.35106
+[22:08:31] HFT: SELL GBPUSD (Vel -0.00370%)
+[22:08:31] SUCCESS: Auto-Trade SELL Filled @ 1.35101
+[22:09:00] HFT: BUY XAUUSD (Vel 0.00425%)
+[22:09:00] SUCCESS: Auto-Trade BUY Filled @ 4474.81
+[22:09:01] HFT: BUY XAUUSD (Vel 0.00179%)
+[22:09:01] SUCCESS: Auto-Trade BUY Filled @ 4474.77
+[22:12:52] HFT: BUY GBPUSD (Vel 0.00592%)
+[22:12:52] SUCCESS: Auto-Trade BUY Filled @ 1.3505099999999999
+[22:12:53] HFT: SELL GBPUSD (Vel -0.00148%)
+[22:12:54] SUCCESS: Auto-Trade SELL Filled @ 1.3504800000000001
+[22:13:02] HFT: SELL XAUUSD (Vel -0.00425%)
+[22:13:02] SUCCESS: Auto-Trade SELL Filled @ 4475.18
+[22:13:09] HFT: BUY XAUUSD (Vel 0.00112%)
+[22:13:09] SUCCESS: Auto-Trade BUY Filled @ 4475.97
+[22:13:34] HFT: SELL XAUUSD (Vel -0.00447%)
+[22:13:34] SUCCESS: Auto-Trade SELL Filled @ 4475.85
+[22:13:48] HFT: BUY XAUUSD (Vel 0.00290%)
+[22:13:48] SUCCESS: Auto-Trade BUY Filled @ 4476.76
+[22:14:15] HFT: BUY XAUUSD (Vel 0.00268%)
+[22:14:16] SUCCESS: Auto-Trade BUY Filled @ 4475.61
+[22:15:11] HFT: SELL XAUUSD (Vel -0.01006%)
+[22:15:12] SUCCESS: Auto-Trade SELL Filled @ 4474.86
+[22:15:30] HFT: SELL XAUUSD (Vel -0.00559%)
+[22:15:30] SUCCESS: Auto-Trade SELL Filled @ 4473.67
+[22:16:22] HFT: BUY XAUUSD (Vel 0.00335%)
+[22:16:22] SUCCESS: Auto-Trade BUY Filled @ 4473.3
+[22:16:33] HFT: SELL GBPUSD (Vel -0.00222%)
+[22:16:33] SUCCESS: Auto-Trade SELL Filled @ 1.34989
+[22:16:34] HFT: BUY XAUUSD (Vel 0.01565%)
+[22:16:34] SUCCESS: Auto-Trade BUY Filled @ 4474.01
+[22:25:48] HFT: SELL XAUUSD (Vel -0.00514%)
+[22:25:48] SUCCESS: Auto-Trade SELL Filled @ 4474.13
+[22:27:37] HFT: SELL XAUUSD (Vel -0.00134%)
+[22:27:49] SUCCESS: Auto-Trade SELL Filled @ 4476.49
+[22:28:08] HFT: SELL XAUUSD (Vel -0.00112%)
+[22:28:08] SUCCESS: Auto-Trade SELL Filled @ 4477.36
+[22:30:08] HFT: BUY XAUUSD (Vel 0.00290%)
+[22:30:08] SUCCESS: Auto-Trade BUY Filled @ 4475.89
+[22:30:09] HFT: BUY XAUUSD (Vel 0.00670%)
+[22:30:09] SUCCESS: Auto-Trade BUY Filled @ 4476.22
+[22:30:48] HFT: BUY XAUUSD (Vel 0.00201%)
+[22:30:48] SUCCESS: Auto-Trade BUY Filled @ 4476.9
+[22:30:49] HFT: BUY XAUUSD (Vel 0.00179%)
+[22:30:49] SUCCESS: Auto-Trade BUY Filled @ 4477.09
+[22:31:29] HFT: SELL XAUUSD (Vel -0.00112%)
+[22:31:29] SUCCESS: Auto-Trade SELL Filled @ 4477.55
+[22:31:30] HFT: SELL XAUUSD (Vel -0.00201%)
+[22:31:30] SUCCESS: Auto-Trade SELL Filled @ 4477.52
+[22:32:03] HFT: SELL XAUUSD (Vel -0.00246%)
+[22:32:03] SUCCESS: Auto-Trade SELL Filled @ 4476.79
+[22:32:04] HFT: BUY XAUUSD (Vel 0.00447%)
+[22:32:04] SUCCESS: Auto-Trade BUY Filled @ 4477.16
+[22:32:50] HFT: BUY XAUUSD (Vel 0.01005%)
+[22:32:51] SUCCESS: Auto-Trade BUY Filled @ 4478.43
+[22:35:06] HFT: BUY XAUUSD (Vel 0.00313%)
+[22:35:07] SUCCESS: Auto-Trade BUY Filled @ 4479.24
+[22:35:55] HFT: BUY XAUUSD (Vel 0.00179%)
+[22:35:56] SUCCESS: Auto-Trade BUY Filled @ 4479.96
+[22:36:56] HFT: BUY XAUUSD (Vel 0.03125%)
+[22:37:03] SUCCESS: Auto-Trade BUY Filled @ 4482.17
+[22:38:31] HFT: SELL XAUUSD (Vel -0.01271%)
+[22:38:36] SUCCESS: Auto-Trade SELL Filled @ 4482.98
+[22:45:17] HFT: SELL XAUUSD (Vel -0.00268%)
+[22:45:17] SUCCESS: Auto-Trade SELL Filled @ 4482.05
+[22:46:37] INFO: Smart Connect: Already connected to MT5.
+[22:46:37] INFO: MT5 Connected. Account: 5042587631
+[22:46:37] INFO: Spidy HFT Scalper Started (Speed: 0.1s)
+[22:46:37] INFO: Profit Guardian (ATR Trailing) Started.
+[22:46:49] INFO: Smart Connect: Already connected to MT5.
+[22:46:49] INFO: MT5 Connected. Account: 5042587631
+[08:12:18] INFO: Smart Connect: Already connected to MT5.
+[08:12:18] INFO: MT5 Connected. Account: 5042587631
+[08:12:18] INFO: Spidy HFT Scalper Started (Speed: 0.1s)
+[08:12:18] INFO: Profit Guardian (ATR Trailing) Started.
+[08:12:18] BREAKING NEWS: Market Sentiment shifted to BULLISH
+[08:12:27] INFO: Smart Connect: Already connected to MT5.
+[08:12:27] INFO: MT5 Connected. Account: 5042587631
+[08:17:45] ERROR: Close Failed: No prices (10021)
+[08:17:57] COMMAND: Starting Close All (Profitable Only: True)...
+[08:17:57] CLOSING: Ticket 54447969977 (Profit: 2.65)
+[08:18:00] ERROR: Close Failed: No prices (10021)
+[08:18:00] COMMAND: Close All Completed. Total Closed: 0
+[08:18:37] INFO: Smart Connect: Already connected to MT5.
+[08:18:37] INFO: MT5 Connected. Account: 5042587631
+[08:18:37] INFO: Spidy HFT Scalper Started (Speed: 0.1s)
+[08:18:37] INFO: Profit Guardian (ATR Trailing) Started.
+[08:18:44] INFO: Smart Connect: Already connected to MT5.
+[08:18:44] INFO: MT5 Connected. Account: 5042587631
+[14:30:02] INFO: Smart Connect: Already connected to MT5.
+[14:30:03] INFO: MT5 Connected. Account: 5042587631
+[14:30:03] INFO: Spidy HFT Scalper Started (Speed: 0.1s)
+[14:30:03] INFO: Profit Guardian (ATR Trailing) Started.
+[14:30:29] INFO: Smart Connect: Already connected to MT5.
+[14:30:29] INFO: MT5 Connected. Account: 5042587631
+[14:59:03] BREAKING NEWS: Market Sentiment shifted to BULLISH
+[15:03:56] INFO: Smart Connect: Already connected to MT5.
+[15:03:57] INFO: MT5 Connected. Account: 5042587631
+[15:03:57] INFO: Spidy HFT Scalper Started (Speed: 0.1s)
+[15:03:57] INFO: Profit Guardian (ATR Trailing) Started.
+[15:05:26] COMMAND: Starting Close All (Profitable Only: True)...
+[15:05:26] CLOSING: Ticket 54447519600 (Profit: 1.3900000000000001)
+[15:05:26] SUCCESS: Closed Position 54447519600 @ 1.3485
+[15:05:26] COMMAND: Close All Completed. Total Closed: 1
+[15:05:29] HFT: BUY GBPUSD (Vel 0.00148%)
+[15:05:29] SUCCESS: Auto-Trade BUY Filled @ 1.34844
+[15:59:04] BREAKING NEWS: Market Sentiment shifted to BEARISH
+[16:02:04] BREAKING NEWS: Market Sentiment shifted to BULLISH
+[16:04:04] BREAKING NEWS: Market Sentiment shifted to BEARISH
+[16:05:00] SUCCESS: Closed Position 54447458343 @ 1.34915
+[16:05:07] HFT: SELL GBPUSD (Vel -0.00148%)
+[16:05:07] SUCCESS: Auto-Trade SELL Filled @ 1.34913
+[16:05:08] SUCCESS: Closed Position 54454601836 @ 1.34915
+[16:05:09] HFT: SELL GBPUSD (Vel -0.00222%)
+[16:05:09] SUCCESS: Auto-Trade SELL Filled @ 1.34912
+[16:08:04] BREAKING NEWS: Market Sentiment shifted to NEUTRAL
+[16:16:04] BREAKING NEWS: Market Sentiment shifted to BEARISH
+[16:18:04] BREAKING NEWS: Market Sentiment shifted to NEUTRAL
+[16:23:04] BREAKING NEWS: Market Sentiment shifted to BULLISH
+[16:25:04] BREAKING NEWS: Market Sentiment shifted to BEARISH
+[16:28:04] BREAKING NEWS: Market Sentiment shifted to BULLISH
+[16:35:04] BREAKING NEWS: Market Sentiment shifted to BEARISH
+[16:45:04] BREAKING NEWS: Market Sentiment shifted to NEUTRAL
+[16:53:04] BREAKING NEWS: Market Sentiment shifted to BULLISH
+[16:53:59] COMMAND: Starting Close All (Profitable Only: True)...
+[16:53:59] CLOSING: Ticket 54447392740 (Profit: 0.02)
+[16:54:00] SUCCESS: Closed Position 54447392740 @ 1.17803
+[16:54:00] CLOSING: Ticket 54447394980 (Profit: 0.01)
+[16:54:00] SUCCESS: Closed Position 54447394980 @ 1.17803
+[16:54:00] COMMAND: Close All Completed. Total Closed: 2
+[16:54:15] HFT: BUY EURUSD (Vel 0.00255%)
+[16:54:15] SUCCESS: Auto-Trade BUY Filled @ 1.17805
+[16:54:30] HFT: BUY EURUSD (Vel 0.00170%)
+[16:54:31] SUCCESS: Auto-Trade BUY Filled @ 1.1781
+[16:55:35] COMMAND: Starting Close All (Profitable Only: True)...
+[16:55:35] CLOSING: Ticket 54447393842 (Profit: 0.17)
+[16:55:35] SUCCESS: Closed Position 54447393842 @ 1.1782
+[16:55:36] CLOSING: Ticket 54456114934 (Profit: 0.24)
+[16:55:36] SUCCESS: Closed Position 54456114934 @ 1.17821
+[16:55:36] CLOSING: Ticket 54456118742 (Profit: 0.2)
+[16:55:36] SUCCESS: Closed Position 54456118742 @ 1.17821
+[16:55:36] COMMAND: Close All Completed. Total Closed: 3
+[16:56:41] HFT: BUY EURUSD (Vel 0.00170%)
+[16:56:42] SUCCESS: Auto-Trade BUY Filled @ 1.17812
+[16:56:58] HFT: BUY EURUSD (Vel 0.00170%)
+[16:56:58] SUCCESS: Auto-Trade BUY Filled @ 1.17814
+[16:57:44] HFT: BUY EURUSD (Vel 0.00255%)
+[16:57:44] SUCCESS: Auto-Trade BUY Filled @ 1.17805
+[17:01:04] BREAKING NEWS: Market Sentiment shifted to BEARISH
+[17:44:04] BREAKING NEWS: Market Sentiment shifted to BULLISH
+[17:49:24] COMMAND: Starting Close All (Profitable Only: True)...
+[17:49:24] CLOSING: Ticket 54455347162 (Profit: 0.12)
+[17:49:25] SUCCESS: Closed Position 54455347162 @ 1.34909
+[17:49:25] CLOSING: Ticket 54455347503 (Profit: 0.06)
+[17:49:25] SUCCESS: Closed Position 54455347503 @ 1.34908
+[17:49:25] COMMAND: Close All Completed. Total Closed: 2
+[17:49:28] HFT: BUY GBPUSD (Vel 0.00148%)
+[17:49:28] SUCCESS: Auto-Trade BUY Filled @ 1.3491
+[17:49:52] HFT: BUY GBPUSD (Vel 0.00222%)
+[17:49:52] SUCCESS: Auto-Trade BUY Filled @ 1.34915
+[17:52:04] BREAKING NEWS: Market Sentiment shifted to NEUTRAL
+[20:00:10] BREAKING NEWS: Market Sentiment shifted to BULLISH
+[20:31:11] BREAKING NEWS: Market Sentiment shifted to NEUTRAL
+[20:33:11] BREAKING NEWS: Market Sentiment shifted to BULLISH
+[20:51:11] BREAKING NEWS: Market Sentiment shifted to BEARISH
+[21:38:11] BREAKING NEWS: Market Sentiment shifted to BULLISH
+[16:31:40] INFO: Smart Connect: Already connected to MT5.
+[16:31:40] INFO: MT5 Connected. Account: 5042587631
+[16:31:40] INFO: Spidy HFT Scalper Started (Speed: 0.1s)
+[16:31:40] INFO: Profit Guardian (ATR Trailing) Started.
+[16:31:40] INFO: Smart Connect: Already connected to MT5.
+[16:31:41] INFO: MT5 Connected. Account: 5042587631
+[16:32:08] ERROR: Close Failed: Market closed (10018)
+[14:54:32] INFO: Smart Connect: Already connected to MT5.
+[14:54:32] INFO: MT5 Connected. Account: 5042587631
+[14:54:32] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[14:54:39] INFO: Profit Guardian (ATR Trailing) Started.
+[14:54:39] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[14:54:40] INFO: Smart Connect: Already connected to MT5.
+[14:54:40] INFO: MT5 Connected. Account: 5042587631
+[14:54:57] ERROR: Close Failed: Market closed (10018)
+[15:07:36] INFO: Smart Connect: Already connected to MT5.
+[15:07:36] INFO: MT5 Connected. Account: 5042587631
+[15:07:36] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[15:07:48] INFO: Profit Guardian (ATR Trailing) Started.
+[15:08:31] GLOBAL SENTIMENT SHIFT: BEARISH (Bull:0 Bear:1)
+[15:08:31] SHIELD: DXY is BEARISH (-0.6243%)
+[15:08:31] 🛡️ DEFENSE: Enforcing Sentiment Bias: BEARISH
+[15:08:31] ⚠️ CLOSING GBPUSD (Ticket 54447394185) due to BEARISH News
+[15:08:32] ERROR: Close Failed: Market closed (10018)
+[15:08:32] ⚠️ CLOSING EURUSD (Ticket 54456151269) due to BEARISH News
+[15:08:32] ERROR: Close Failed: Market closed (10018)
+[15:08:32] ⚠️ CLOSING EURUSD (Ticket 54456154488) due to BEARISH News
+[15:08:32] ERROR: Close Failed: Market closed (10018)
+[15:08:32] ⚠️ CLOSING EURUSD (Ticket 54456166348) due to BEARISH News
+[15:08:33] ERROR: Close Failed: Market closed (10018)
+[15:08:33] ⚠️ CLOSING GBPUSD (Ticket 54456878225) due to BEARISH News
+[15:08:33] ERROR: Close Failed: Market closed (10018)
+[15:08:33] ⚠️ CLOSING GBPUSD (Ticket 54456881873) due to BEARISH News
+[15:08:33] ERROR: Close Failed: Market closed (10018)
+[15:08:36] 🛡️ DEFENSE: Closed 6 counter-trend positions.
+[15:08:36] 🧠 STRATEGY UPDATE: Switching to CONSERVATIVE Mode (Lot: 0.01)
+[15:22:08] INFO: Smart Connect: Already connected to MT5.
+[15:22:08] INFO: MT5 Connected. Account: 5042587631
+[15:22:08] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[15:22:19] INFO: Profit Guardian (ATR Trailing) Started.
+[15:22:19] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[15:22:19] INFO: Smart Connect: Already connected to MT5.
+[15:22:19] INFO: MT5 Connected. Account: 5042587631
+[15:22:24] INFO: Smart Connect: Already connected to MT5.
+[15:22:24] INFO: MT5 Connected. Account: 5042587631
+[15:22:56] COMMAND: Starting Close All (Profitable Only: True)...
+[15:22:56] CLOSING: Ticket 54456878225 (Profit: 0.72)
+[15:22:56] ERROR: Close Failed: Market closed (10018)
+[15:22:56] CLOSING: Ticket 54456881873 (Profit: 0.62)
+[15:22:56] ERROR: Close Failed: Market closed (10018)
+[15:22:56] COMMAND: Close All Completed. Total Closed: 0
+[15:23:03] ERROR: Close Failed: Market closed (10018)
+[15:31:42] INFO: Smart Connect: Already connected to MT5.
+[15:31:42] INFO: MT5 Connected. Account: 5042587631
+[15:31:42] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[15:31:49] INFO: Profit Guardian (ATR Trailing) Started.
+[15:31:49] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[15:31:49] INFO: Smart Connect: Already connected to MT5.
+[15:31:49] INFO: MT5 Connected. Account: 5042587631
+[15:54:39] INFO: Smart Connect: Already connected to MT5.
+[15:54:39] INFO: MT5 Connected. Account: 5042587631
+[15:54:39] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[15:54:39] INFO: Profit Guardian (ATR Trailing) Started.
+[15:55:05] SHIELD: DXY is BEARISH (-0.6243%)
+[15:55:05] 🧠 STRATEGY UPDATE: Switching to CONSERVATIVE Mode (Lot: 0.01)
+[16:00:06] SHIELD: DXY is BEARISH (-0.6243%)
+[16:00:06] 🧠 STRATEGY UPDATE: Switching to CONSERVATIVE Mode (Lot: 0.01)
+[16:05:09] SHIELD: DXY is BEARISH (-0.6243%)
+[16:05:09] 🧠 STRATEGY UPDATE: Switching to CONSERVATIVE Mode (Lot: 0.01)
+[16:07:40] INFO: Smart Connect: Already connected to MT5.
+[16:07:40] INFO: MT5 Connected. Account: 5042587631
+[16:07:40] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[16:07:40] INFO: Profit Guardian (ATR Trailing) Started.
+[16:10:10] SHIELD: DXY is BEARISH (-0.6243%)
+[16:10:10] 🧠 STRATEGY UPDATE: Switching to CONSERVATIVE Mode (Lot: 0.01)
+[16:10:31] INFO: Smart Connect: Already connected to MT5.
+[16:10:31] INFO: MT5 Connected. Account: 5042587631
+[16:10:31] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[16:10:31] INFO: Profit Guardian (ATR Trailing) Started.
+[16:14:49] INFO: Smart Connect: Already connected to MT5.
+[16:14:49] INFO: MT5 Connected. Account: 5042587631
+[16:14:49] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[16:14:50] INFO: Profit Guardian (ATR Trailing) Started.
+[16:15:11] SHIELD: DXY is BEARISH (-0.6243%)
+[16:15:11] 🧠 STRATEGY UPDATE: Switching to CONSERVATIVE Mode (Lot: 0.01)
+[16:17:39] INFO: Smart Connect: Already connected to MT5.
+[16:17:39] INFO: MT5 Connected. Account: 5042587631
+[16:17:39] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[16:17:39] INFO: Profit Guardian (ATR Trailing) Started.
+[16:17:39] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[16:17:52] INFO: Smart Connect: Already connected to MT5.
+[16:17:52] INFO: MT5 Connected. Account: 5042587631
+[08:07:53] INFO: Smart Connect: Already connected to MT5.
+[08:07:53] INFO: MT5 Connected. Account: 5042587631
+[08:07:53] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[08:08:04] INFO: Profit Guardian (ATR Trailing) Started.
+[08:08:04] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[08:08:04] HFT: BUY USDJPY (Vel 0.00192%)
+[08:08:04] SUCCESS: Auto-Trade BUY Filled @ 156.436
+[08:08:05] INFO: Smart Connect: Already connected to MT5.
+[08:08:05] INFO: MT5 Connected. Account: 5042587631
+[08:08:05] HFT: BUY AUDUSD (Vel 0.00149%)
+[08:08:05] SUCCESS: Auto-Trade BUY Filled @ 0.6716
+[08:08:05] HFT: BUY EURJPY (Vel 0.00326%)
+[08:08:06] SUCCESS: Auto-Trade BUY Filled @ 184.302
+[08:08:06] HFT: BUY AUDJPY (Vel 0.00762%)
+[08:08:07] SUCCESS: Auto-Trade BUY Filled @ 105.073
+[08:08:07] HFT: BUY CADJPY (Vel 0.01398%)
+[08:08:07] SUCCESS: Auto-Trade BUY Filled @ 114.517
+[08:08:08] HFT: SELL XAGUSD (Vel -0.12678%)
+[08:08:08] SUCCESS: Auto-Trade SELL Filled @ 77.992
+[08:08:09] HFT: BUY US30 (Vel 0.00205%)
+[08:08:09] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:08:09] HFT: SELL USDJPY (Vel -0.00128%)
+[08:08:10] SUCCESS: Auto-Trade SELL Filled @ 156.431
+[08:08:10] HFT: BUY USDCHF (Vel 0.00380%)
+[08:08:10] SUCCESS: Auto-Trade BUY Filled @ 0.78933
+[08:08:11] HFT: BUY AUDUSD (Vel 0.00745%)
+[08:08:11] SUCCESS: Auto-Trade BUY Filled @ 0.67165
+[08:08:12] HFT: BUY NZDUSD (Vel 0.00687%)
+[08:08:12] SUCCESS: Auto-Trade BUY Filled @ 0.58278
+[08:08:12] HFT: SELL EURGBP (Vel -0.00115%)
+[08:08:11] SUCCESS: Auto-Trade SELL Filled @ 0.87203
+[08:08:11] HFT: SELL EURJPY (Vel -0.00109%)
+[08:08:12] SUCCESS: Auto-Trade SELL Filled @ 184.278
+[08:08:12] HFT: SELL GBPJPY (Vel -0.00947%)
+[08:08:12] SUCCESS: Auto-Trade SELL Filled @ 211.227
+[08:08:13] HFT: BUY AUDJPY (Vel 0.00286%)
+[08:08:13] SUCCESS: Auto-Trade BUY Filled @ 105.076
+[08:08:14] HFT: SELL XAGUSD (Vel -0.00128%)
+[08:08:14] SUCCESS: Auto-Trade SELL Filled @ 77.991
+[08:08:15] HFT: BUY US30 (Vel 0.00205%)
+[08:08:15] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:08:16] HFT: SELL USDCHF (Vel -0.00253%)
+[08:08:17] SUCCESS: Auto-Trade SELL Filled @ 0.78925
+[08:08:17] HFT: SELL AUDUSD (Vel -0.00596%)
+[08:08:17] SUCCESS: Auto-Trade SELL Filled @ 0.67153
+[08:08:18] HFT: SELL NZDUSD (Vel -0.00515%)
+[08:08:18] SUCCESS: Auto-Trade SELL Filled @ 0.58265
+[08:08:19] HFT: BUY EURGBP (Vel 0.00115%)
+[08:08:19] SUCCESS: Auto-Trade BUY Filled @ 0.87217
+[08:08:20] HFT: SELL AUDJPY (Vel -0.00286%)
+[08:08:20] SUCCESS: Auto-Trade SELL Filled @ 105.055
+[08:08:20] HFT: BUY XAGUSD (Vel 0.03590%)
+[08:08:21] SUCCESS: Auto-Trade BUY Filled @ 78.049
+[08:08:21] HFT: BUY US30 (Vel 0.00205%)
+[08:08:21] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:08:22] HFT: SELL EURJPY (Vel -0.00326%)
+[08:08:22] SUCCESS: Auto-Trade SELL Filled @ 184.271
+[08:08:23] HFT: BUY GBPJPY (Vel 0.00237%)
+[08:08:23] SUCCESS: Auto-Trade BUY Filled @ 211.251
+[08:08:24] HFT: SELL US30 (Vel -0.00205%)
+[08:08:24] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:08:24] HFT: BUY GBPJPY (Vel 0.00757%)
+[08:08:24] SUCCESS: Auto-Trade BUY Filled @ 211.267
+[08:08:29] HFT: SELL USDCHF (Vel -0.00127%)
+[08:08:29] SUCCESS: Auto-Trade SELL Filled @ 0.78924
+[08:08:30] HFT: BUY NZDUSD (Vel 0.00343%)
+[08:08:30] SUCCESS: Auto-Trade BUY Filled @ 0.58278
+[08:08:31] HFT: SELL CADJPY (Vel -0.01223%)
+[08:08:31] SUCCESS: Auto-Trade SELL Filled @ 114.49
+[08:08:32] HFT: BUY US30 (Vel 0.00205%)
+[08:08:32] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:08:33] HFT: BUY CADJPY (Vel 0.01310%)
+[08:08:33] SUCCESS: Auto-Trade BUY Filled @ 114.518
+[08:08:33] HFT: SELL US30 (Vel -0.00103%)
+[08:08:33] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:08:34] HFT: BUY US30 (Vel 0.00103%)
+[08:08:34] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:08:49] HFT: BUY US30 (Vel 0.00205%)
+[08:08:49] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:08:52] HFT: SELL US30 (Vel -0.00103%)
+[08:08:52] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:08:54] HFT: BUY US30 (Vel 0.00103%)
+[08:08:54] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:08:55] HFT: SELL US30 (Vel -0.00103%)
+[08:08:55] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:08:56] HFT: BUY US30 (Vel 0.00103%)
+[08:08:56] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:08:57] HFT: SELL US30 (Vel -0.00103%)
+[08:08:57] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:08:58] HFT: BUY USDJPY (Vel 0.00128%)
+[08:08:58] SUCCESS: Auto-Trade BUY Filled @ 156.434
+[08:08:58] HFT: BUY US30 (Vel 0.00103%)
+[08:08:58] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:08:59] HFT: SELL US30 (Vel -0.00205%)
+[08:08:59] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:00] HFT: BUY EURGBP (Vel 0.00115%)
+[08:09:00] SUCCESS: Auto-Trade BUY Filled @ 0.87218
+[08:09:01] HFT: SELL US30 (Vel -0.00103%)
+[08:09:01] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:01] HFT: BUY USDCAD (Vel 0.00220%)
+[08:09:02] SUCCESS: Auto-Trade BUY Filled @ 1.36663
+[08:09:02] HFT: SELL US30 (Vel -0.00103%)
+[08:09:02] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:03] HFT: BUY USDCAD (Vel 0.00512%)
+[08:09:03] SUCCESS: Auto-Trade BUY Filled @ 1.3667099999999999
+[08:09:04] HFT: BUY US30 (Vel 0.00205%)
+[08:09:04] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:04] HFT: BUY US30 (Vel 0.00103%)
+[08:09:04] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:05] HFT: SELL US30 (Vel -0.00103%)
+[08:09:05] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:09] HFT: BUY US30 (Vel 0.00103%)
+[08:09:09] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:09] HFT: BUY US30 (Vel 0.00103%)
+[08:09:09] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:10] HFT: SELL US30 (Vel -0.00205%)
+[08:09:10] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:11] HFT: BUY US30 (Vel 0.00205%)
+[08:09:11] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:12] HFT: SELL US30 (Vel -0.00205%)
+[08:09:12] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:13] HFT: SELL USDCAD (Vel -0.00146%)
+[08:09:13] SUCCESS: Auto-Trade SELL Filled @ 1.36665
+[08:09:15] HFT: SELL US30 (Vel -0.00205%)
+[08:09:15] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:16] HFT: BUY US30 (Vel 0.00205%)
+[08:09:16] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:16] HFT: SELL US30 (Vel -0.00103%)
+[08:09:16] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:17] HFT: BUY US30 (Vel 0.00103%)
+[08:09:17] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:31] HFT: SELL US30 (Vel -0.00103%)
+[08:09:31] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:32] HFT: BUY US30 (Vel 0.00103%)
+[08:09:32] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:42] HFT: SELL US30 (Vel -0.00205%)
+[08:09:42] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:46] HFT: SELL US30 (Vel -0.00103%)
+[08:09:46] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:47] HFT: BUY US30 (Vel 0.00103%)
+[08:09:47] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:47] HFT: BUY US30 (Vel 0.00205%)
+[08:09:47] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:48] HFT: BUY US30 (Vel 0.00103%)
+[08:09:48] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:49] HFT: BUY US30 (Vel 0.00103%)
+[08:09:49] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:49] HFT: SELL US30 (Vel -0.00205%)
+[08:09:49] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:50] HFT: BUY US30 (Vel 0.00103%)
+[08:09:50] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:51] HFT: SELL US30 (Vel -0.00103%)
+[08:09:51] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:55] HFT: SELL US30 (Vel -0.00103%)
+[08:09:55] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:55] HFT: BUY US30 (Vel 0.00103%)
+[08:09:55] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:09:57] HFT: SELL US30 (Vel -0.00205%)
+[08:09:57] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:01] HFT: BUY US30 (Vel 0.00205%)
+[08:10:01] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:09] HFT: SELL US30 (Vel -0.00103%)
+[08:10:09] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:11] HFT: BUY US30 (Vel 0.00103%)
+[08:10:11] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:15] HFT: BUY US30 (Vel 0.00103%)
+[08:10:15] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:17] HFT: BUY US30 (Vel 0.00103%)
+[08:10:17] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:18] HFT: SELL US30 (Vel -0.00103%)
+[08:10:18] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:20] HFT: SELL US30 (Vel -0.00103%)
+[08:10:20] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:23] HFT: SELL US30 (Vel -0.00103%)
+[08:10:23] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:24] HFT: BUY US30 (Vel 0.00103%)
+[08:10:24] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:35] HFT: BUY US30 (Vel 0.00205%)
+[08:10:35] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:36] HFT: SELL US30 (Vel -0.00103%)
+[08:10:36] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:44] HFT: SELL US30 (Vel -0.00103%)
+[08:10:44] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:45] HFT: BUY US30 (Vel 0.00205%)
+[08:10:45] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:46] HFT: SELL US30 (Vel -0.00103%)
+[08:10:46] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:46] HFT: SELL US30 (Vel -0.00103%)
+[08:10:46] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:49] HFT: SELL US30 (Vel -0.00103%)
+[08:10:49] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:10:49] HFT: SELL US30 (Vel -0.00103%)
+[08:10:49] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:00] HFT: BUY US30 (Vel 0.00103%)
+[08:11:00] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:00] HFT: BUY US30 (Vel 0.00103%)
+[08:11:00] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:02] HFT: BUY US30 (Vel 0.00205%)
+[08:11:02] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:03] HFT: SELL US30 (Vel -0.00205%)
+[08:11:03] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:15] HFT: BUY US30 (Vel 0.00103%)
+[08:11:15] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:16] HFT: SELL US30 (Vel -0.00103%)
+[08:11:16] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:21] HFT: SELL US30 (Vel -0.00205%)
+[08:11:21] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:24] HFT: SELL US30 (Vel -0.00103%)
+[08:11:24] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:27] HFT: BUY US30 (Vel 0.00103%)
+[08:11:27] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:32] HFT: SELL US30 (Vel -0.00103%)
+[08:11:32] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:33] HFT: BUY US30 (Vel 0.00103%)
+[08:11:33] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:35] HFT: SELL US30 (Vel -0.00103%)
+[08:11:35] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:37] HFT: BUY US30 (Vel 0.00103%)
+[08:11:37] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:38] HFT: BUY US30 (Vel 0.00205%)
+[08:11:38] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:38] HFT: SELL US30 (Vel -0.00205%)
+[08:11:38] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:47] HFT: BUY US30 (Vel 0.00205%)
+[08:11:47] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:11:50] HFT: BUY US30 (Vel 0.00205%)
+[08:11:50] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:00] SETTINGS: Auto-Secure ENABLED (Target: $10.0)
+[08:12:12] HFT: BUY US30 (Vel 0.00205%)
+[08:12:12] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:14] HFT: SELL US30 (Vel -0.00205%)
+[08:12:14] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:15] HFT: BUY US30 (Vel 0.00205%)
+[08:12:15] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:19] HFT: SELL US30 (Vel -0.00205%)
+[08:12:19] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:20] HFT: BUY US30 (Vel 0.00205%)
+[08:12:20] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:21] HFT: SELL US30 (Vel -0.00103%)
+[08:12:21] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:21] HFT: SELL US30 (Vel -0.00103%)
+[08:12:21] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:24] HFT: BUY US30 (Vel 0.00103%)
+[08:12:24] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:26] HFT: SELL US30 (Vel -0.00103%)
+[08:12:26] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:27] HFT: SELL US30 (Vel -0.00103%)
+[08:12:27] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:29] HFT: BUY US30 (Vel 0.00103%)
+[08:12:29] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:30] HFT: SELL US30 (Vel -0.00103%)
+[08:12:30] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:30] HFT: BUY US30 (Vel 0.00103%)
+[08:12:30] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:31] HFT: SELL US30 (Vel -0.00103%)
+[08:12:31] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:32] HFT: SELL US30 (Vel -0.00103%)
+[08:12:32] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:44] HFT: BUY US30 (Vel 0.00205%)
+[08:12:44] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:55] HFT: BUY US30 (Vel 0.00103%)
+[08:12:55] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:57] HFT: SELL US30 (Vel -0.00103%)
+[08:12:57] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:12:58] COMMAND: Starting Close All (Profitable Only: True)...
+[08:12:58] CLOSING: Ticket 54456878225 (Profit: 2.4)
+[08:13:02] HFT: BUY US30 (Vel 0.00103%)
+[08:13:02] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:13:02] SUCCESS: Closed Position 54456878225 @ 1.3503
+[08:13:03] CLOSING: Ticket 54456881873 (Profit: 2.3)
+[08:13:07] SUCCESS: Closed Position 54456881873 @ 1.35029
+[08:13:07] CLOSING: Ticket 54467638437 (Profit: 0.19)
+[08:13:11] HFT: SELL AUDUSD (Vel -0.00149%)
+[08:13:13] SUCCESS: Auto-Trade SELL Filled @ 0.6718
+[08:13:13] SUCCESS: Closed Position 54467638437 @ 0.67181
+[08:13:13] CLOSING: Ticket 54467638635 (Profit: 0.15)
+[08:13:14] HFT: SELL US30 (Vel -0.00308%)
+[08:13:14] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:13:14] SUCCESS: Closed Position 54467638635 @ 105.104
+[08:13:14] CLOSING: Ticket 54467639504 (Profit: 0.23)
+[08:13:14] SUCCESS: Closed Position 54467639504 @ 0.78948
+[08:13:14] COMMAND: Starting Close All (Profitable Only: True)...
+[08:13:14] CLOSING: Ticket 54467638342 (Profit: 0.04)
+[08:13:14] HFT: BUY USDJPY (Vel 0.00192%)
+[08:13:15] SUCCESS: Auto-Trade BUY Filled @ 156.446
+[08:13:15] SUCCESS: Closed Position 54467638342 @ 156.441
+[08:13:15] CLOSING: Ticket 54467639600 (Profit: 0.14)
+[08:13:15] SUCCESS: Closed Position 54467639600 @ 0.67181
+[08:13:15] CLOSING: Ticket 54467639600 (Profit: 0.15)
+[08:13:15] HFT: BUY AUDUSD (Vel 0.00149%)
+[08:13:16] SUCCESS: Auto-Trade BUY Filled @ 0.67189
+[08:13:16] ERROR: Position 54467639600 not found to close.
+[08:13:16] CLOSING: Ticket 54467639669 (Profit: 0.01)
+[08:13:16] CLOSING: Ticket 54467640034 (Profit: 0.13)
+[08:13:16] SUCCESS: Closed Position 54467639669 @ 0.58279
+[08:13:16] SUCCESS: Closed Position 54467640034 @ 105.106
+[08:13:16] HFT: BUY AUDJPY (Vel 0.00190%)
+[08:13:16] SUCCESS: Auto-Trade BUY Filled @ 105.124
+[08:13:17] CLOSING: Ticket 54467641167 (Profit: 4.45)
+[08:13:17] CLOSING: Ticket 54467640034 (Profit: 0.17)
+[08:13:17] SUCCESS: Closed Position 54467641167 @ 78.167
+[08:13:17] ERROR: Position 54467640034 not found to close.
+[08:13:17] CLOSING: Ticket 54467641167 (Profit: 5.95)
+[08:13:17] ERROR: Position 54467641167 not found to close.
+[08:13:17] CLOSING: Ticket 54467642536 (Profit: 0.01)
+[08:13:17] HFT: SELL XAGUSD (Vel -0.01151%)
+[08:13:17] SUCCESS: Auto-Trade SELL Filled @ 78.16
+[08:13:17] SUCCESS: Closed Position 54467642536 @ 0.58279
+[08:13:18] CLOSING: Ticket 54467645864 (Profit: 0.01)
+[08:13:18] SUCCESS: Closed Position 54467645864 @ 156.441
+[08:13:18] CLOSING: Ticket 54467645864 (Profit: 0.04)
+[08:13:18] ERROR: Position 54467645864 not found to close.
+[08:13:18] CLOSING: Ticket 54467646223 (Profit: 0.01)
+[08:13:20] SUCCESS: Closed Position 54467646223 @ 1.36665
+[08:13:21] CLOSING: Ticket 54467646223 (Profit: 0.03)
+[08:13:21] HFT: BUY USDCHF (Vel 0.00380%)
+[08:13:21] SUCCESS: Auto-Trade BUY Filled @ 0.78961
+[08:13:21] ERROR: Position 54467646223 not found to close.
+[08:13:21] COMMAND: Close All Completed. Total Closed: 9
+[08:13:21] COMMAND: Close All Completed. Total Closed: 4
+[08:13:21] HFT: SELL NZDUSD (Vel -0.00686%)
+[08:13:22] SUCCESS: Auto-Trade SELL Filled @ 0.58275
+[08:13:22] HFT: SELL AUDJPY (Vel -0.00190%)
+[08:13:23] SUCCESS: Auto-Trade SELL Filled @ 105.104
+[08:13:23] HFT: BUY USDJPY (Vel 0.00128%)
+[08:13:24] SUCCESS: Auto-Trade BUY Filled @ 156.448
+[08:13:31] HFT: SELL US30 (Vel -0.00205%)
+[08:13:31] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:13:31] HFT: BUY US30 (Vel 0.00205%)
+[08:13:31] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:13:33] HFT: BUY NZDUSD (Vel 0.00172%)
+[08:13:33] SUCCESS: Auto-Trade BUY Filled @ 0.58288
+[08:13:34] HFT: BUY GBPUSD (Vel 0.00222%)
+[08:13:34] SUCCESS: Auto-Trade BUY Filled @ 1.35039
+[08:13:41] HFT: BUY US30 (Vel 0.00103%)
+[08:13:41] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:13:42] HFT: SELL USDCAD (Vel -0.00146%)
+[08:13:42] SUCCESS: Auto-Trade SELL Filled @ 1.36662
+[08:13:46] HFT: BUY US30 (Vel 0.00205%)
+[08:13:46] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:13:47] HFT: SELL US30 (Vel -0.00103%)
+[08:13:47] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:14:01] HFT: BUY US30 (Vel 0.00103%)
+[08:14:01] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:14:01] HFT: SELL US30 (Vel -0.00103%)
+[08:14:01] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:14:14] HFT: SELL GBPUSD (Vel -0.00148%)
+[08:14:14] SUCCESS: Auto-Trade SELL Filled @ 1.35036
+[08:14:17] HFT: SELL US30 (Vel -0.00205%)
+[08:14:17] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:14:37] HFT: SELL US30 (Vel -0.00103%)
+[08:14:37] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:14:40] HFT: SELL US30 (Vel -0.00103%)
+[08:14:40] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:14:43] HFT: BUY US30 (Vel 0.00205%)
+[08:14:43] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:14:47] HFT: SELL US30 (Vel -0.00205%)
+[08:14:47] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:14:49] HFT: BUY US30 (Vel 0.00103%)
+[08:14:49] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:14:49] HFT: BUY US30 (Vel 0.00103%)
+[08:14:49] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:14:56] HFT: BUY US30 (Vel 0.00103%)
+[08:14:56] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:14:57] HFT: SELL US30 (Vel -0.00103%)
+[08:14:57] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:10] HFT: BUY US30 (Vel 0.00103%)
+[08:15:10] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:11] HFT: SELL US30 (Vel -0.00103%)
+[08:15:11] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:18] HFT: SELL US30 (Vel -0.00205%)
+[08:15:18] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:18] HFT: SELL US30 (Vel -0.00103%)
+[08:15:18] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:20] HFT: BUY US30 (Vel 0.00103%)
+[08:15:20] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:21] HFT: BUY US30 (Vel 0.00103%)
+[08:15:21] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:21] HFT: BUY US30 (Vel 0.00103%)
+[08:15:21] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:24] HFT: SELL US30 (Vel -0.00103%)
+[08:15:24] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:25] HFT: BUY US30 (Vel 0.00103%)
+[08:15:25] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:28] HFT: SELL US30 (Vel -0.00103%)
+[08:15:28] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:28] HFT: BUY US30 (Vel 0.00103%)
+[08:15:28] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:30] HFT: SELL US30 (Vel -0.00205%)
+[08:15:30] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:34] HFT: BUY US30 (Vel 0.00205%)
+[08:15:34] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:34] HFT: SELL US30 (Vel -0.00205%)
+[08:15:34] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:36] HFT: BUY US30 (Vel 0.00103%)
+[08:15:36] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:42] HFT: BUY US30 (Vel 0.00103%)
+[08:15:42] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:43] HFT: BUY US30 (Vel 0.00103%)
+[08:15:43] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:44] HFT: BUY US30 (Vel 0.00103%)
+[08:15:44] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:44] HFT: SELL US30 (Vel -0.00205%)
+[08:15:44] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:45] HFT: SELL US30 (Vel -0.00103%)
+[08:15:45] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:48] HFT: BUY US30 (Vel 0.00103%)
+[08:15:48] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:50] HFT: SELL US30 (Vel -0.00308%)
+[08:15:50] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:50] HFT: BUY US30 (Vel 0.00103%)
+[08:15:50] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:52] HFT: SELL US30 (Vel -0.00103%)
+[08:15:52] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:52] HFT: SELL US30 (Vel -0.00103%)
+[08:15:52] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:58] HFT: SELL US30 (Vel -0.00103%)
+[08:15:58] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:15:59] HFT: SELL US30 (Vel -0.00103%)
+[08:15:59] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:16:01] HFT: BUY US30 (Vel 0.00103%)
+[08:16:01] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:16:12] HFT: BUY US30 (Vel 0.00103%)
+[08:16:12] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:16:13] HFT: BUY US30 (Vel 0.00205%)
+[08:16:13] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:16:14] HFT: SELL US30 (Vel -0.00205%)
+[08:16:14] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:16:21] HFT: SELL US30 (Vel -0.00103%)
+[08:16:21] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:16:23] HFT: SELL US30 (Vel -0.00103%)
+[08:16:23] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:16:52] HFT: BUY US30 (Vel 0.00205%)
+[08:16:52] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:16:58] HFT: SELL US30 (Vel -0.00103%)
+[08:16:58] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:17:00] HFT: BUY US30 (Vel 0.00103%)
+[08:17:00] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:17:02] HFT: BUY US30 (Vel 0.00205%)
+[08:17:02] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:17:09] HFT: SELL US30 (Vel -0.00103%)
+[08:17:09] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:17:10] HFT: BUY US30 (Vel 0.00103%)
+[08:17:10] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:17:25] HFT: BUY US30 (Vel 0.00205%)
+[08:17:25] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:17:29] HFT: BUY US30 (Vel 0.00205%)
+[08:17:29] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:17:30] HFT: SELL US30 (Vel -0.00205%)
+[08:17:30] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:17:37] HFT: BUY US30 (Vel 0.00103%)
+[08:17:37] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:17:41] HFT: BUY US30 (Vel 0.00103%)
+[08:17:41] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:17:47] HFT: SELL US30 (Vel -0.00103%)
+[08:17:47] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:17:47] HFT: BUY US30 (Vel 0.00103%)
+[08:17:47] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:17:48] HFT: SELL US30 (Vel -0.00205%)
+[08:17:48] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:01] HFT: BUY US30 (Vel 0.00205%)
+[08:18:01] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:04] HFT: BUY US30 (Vel 0.00103%)
+[08:18:04] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:05] HFT: SELL US30 (Vel -0.00103%)
+[08:18:05] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:05] HFT: SELL US30 (Vel -0.00205%)
+[08:18:05] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:06] HFT: BUY US30 (Vel 0.00103%)
+[08:18:06] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:07] HFT: BUY US30 (Vel 0.00103%)
+[08:18:07] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:07] HFT: SELL US30 (Vel -0.00205%)
+[08:18:07] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:11] HFT: BUY US30 (Vel 0.00410%)
+[08:18:11] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:12] HFT: SELL US30 (Vel -0.00103%)
+[08:18:12] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:13] HFT: SELL US30 (Vel -0.00103%)
+[08:18:13] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:14] HFT: BUY US30 (Vel 0.00103%)
+[08:18:14] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:15] HFT: SELL US30 (Vel -0.00103%)
+[08:18:15] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:16] HFT: SELL US30 (Vel -0.00205%)
+[08:18:16] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:16] HFT: BUY US30 (Vel 0.00205%)
+[08:18:16] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:19] HFT: SELL US30 (Vel -0.00205%)
+[08:18:19] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:25] HFT: BUY US30 (Vel 0.00205%)
+[08:18:25] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:28] HFT: SELL US30 (Vel -0.00205%)
+[08:18:28] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:45] HFT: SELL US30 (Vel -0.00205%)
+[08:18:45] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:54] HFT: SELL US30 (Vel -0.00205%)
+[08:18:54] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:56] HFT: BUY US30 (Vel 0.00103%)
+[08:18:56] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:58] HFT: BUY US30 (Vel 0.00205%)
+[08:18:58] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:58] HFT: BUY US30 (Vel 0.00103%)
+[08:18:58] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:18:59] HFT: BUY US30 (Vel 0.00205%)
+[08:18:59] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:19:00] HFT: SELL US30 (Vel -0.00103%)
+[08:19:00] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:19:01] HFT: SELL US30 (Vel -0.00103%)
+[08:19:01] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:19:05] HFT: BUY US30 (Vel 0.00103%)
+[08:19:05] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:19:05] HFT: BUY US30 (Vel 0.00103%)
+[08:19:05] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:19:08] HFT: SELL US30 (Vel -0.00205%)
+[08:19:08] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:19:16] HFT: SELL US30 (Vel -0.00103%)
+[08:19:16] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:19:19] HFT: BUY US30 (Vel 0.00103%)
+[08:19:19] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:19:21] HFT: SELL US30 (Vel -0.00103%)
+[08:19:21] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:19:24] HFT: BUY US30 (Vel 0.00103%)
+[08:19:24] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:19:28] HFT: SELL US30 (Vel -0.00103%)
+[08:19:28] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:19:31] HFT: SELL US30 (Vel -0.00103%)
+[08:19:31] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:19:41] HFT: BUY US30 (Vel 0.00205%)
+[08:19:41] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:19:42] HFT: SELL US30 (Vel -0.00103%)
+[08:19:42] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:19:47] HFT: BUY US30 (Vel 0.00103%)
+[08:19:47] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:19:49] HFT: SELL US30 (Vel -0.00205%)
+[08:19:49] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:20:00] HFT: BUY US30 (Vel 0.00103%)
+[08:20:00] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:20:04] HFT: BUY US30 (Vel 0.00103%)
+[08:20:04] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:20:10] HFT: SELL US30 (Vel -0.00205%)
+[08:20:10] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:20:22] HFT: BUY US30 (Vel 0.00103%)
+[08:20:22] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:20:23] HFT: BUY US30 (Vel 0.00103%)
+[08:20:23] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:20:30] HFT: BUY US30 (Vel 0.00205%)
+[08:20:30] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:20:31] HFT: SELL US30 (Vel -0.00205%)
+[08:20:31] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:20:37] HFT: BUY US30 (Vel 0.00103%)
+[08:20:37] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:20:38] HFT: BUY US30 (Vel 0.00103%)
+[08:20:38] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:20:39] HFT: SELL US30 (Vel -0.00205%)
+[08:20:39] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:20:39] HFT: BUY US30 (Vel 0.00103%)
+[08:20:39] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:20:40] HFT: SELL US30 (Vel -0.00103%)
+[08:20:40] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:20:50] HFT: BUY US30 (Vel 0.00205%)
+[08:20:50] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:21:10] HFT: SELL US30 (Vel -0.00205%)
+[08:21:10] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:21:25] HFT: BUY US30 (Vel 0.00205%)
+[08:21:25] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:21:26] HFT: SELL US30 (Vel -0.00205%)
+[08:21:26] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:21:30] HFT: BUY US30 (Vel 0.00205%)
+[08:21:30] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:21:34] HFT: SELL US30 (Vel -0.00103%)
+[08:21:34] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:21:34] HFT: BUY US30 (Vel 0.00103%)
+[08:21:34] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:21:35] HFT: SELL US30 (Vel -0.00205%)
+[08:21:35] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:21:40] COMMAND: Starting Close All (Profitable Only: True)...
+[08:21:40] CLOSING: Ticket 54467639414 (Profit: 0.04)
+[08:21:40] SUCCESS: Closed Position 54467639414 @ 156.424
+[08:21:41] CLOSING: Ticket 54467641479 (Profit: 0.02)
+[08:21:41] SUCCESS: Closed Position 54467641479 @ 211.254
+[08:21:41] CLOSING: Ticket 54467647636 (Profit: 0.13)
+[08:21:41] SUCCESS: Closed Position 54467647636 @ 1.36648
+[08:21:42] CLOSING: Ticket 54467679637 (Profit: 0.3)
+[08:21:42] SUCCESS: Closed Position 54467679637 @ 0.67218
+[08:21:42] CLOSING: Ticket 54467679685 (Profit: 0.13)
+[08:21:42] SUCCESS: Closed Position 54467679685 @ 105.145
+[08:21:43] CLOSING: Ticket 54467681186 (Profit: 0.21)
+[08:21:43] SUCCESS: Closed Position 54467681186 @ 0.58309
+[08:21:43] CLOSING: Ticket 54467681318 (Profit: 0.2)
+[08:21:43] SUCCESS: Closed Position 54467681318 @ 1.35059
+[08:21:44] CLOSING: Ticket 54467682342 (Profit: 0.11)
+[08:21:44] SUCCESS: Closed Position 54467682342 @ 1.36648
+[08:21:44] COMMAND: Close All Completed. Total Closed: 8
+[08:21:47] HFT: SELL GBPJPY (Vel -0.00189%)
+[08:21:49] SUCCESS: Auto-Trade SELL Filled @ 211.251
+[08:21:49] HFT: SELL AUDJPY (Vel -0.00190%)
+[08:21:50] SUCCESS: Auto-Trade SELL Filled @ 105.143
+[08:21:52] HFT: SELL USDJPY (Vel -0.00256%)
+[08:21:52] SUCCESS: Auto-Trade SELL Filled @ 156.415
+[08:21:53] HFT: SELL USDCAD (Vel -0.00146%)
+[08:21:53] SUCCESS: Auto-Trade SELL Filled @ 1.36643
+[08:21:53] HFT: BUY NZDUSD (Vel 0.01029%)
+[08:21:54] SUCCESS: Auto-Trade BUY Filled @ 0.58324
+[08:21:55] HFT: BUY GBPUSD (Vel 0.00370%)
+[08:21:55] SUCCESS: Auto-Trade BUY Filled @ 1.35069
+[08:21:56] HFT: SELL USDCAD (Vel -0.00293%)
+[08:21:56] SUCCESS: Auto-Trade SELL Filled @ 1.36639
+[08:22:03] HFT: SELL US30 (Vel -0.00205%)
+[08:22:03] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:22:04] INFO: Smart Connect: Already connected to MT5.
+[08:22:04] INFO: MT5 Connected. Account: 5042587631
+[08:22:09] HFT: BUY US30 (Vel 0.00103%)
+[08:22:09] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:22:20] HFT: SELL US30 (Vel -0.00103%)
+[08:22:20] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:22:33] HFT: SELL US30 (Vel -0.00205%)
+[08:22:33] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:22:33] HFT: SELL US30 (Vel -0.00103%)
+[08:22:33] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:22:34] HFT: SELL US30 (Vel -0.00103%)
+[08:22:34] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:22:36] HFT: SELL US30 (Vel -0.00103%)
+[08:22:36] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:22:37] HFT: BUY US30 (Vel 0.00103%)
+[08:22:37] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:23:01] HFT: SELL US30 (Vel -0.00103%)
+[08:23:01] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:23:09] HFT: SELL US30 (Vel -0.00103%)
+[08:23:09] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:23:29] HFT: SELL US30 (Vel -0.00205%)
+[08:23:29] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:23:30] HFT: SELL US30 (Vel -0.00103%)
+[08:23:30] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:23:33] HFT: SELL US30 (Vel -0.00103%)
+[08:23:33] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:23:33] HFT: BUY US30 (Vel 0.00103%)
+[08:23:33] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:23:34] HFT: SELL US30 (Vel -0.00103%)
+[08:23:34] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:23:41] HFT: BUY US30 (Vel 0.00103%)
+[08:23:41] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:23:42] HFT: SELL US30 (Vel -0.00103%)
+[08:23:42] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:23:45] SETTINGS: Auto-Secure DISABLED (Target: $10.0)
+[08:23:46] HFT: BUY US30 (Vel 0.00205%)
+[08:23:46] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:23:49] HFT: BUY US30 (Vel 0.00205%)
+[08:23:49] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:23:52] HFT: SELL US30 (Vel -0.00103%)
+[08:23:52] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:23:54] HFT: BUY US30 (Vel 0.00103%)
+[08:23:54] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:23:59] HFT: SELL US30 (Vel -0.00103%)
+[08:23:59] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:24:01] HFT: BUY US30 (Vel 0.00103%)
+[08:24:01] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:24:10] HFT: SELL US30 (Vel -0.00103%)
+[08:24:10] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:24:26] HFT: SELL US30 (Vel -0.00205%)
+[08:24:26] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:24:29] HFT: SELL US30 (Vel -0.00103%)
+[08:24:29] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:24:30] HFT: BUY US30 (Vel 0.00103%)
+[08:24:30] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:24:31] HFT: SELL US30 (Vel -0.00103%)
+[08:24:31] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:24:32] HFT: BUY US30 (Vel 0.00205%)
+[08:24:32] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:24:33] HFT: SELL US30 (Vel -0.00103%)
+[08:24:33] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:24:34] HFT: BUY US30 (Vel 0.00103%)
+[08:24:34] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:25:11] HFT: SELL US30 (Vel -0.00103%)
+[08:25:11] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:25:12] HFT: SELL US30 (Vel -0.00103%)
+[08:25:12] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:25:31] HFT: SELL US30 (Vel -0.00103%)
+[08:25:31] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:25:32] HFT: SELL US30 (Vel -0.00103%)
+[08:25:32] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:25:33] HFT: SELL US30 (Vel -0.00205%)
+[08:25:33] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:25:37] HFT: SELL US30 (Vel -0.00103%)
+[08:25:37] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:25:38] HFT: BUY US30 (Vel 0.00103%)
+[08:25:38] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:25:42] HFT: SELL US30 (Vel -0.00103%)
+[08:25:42] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:25:45] HFT: BUY US30 (Vel 0.00103%)
+[08:25:45] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:26:01] HFT: BUY US30 (Vel 0.00205%)
+[08:26:01] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:26:02] HFT: BUY US30 (Vel 0.00205%)
+[08:26:02] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:26:03] HFT: SELL US30 (Vel -0.00103%)
+[08:26:03] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:26:04] HFT: SELL US30 (Vel -0.00103%)
+[08:26:04] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:26:34] HFT: SELL US30 (Vel -0.00103%)
+[08:26:34] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:26:34] HFT: BUY US30 (Vel 0.00103%)
+[08:26:34] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:26:53] HFT: SELL US30 (Vel -0.00103%)
+[08:26:53] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:26:53] HFT: BUY US30 (Vel 0.00103%)
+[08:26:53] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:27:34] HFT: SELL US30 (Vel -0.00205%)
+[08:27:34] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:27:34] HFT: BUY US30 (Vel 0.00103%)
+[08:27:34] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:27:35] HFT: SELL US30 (Vel -0.00308%)
+[08:27:35] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:27:40] HFT: BUY US30 (Vel 0.00205%)
+[08:27:40] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:27:41] HFT: SELL US30 (Vel -0.00205%)
+[08:27:41] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:27:51] HFT: SELL US30 (Vel -0.00205%)
+[08:27:51] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:27:56] HFT: SELL US30 (Vel -0.00103%)
+[08:27:56] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:27:57] HFT: BUY US30 (Vel 0.00103%)
+[08:27:57] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:28:03] HFT: BUY US30 (Vel 0.00205%)
+[08:28:03] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:28:09] HFT: SELL US30 (Vel -0.00103%)
+[08:28:09] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:28:10] HFT: BUY US30 (Vel 0.00103%)
+[08:28:10] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:28:11] HFT: SELL US30 (Vel -0.00103%)
+[08:28:11] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:28:12] HFT: SELL US30 (Vel -0.00103%)
+[08:28:12] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:28:20] HFT: BUY US30 (Vel 0.00205%)
+[08:28:20] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:28:21] HFT: SELL US30 (Vel -0.00103%)
+[08:28:21] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:28:23] HFT: SELL US30 (Vel -0.00103%)
+[08:28:23] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:28:38] HFT: BUY US30 (Vel 0.00205%)
+[08:28:38] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:28:43] HFT: SELL US30 (Vel -0.00103%)
+[08:28:43] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:28:44] HFT: SELL US30 (Vel -0.00103%)
+[08:28:44] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:28:58] HFT: SELL US30 (Vel -0.00205%)
+[08:28:58] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:28:59] HFT: BUY US30 (Vel 0.00205%)
+[08:28:59] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:29:01] HFT: SELL US30 (Vel -0.00103%)
+[08:29:01] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:29:02] HFT: BUY US30 (Vel 0.00103%)
+[08:29:02] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:29:05] HFT: SELL US30 (Vel -0.00103%)
+[08:29:05] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:29:06] HFT: SELL US30 (Vel -0.00103%)
+[08:29:06] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:29:07] HFT: SELL US30 (Vel -0.00205%)
+[08:29:07] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:29:15] COMMAND: Starting Close All (Profitable Only: True)...
+[08:29:15] CLOSING: Ticket 54467637788 (Profit: 0.01)
+[08:29:15] SUCCESS: Closed Position 54467637788 @ 0.58323
+[08:29:15] CLOSING: Ticket 54467639764 (Profit: 0.32)
+[08:29:16] SUCCESS: Closed Position 54467639764 @ 0.8718
+[08:29:16] HFT: BUY EURGBP (Vel 0.00115%)
+[08:29:16] SUCCESS: Auto-Trade BUY Filled @ 0.87181
+[08:29:16] CLOSING: Ticket 54467641753 (Profit: 0.21)
+[08:29:16] SUCCESS: Closed Position 54467641753 @ 211.299
+[08:29:17] CLOSING: Ticket 54467747216 (Profit: 0.01)
+[08:29:17] SUCCESS: Closed Position 54467747216 @ 1.3664100000000001
+[08:29:17] CLOSING: Ticket 54467747298 (Profit: 0.08)
+[08:29:17] SUCCESS: Closed Position 54467747298 @ 1.3507799999999999
+[08:29:18] COMMAND: Close All Completed. Total Closed: 5
+[08:29:19] HFT: BUY GBPJPY (Vel 0.00142%)
+[08:29:19] SUCCESS: Auto-Trade BUY Filled @ 211.322
+[08:29:29] HFT: BUY US30 (Vel 0.00103%)
+[08:29:29] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:29:29] HFT: BUY US30 (Vel 0.00103%)
+[08:29:29] ERROR: Auto-Trade Order Failed: Trade disabled (10017)
+[08:36:37] INFO: Smart Connect: Already connected to MT5.
+[08:36:37] INFO: MT5 Connected. Account: 5042587631
+[08:36:37] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[08:36:37] INFO: System Warmup Active. Trading paused for 15s...
+[08:36:37] INFO: Profit Guardian (ATR Trailing) Started.
+[08:36:37] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[08:36:40] INFO: Smart Connect: Already connected to MT5.
+[08:36:40] INFO: MT5 Connected. Account: 5042587631
+[08:38:08] HFT: BUY GBPUSD (Vel 0.00666%)
+[08:38:08] SUCCESS: Auto-Trade BUY Filled @ 1.35062
+[08:38:09] HFT: SELL USDCAD (Vel -0.00659%)
+[08:38:09] SUCCESS: Auto-Trade SELL Filled @ 1.36621
+[08:42:36] COMMAND: Starting Close All (Profitable Only: True)...
+[08:42:36] CLOSING: Ticket 54467639846 (Profit: 0.45)
+[08:42:36] SUCCESS: Closed Position 54467639846 @ 184.204
+[08:42:36] CLOSING: Ticket 54467639951 (Profit: 0.02)
+[08:42:37] SUCCESS: Closed Position 54467639951 @ 211.224
+[08:42:37] CLOSING: Ticket 54467641350 (Profit: 0.43)
+[08:42:37] SUCCESS: Closed Position 54467641350 @ 184.204
+[08:42:37] CLOSING: Ticket 54467746784 (Profit: 0.17)
+[08:42:38] SUCCESS: Closed Position 54467746784 @ 211.224
+[08:42:38] CLOSING: Ticket 54467746858 (Profit: 0.14)
+[08:42:38] SUCCESS: Closed Position 54467746858 @ 105.12
+[08:42:39] CLOSING: Ticket 54467747163 (Profit: 0.28)
+[08:42:39] SUCCESS: Closed Position 54467747163 @ 156.371
+[08:42:39] CLOSING: Ticket 54467747316 (Profit: 0.26)
+[08:42:39] SUCCESS: Closed Position 54467747316 @ 1.36604
+[08:42:40] CLOSING: Ticket 54467883303 (Profit: 0.12)
+[08:42:40] SUCCESS: Closed Position 54467883303 @ 1.36604
+[08:42:40] COMMAND: Close All Completed. Total Closed: 8
+[08:43:06] HFT: BUY AUDJPY (Vel 0.00666%)
+[08:43:08] SUCCESS: Auto-Trade BUY Filled @ 105.13
+[08:43:30] HFT: BUY USDJPY (Vel 0.00512%)
+[08:43:30] SUCCESS: Auto-Trade BUY Filled @ 156.384
+[08:43:33] HFT: SELL GBPJPY (Vel -0.00568%)
+[08:43:35] SUCCESS: Auto-Trade SELL Filled @ 211.208
+[08:44:10] HFT: BUY EURJPY (Vel 0.00977%)
+[08:44:11] SUCCESS: Auto-Trade BUY Filled @ 184.223
+[08:44:23] HFT: SELL GBPJPY (Vel -0.00758%)
+[08:44:23] SUCCESS: Auto-Trade SELL Filled @ 211.198
+[08:44:35] HFT: SELL EURJPY (Vel -0.00814%)
+[08:44:36] SUCCESS: Auto-Trade SELL Filled @ 184.187
+[08:57:11] COMMAND: Starting Close All (Profitable Only: True)...
+[08:57:11] CLOSING: Ticket 54467637598 (Profit: 0.02)
+[08:57:11] SUCCESS: Closed Position 54467637598 @ 1.36611
+[08:57:12] CLOSING: Ticket 54467642724 (Profit: 0.03)
+[08:57:12] SUCCESS: Closed Position 54467642724 @ 114.488
+[08:57:12] CLOSING: Ticket 54467883071 (Profit: 0.01)
+[08:57:12] SUCCESS: Closed Position 54467883071 @ 1.35063
+[08:57:13] CLOSING: Ticket 54467940109 (Profit: 0.15)
+[08:57:13] SUCCESS: Closed Position 54467940109 @ 211.189
+[08:57:13] CLOSING: Ticket 54467946795 (Profit: 0.07)
+[08:57:14] SUCCESS: Closed Position 54467946795 @ 211.188
+[08:57:14] CLOSING: Ticket 54467949003 (Profit: 0.06)
+[08:57:16] SUCCESS: Closed Position 54467949003 @ 184.16
+[08:57:16] COMMAND: Close All Completed. Total Closed: 6
+[08:57:19] HFT: BUY EURJPY (Vel 0.00869%)
+[08:57:19] SUCCESS: Auto-Trade BUY Filled @ 184.178
+[08:58:23] HFT: BUY GBPJPY (Vel 0.00521%)
+[08:58:24] SUCCESS: Auto-Trade BUY Filled @ 211.185
+[08:58:36] HFT: BUY CADJPY (Vel 0.00524%)
+[08:58:37] SUCCESS: Auto-Trade BUY Filled @ 114.491
+[08:58:44] HFT: BUY GBPJPY (Vel 0.00852%)
+[08:58:45] SUCCESS: Auto-Trade BUY Filled @ 211.209
+[09:00:23] HFT: BUY GBPUSD (Vel 0.00667%)
+[09:00:23] SUCCESS: Auto-Trade BUY Filled @ 1.35039
+[09:02:01] INFO: Smart Connect: Already connected to MT5.
+[09:02:01] INFO: MT5 Connected. Account: 5042587631
+[09:02:01] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[09:02:01] INFO: System Warmup Active. Trading paused for 15s...
+[09:02:01] INFO: Profit Guardian (ATR Trailing) Started.
+[09:02:01] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[09:03:11] HFT: BUY AUDJPY (Vel 0.00571%)
+[09:03:11] SUCCESS: Auto-Trade BUY Filled @ 105.164
+[09:03:11] HFT: BUY CADJPY (Vel 0.00699%)
+[09:03:12] SUCCESS: Auto-Trade BUY Filled @ 114.503
+[09:04:06] HFT: SELL USDJPY (Vel -0.00576%)
+[09:04:06] SUCCESS: Auto-Trade SELL Filled @ 156.359
+[09:04:46] HFT: SELL CADJPY (Vel -0.00524%)
+[09:04:46] SUCCESS: Auto-Trade SELL Filled @ 114.498
+[09:04:47] HFT: SELL USDJPY (Vel -0.00895%)
+[09:04:47] SUCCESS: Auto-Trade SELL Filled @ 156.357
+[09:05:13] COMMAND: Starting Close All (Profitable Only: True)...
+[09:05:13] CLOSING: Ticket 54467636984 (Profit: 0.3)
+[09:05:14] SUCCESS: Closed Position 54467636984 @ 1.17747
+[09:05:14] CLOSING: Ticket 54468093451 (Profit: 0.28)
+[09:05:14] SUCCESS: Closed Position 54468093451 @ 1.35067
+[09:05:14] CLOSING: Ticket 54468120277 (Profit: 0.1)
+[09:05:15] SUCCESS: Closed Position 54468120277 @ 105.181
+[09:05:15] COMMAND: Close All Completed. Total Closed: 3
+[09:05:16] HFT: SELL AUDJPY (Vel -0.00666%)
+[09:05:16] SUCCESS: Auto-Trade SELL Filled @ 105.176
+[09:05:25] HFT: SELL CADJPY (Vel -0.01135%)
+[09:05:25] SUCCESS: Auto-Trade SELL Filled @ 114.504
+[09:06:07] HFT: BUY CADJPY (Vel 0.01310%)
+[09:06:08] SUCCESS: Auto-Trade BUY Filled @ 114.515
+[09:08:47] INFO: Smart Connect: Already connected to MT5.
+[09:08:47] INFO: MT5 Connected. Account: 5042587631
+[09:08:47] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[09:08:47] INFO: System Warmup Active. Trading paused for 15s...
+[09:08:48] INFO: Profit Guardian (ATR Trailing) Started.
+[09:08:48] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[09:10:01] HFT: BUY CADJPY (Vel 0.01135%)
+[09:10:01] SUCCESS: Auto-Trade BUY Filled @ 114.514
+[09:10:40] HFT: SELL USDCAD (Vel -0.00878%)
+[09:10:41] SUCCESS: Auto-Trade SELL Filled @ 1.36585
+[09:11:35] HFT: BUY GBPJPY (Vel 0.00757%)
+[09:11:35] SUCCESS: Auto-Trade BUY Filled @ 211.258
+[09:11:37] HFT: BUY GBPUSD (Vel 0.00592%)
+[09:11:38] SUCCESS: Auto-Trade BUY Filled @ 1.35095
+[09:11:40] HFT: BUY GBPJPY (Vel 0.00805%)
+[09:11:40] SUCCESS: Auto-Trade BUY Filled @ 211.261
+[14:24:34] INFO: Smart Connect: Already connected to MT5.
+[14:24:34] INFO: MT5 Connected. Account: 5042587631
+[14:24:34] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[14:24:34] INFO: System Warmup Active. Trading paused for 15s...
+[14:25:14] INFO: Smart Connect: Already connected to MT5.
+[14:25:14] INFO: MT5 Connected. Account: 5042587631
+[14:25:14] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[14:25:14] INFO: System Warmup Active. Trading paused for 15s...
+[14:25:18] INFO: Profit Guardian (ATR Trailing) Started.
+[14:25:18] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[14:25:27] COMMAND: Starting Close All (Profitable Only: True)...
+[14:25:27] CLOSING: Ticket 54447631670 (Profit: 13.98)
+[14:25:27] SUCCESS: Closed Position 54447631670 @ 4460.15
+[14:25:28] CLOSING: Ticket 54447729579 (Profit: 16.51)
+[14:25:28] SUCCESS: Closed Position 54447729579 @ 4459.85
+[14:25:28] CLOSING: Ticket 54447969977 (Profit: 21.9)
+[14:25:29] SUCCESS: Closed Position 54447969977 @ 4459.82
+[14:25:29] CLOSING: Ticket 54456151269 (Profit: 0.98)
+[14:25:29] SUCCESS: Closed Position 54456151269 @ 1.1786
+[14:25:31] CLOSING: Ticket 54456154488 (Profit: 0.92)
+[14:25:32] SUCCESS: Closed Position 54456154488 @ 1.17858
+[14:25:32] CLOSING: Ticket 54456166348 (Profit: 1.1400000000000001)
+[14:25:32] SUCCESS: Closed Position 54456166348 @ 1.1785700000000001
+[14:25:33] CLOSING: Ticket 54467637426 (Profit: 0.15)
+[14:25:33] SUCCESS: Closed Position 54467637426 @ 0.78888
+[14:25:33] CLOSING: Ticket 54467639075 (Profit: 155.45)
+[14:25:33] SUCCESS: Closed Position 54467639075 @ 74.832
+[14:25:34] HFT: BUY EURJPY (Vel 0.01412%)
+[14:25:34] SUCCESS: Auto-Trade BUY Filled @ 184.218
+[14:25:34] CLOSING: Ticket 54467640124 (Profit: 155.4)
+[14:25:35] SUCCESS: Closed Position 54467640124 @ 74.826
+[14:25:35] CLOSING: Ticket 54467640708 (Profit: 0.35)
+[14:25:35] SUCCESS: Closed Position 54467640708 @ 0.789
+[14:25:36] CLOSING: Ticket 54467640815 (Profit: 0.77)
+[14:25:36] SUCCESS: Closed Position 54467640815 @ 0.67075
+[14:25:36] CLOSING: Ticket 54467640928 (Profit: 0.92)
+[14:25:36] SUCCESS: Closed Position 54467640928 @ 0.58167
+[14:25:37] CLOSING: Ticket 54467640993 (Profit: 1.47)
+[14:25:37] SUCCESS: Closed Position 54467640993 @ 0.8735
+[14:25:37] CLOSING: Ticket 54467641086 (Profit: 1.54)
+[14:25:38] SUCCESS: Closed Position 54467641086 @ 104.809
+[14:25:38] CLOSING: Ticket 54467642347 (Profit: 0.34)
+[14:25:38] SUCCESS: Closed Position 54467642347 @ 0.78903
+[14:25:39] CLOSING: Ticket 54467646091 (Profit: 1.46)
+[14:25:39] SUCCESS: Closed Position 54467646091 @ 0.87352
+[14:25:39] COMMAND: Starting Close All (Profitable Only: True)...
+[14:25:39] CLOSING: Ticket 54467646333 (Profit: 1.13)
+[14:25:40] SUCCESS: Closed Position 54467646333 @ 1.36826
+[14:25:40] CLOSING: Ticket 54467646333 (Profit: 1.11)
+[14:25:40] ERROR: Position 54467646333 not found to close.
+[14:25:40] CLOSING: Ticket 54467679432 (Profit: 1.04)
+[14:25:40] CLOSING: Ticket 54467679432 (Profit: 1.08)
+[14:25:40] SUCCESS: Closed Position 54467679432 @ 0.67072
+[14:25:40] ERROR: Position 54467679432 not found to close.
+[14:25:40] CLOSING: Ticket 54467679731 (Profit: 171.25)
+[14:25:40] SUCCESS: Closed Position 54467679731 @ 74.727
+[14:25:40] CLOSING: Ticket 54467679731 (Profit: 163.85)
+[14:25:40] ERROR: Position 54467679731 not found to close.
+[14:25:40] CLOSING: Ticket 54467680013 (Profit: 1.02)
+[14:25:41] SUCCESS: Closed Position 54467680013 @ 0.58167
+[14:25:41] CLOSING: Ticket 54467680013 (Profit: 1.08)
+[14:25:41] ERROR: Position 54467680013 not found to close.
+[14:25:41] CLOSING: Ticket 54467680055 (Profit: 1.8900000000000001)
+[14:25:41] SUCCESS: Closed Position 54467680055 @ 104.806
+[14:25:42] CLOSING: Ticket 54467680055 (Profit: 1.85)
+[14:25:42] ERROR: Position 54467680055 not found to close.
+[14:25:42] CLOSING: Ticket 54467686148 (Profit: 0.79)
+[14:25:42] SUCCESS: Closed Position 54467686148 @ 1.34913
+[14:25:42] CLOSING: Ticket 54467686148 (Profit: 1.26)
+[14:25:42] ERROR: Position 54467686148 not found to close.
+[14:25:42] CLOSING: Ticket 54467800723 (Profit: 2.2800000000000002)
+[14:25:43] SUCCESS: Closed Position 54467800723 @ 0.87356
+[14:25:43] CLOSING: Ticket 54467800723 (Profit: 1.96)
+[14:25:43] ERROR: Position 54467800723 not found to close.
+[14:25:43] CLOSING: Ticket 54468147289 (Profit: 2.32)
+[14:25:43] SUCCESS: Closed Position 54468147289 @ 104.807
+[14:25:43] CLOSING: Ticket 54468147289 (Profit: 2.36)
+[14:25:43] ERROR: Position 54468147289 not found to close.
+[14:25:43] COMMAND: Close All Completed. Total Closed: 4
+[14:25:43] COMMAND: Close All Completed. Total Closed: 20
+[14:25:45] HFT: SELL AUDUSD (Vel -0.00596%)
+[14:25:45] SUCCESS: Auto-Trade SELL Filled @ 0.67064
+[14:25:56] HFT: BUY GBPUSD (Vel 0.00519%)
+[14:25:57] SUCCESS: Auto-Trade BUY Filled @ 1.3490199999999999
+[14:25:57] HFT: SELL AUDUSD (Vel -0.00746%)
+[14:25:58] SUCCESS: Auto-Trade SELL Filled @ 0.67062
+[14:25:58] HFT: SELL AUDJPY (Vel -0.00668%)
+[14:25:58] SUCCESS: Auto-Trade SELL Filled @ 104.786
+[14:26:25] HFT: SELL NZDUSD (Vel -0.00516%)
+[14:26:25] SUCCESS: Auto-Trade SELL Filled @ 0.58137
+[14:26:26] HFT: SELL AUDJPY (Vel -0.00573%)
+[14:26:26] SUCCESS: Auto-Trade SELL Filled @ 104.766
+[14:26:37] HFT: BUY EURGBP (Vel 0.00687%)
+[14:26:37] SUCCESS: Auto-Trade BUY Filled @ 0.87398
+[14:26:44] HFT: BUY USDJPY (Vel 0.00512%)
+[14:26:44] SUCCESS: Auto-Trade BUY Filled @ 156.265
+[14:26:50] HFT: BUY EURGBP (Vel 0.01259%)
+[14:26:50] SUCCESS: Auto-Trade BUY Filled @ 0.87397
+[14:26:58] HFT: BUY EURGBP (Vel 0.00687%)
+[14:26:59] SUCCESS: Auto-Trade BUY Filled @ 0.87393
+[14:26:59] HFT: SELL AUDJPY (Vel -0.02099%)
+[14:27:00] SUCCESS: Auto-Trade SELL Filled @ 104.778
+[14:27:00] HFT: SELL NZDUSD (Vel -0.00688%)
+[14:27:00] SUCCESS: Auto-Trade SELL Filled @ 0.58137
+[14:28:34] HFT: SELL XAUUSD (Vel -0.00560%)
+[14:28:35] SUCCESS: Auto-Trade SELL Filled @ 4462.08
+[14:28:56] HFT: SELL XAUUSD (Vel -0.00538%)
+[14:28:57] SUCCESS: Auto-Trade SELL Filled @ 4462.36
+[14:29:05] HFT: SELL XAUUSD (Vel -0.00538%)
+[14:29:05] SUCCESS: Auto-Trade SELL Filled @ 4463.22
+[14:29:09] HFT: SELL XAGUSD (Vel -0.00934%)
+[14:29:09] SUCCESS: Auto-Trade SELL Filled @ 74.967
+[14:30:31] HFT: SELL XAGUSD (Vel -0.01204%)
+[14:30:31] SUCCESS: Auto-Trade SELL Filled @ 74.746
+[14:30:32] HFT: SELL XAGUSD (Vel -0.01338%)
+[14:30:32] SUCCESS: Auto-Trade SELL Filled @ 74.735
+[14:33:52] HFT: SELL EURUSD (Vel -0.00510%)
+[14:33:59] SUCCESS: Auto-Trade SELL Filled @ 1.17755
+[14:41:36] HFT: SELL USDCHF (Vel -0.00507%)
+[14:41:49] SUCCESS: Auto-Trade SELL Filled @ 0.78863
+[14:43:17] HFT: SELL USDCHF (Vel -0.01775%)
+[14:43:18] SUCCESS: Auto-Trade SELL Filled @ 0.78849
+[14:43:19] HFT: SELL USDCAD (Vel -0.02995%)
+[14:43:20] SUCCESS: Auto-Trade SELL Filled @ 1.36838
+[14:44:55] HFT: SELL USDCAD (Vel -0.00658%)
+[14:45:00] SUCCESS: Auto-Trade SELL Filled @ 1.36811
+[14:46:18] HFT: SELL AUDUSD (Vel -0.00747%)
+[14:46:19] SUCCESS: Auto-Trade SELL Filled @ 0.66971
+[14:48:01] INFO: Smart Connect: Already connected to MT5.
+[14:48:01] INFO: MT5 Connected. Account: 5042587631
+[14:48:01] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[14:48:01] INFO: System Warmup Active. Trading paused for 15s...
+[14:48:02] INFO: Profit Guardian (ATR Trailing) Started.
+[14:48:02] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[15:09:28] INFO: Smart Connect: Already connected to MT5.
+[15:09:28] INFO: MT5 Connected. Account: 5042587631
+[15:09:28] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[15:09:28] INFO: System Warmup Active. Trading paused for 15s...
+[15:09:29] INFO: Profit Guardian (ATR Trailing) Started.
+[15:09:29] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[15:10:17] COMMAND: Starting Close All (Profitable Only: True)...
+[15:10:17] CLOSING: Ticket 54472775981 (Profit: 0.27)
+[15:10:17] SUCCESS: Closed Position 54472775981 @ 0.67037
+[15:10:18] CLOSING: Ticket 54472780185 (Profit: 1.6600000000000001)
+[15:10:18] SUCCESS: Closed Position 54472780185 @ 1.35069
+[15:10:18] CLOSING: Ticket 54472780553 (Profit: 0.26)
+[15:10:18] SUCCESS: Closed Position 54472780553 @ 0.67038
+[15:10:19] CLOSING: Ticket 54472780959 (Profit: 0.74)
+[15:10:19] SUCCESS: Closed Position 54472780959 @ 104.671
+[15:10:19] CLOSING: Ticket 54472796554 (Profit: 0.23)
+[15:10:20] SUCCESS: Closed Position 54472796554 @ 0.58116
+[15:10:20] CLOSING: Ticket 54472797187 (Profit: 0.62)
+[15:10:20] SUCCESS: Closed Position 54472797187 @ 104.675
+[15:10:21] CLOSING: Ticket 54472812059 (Profit: 0.7)
+[15:10:21] SUCCESS: Closed Position 54472812059 @ 104.675
+[15:10:21] CLOSING: Ticket 54472812601 (Profit: 0.24)
+[15:10:22] SUCCESS: Closed Position 54472812601 @ 0.58116
+[15:10:22] CLOSING: Ticket 54472849343 (Profit: 0.05)
+[15:10:22] SUCCESS: Closed Position 54472849343 @ 0.58107
+[15:10:22] CLOSING: Ticket 54473089090 (Profit: 1.49)
+[15:10:23] SUCCESS: Closed Position 54473089090 @ 0.78741
+[15:10:23] CLOSING: Ticket 54473108873 (Profit: 1.3599999999999999)
+[15:10:24] SUCCESS: Closed Position 54473108873 @ 0.78741
+[15:10:24] CLOSING: Ticket 54473109262 (Profit: 0.42)
+[15:10:24] SUCCESS: Closed Position 54473109262 @ 1.3678
+[15:10:24] CLOSING: Ticket 54473137940 (Profit: 0.23)
+[15:10:25] SUCCESS: Closed Position 54473137940 @ 1.3678
+[15:10:25] COMMAND: Close All Completed. Total Closed: 13
+[15:10:39] HFT: SELL AUDJPY (Vel -0.00955%)
+[15:10:39] SUCCESS: Auto-Trade SELL Filled @ 104.653
+[15:10:59] SETTINGS: Auto-Secure ENABLED (Target: $10.0)
+[15:11:03] HFT: SELL NZDUSD (Vel -0.00688%)
+[15:11:03] SUCCESS: Auto-Trade SELL Filled @ 0.58095
+[15:11:24] HFT: SELL NZDUSD (Vel -0.00516%)
+[15:11:25] SUCCESS: Auto-Trade SELL Filled @ 0.58091
+[15:13:39] HFT: SELL AUDJPY (Vel -0.00573%)
+[15:13:39] SUCCESS: Auto-Trade SELL Filled @ 104.645
+[15:23:22] INFO: Smart Connect: Already connected to MT5.
+[15:23:22] INFO: MT5 Connected. Account: 5042587631
+[15:23:22] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[15:23:22] INFO: System Warmup Active. Trading paused for 15s...
+[15:23:24] INFO: Profit Guardian (ATR Trailing) Started.
+[15:23:24] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[15:30:01] HFT: BUY USDCHF (Vel 0.00507%)
+[15:30:01] SUCCESS: Auto-Trade BUY Filled @ 0.78857
+[15:30:45] INFO: Smart Connect: Already connected to MT5.
+[15:30:46] INFO: MT5 Connected. Account: 5042587631
+[15:30:46] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[15:30:46] INFO: System Warmup Active. Trading paused for 15s...
+[15:30:47] INFO: Profit Guardian (ATR Trailing) Started.
+[15:30:47] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[15:34:11] HFT: BUY AUDJPY (Vel 0.00573%)
+[15:34:11] SUCCESS: Auto-Trade BUY Filled @ 104.756
+[15:36:28] HFT: BUY USDCHF (Vel 0.00634%)
+[15:36:28] SUCCESS: Auto-Trade BUY Filled @ 0.78871
+[19:10:21] INFO: Smart Connect: Already connected to MT5.
+[19:10:21] INFO: MT5 Connected. Account: 5042587631
+[19:10:21] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[19:10:21] INFO: System Warmup Active. Trading paused for 15s...
+[19:10:23] INFO: Profit Guardian (ATR Trailing) Started.
+[19:10:23] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[19:10:43] HFT: SELL XAUUSD (Vel -0.00764%)
+[19:10:43] SUCCESS: Auto-Trade SELL Filled @ 4447.38
+[19:10:44] HFT: SELL XAUUSD (Vel -0.00607%)
+[19:10:44] SUCCESS: Auto-Trade SELL Filled @ 4447.08
+[19:10:50] HFT: SELL XAUUSD (Vel -0.00675%)
+[19:10:51] SUCCESS: Auto-Trade SELL Filled @ 4446.04
+[19:10:54] COMMAND: Starting Close All (Profitable Only: True)...
+[19:10:54] CLOSING: Ticket 54472806162 (Profit: 0.11)
+[19:10:54] SUCCESS: Closed Position 54472806162 @ 156.282
+[19:10:54] HFT: SELL XAUUSD (Vel -0.00787%)
+[19:10:55] SUCCESS: Auto-Trade SELL Filled @ 4445.64
+[19:10:55] CLOSING: Ticket 54472949528 (Profit: 0.73)
+[19:10:55] SUCCESS: Closed Position 54472949528 @ 1.17685
+[19:10:55] CLOSING: Ticket 54473155883 (Profit: 0.45)
+[19:10:56] SUCCESS: Closed Position 54473155883 @ 0.66933
+[19:10:56] CLOSING: Ticket 54473521108 (Profit: 0.33)
+[19:10:56] SUCCESS: Closed Position 54473521108 @ 104.607
+[19:10:56] CLOSING: Ticket 54473528481 (Profit: 1.23)
+[19:10:57] SUCCESS: Closed Position 54473528481 @ 0.57979
+[19:10:57] CLOSING: Ticket 54473534854 (Profit: 1.19)
+[19:10:57] SUCCESS: Closed Position 54473534854 @ 0.57978
+[19:10:57] CLOSING: Ticket 54473574612 (Profit: 0.27)
+[19:10:57] SUCCESS: Closed Position 54473574612 @ 104.607
+[19:10:58] CLOSING: Ticket 54473823664 (Profit: 1.1)
+[19:10:58] SUCCESS: Closed Position 54473823664 @ 0.7894
+[19:10:58] CLOSING: Ticket 54473907874 (Profit: 0.92)
+[19:10:59] SUCCESS: Closed Position 54473907874 @ 0.7894
+[19:10:59] CLOSING: Ticket 54477775632 (Profit: 1.09)
+[19:10:59] ERROR: Position 54477775632 not found to close.
+[19:10:59] COMMAND: Close All Completed. Total Closed: 9
+[19:11:07] HFT: SELL XAUUSD (Vel -0.01350%)
+[19:11:07] SUCCESS: Auto-Trade SELL Filled @ 4444.09
+[19:11:20] HFT: SELL XAUUSD (Vel -0.00720%)
+[19:11:20] SUCCESS: Auto-Trade SELL Filled @ 4442.39
+[19:11:31] HFT: SELL XAUUSD (Vel -0.00856%)
+[19:11:31] SUCCESS: Auto-Trade SELL Filled @ 4441.44
+[19:11:43] HFT: SELL XAUUSD (Vel -0.01171%)
+[19:11:43] SUCCESS: Auto-Trade SELL Filled @ 4441.52
+[19:11:54] HFT: SELL XAUUSD (Vel -0.01509%)
+[19:11:54] SUCCESS: Auto-Trade SELL Filled @ 4440.67
+[19:12:03] HFT: SELL XAUUSD (Vel -0.00923%)
+[19:12:03] SUCCESS: Auto-Trade SELL Filled @ 4440.05
+[19:12:20] HFT: SELL XAUUSD (Vel -0.00766%)
+[19:12:21] SUCCESS: Auto-Trade SELL Filled @ 4437.49
+[19:12:22] HFT: SELL XAUUSD (Vel -0.00901%)
+[19:12:22] SUCCESS: Auto-Trade SELL Filled @ 4436.84
+[19:14:17] HFT: SELL XAGUSD (Vel -0.00544%)
+[19:14:17] SUCCESS: Auto-Trade SELL Filled @ 73.543
+[19:14:18] HFT: SELL XAGUSD (Vel -0.02719%)
+[19:14:18] SUCCESS: Auto-Trade SELL Filled @ 73.523
+[19:14:19] HFT: SELL XAGUSD (Vel -0.02040%)
+[19:14:19] SUCCESS: Auto-Trade SELL Filled @ 73.508
+[19:14:49] HFT: SELL XAGUSD (Vel -0.01495%)
+[19:14:49] SUCCESS: Auto-Trade SELL Filled @ 73.571
+[19:14:50] HFT: SELL XAGUSD (Vel -0.02038%)
+[19:14:50] SUCCESS: Auto-Trade SELL Filled @ 73.571
+[19:14:51] HFT: SELL XAGUSD (Vel -0.00815%)
+[19:14:52] SUCCESS: Auto-Trade SELL Filled @ 73.583
+[19:14:52] HFT: SELL USDCAD (Vel -0.00512%)
+[19:14:52] SUCCESS: Auto-Trade SELL Filled @ 1.36844
+[19:15:01] HFT: SELL USDCAD (Vel -0.00512%)
+[19:15:02] SUCCESS: Auto-Trade SELL Filled @ 1.36842
+[19:15:11] HFT: SELL XAGUSD (Vel -0.02590%)
+[19:15:11] SUCCESS: Auto-Trade SELL Filled @ 73.339
+[19:15:12] HFT: SELL XAGUSD (Vel -0.05454%)
+[19:15:13] SUCCESS: Auto-Trade SELL Filled @ 73.299
+[19:15:16] HFT: SELL XAGUSD (Vel -0.02860%)
+[19:15:17] SUCCESS: Auto-Trade SELL Filled @ 73.399
+[19:15:29] HFT: SELL XAGUSD (Vel -0.00818%)
+[19:15:29] SUCCESS: Auto-Trade SELL Filled @ 73.362
+[19:15:35] HFT: SELL XAGUSD (Vel -0.00954%)
+[19:15:35] SUCCESS: Auto-Trade SELL Filled @ 73.361
+[19:16:02] HFT: SELL XAGUSD (Vel -0.00954%)
+[19:16:02] SUCCESS: Auto-Trade SELL Filled @ 73.353
+[19:16:03] HFT: SELL XAGUSD (Vel -0.01091%)
+[19:16:03] SUCCESS: Auto-Trade SELL Filled @ 73.343
+[19:16:36] HFT: SELL XAGUSD (Vel -0.00682%)
+[19:16:36] SUCCESS: Auto-Trade SELL Filled @ 73.269
+[19:16:37] HFT: SELL XAGUSD (Vel -0.00955%)
+[19:16:37] SUCCESS: Auto-Trade SELL Filled @ 73.313
+[19:17:27] HFT: SELL USDCHF (Vel -0.00760%)
+[19:17:28] SUCCESS: Auto-Trade SELL Filled @ 0.78939
+[19:17:34] HFT: SELL USDCHF (Vel -0.00633%)
+[19:17:34] SUCCESS: Auto-Trade SELL Filled @ 0.78935
+[19:18:01] HFT: SELL XAGUSD (Vel -0.00682%)
+[19:18:02] SUCCESS: Auto-Trade SELL Filled @ 73.32
+[19:18:02] HFT: SELL XAGUSD (Vel -0.01909%)
+[19:18:02] SUCCESS: Auto-Trade SELL Filled @ 73.306
+[19:18:03] HFT: SELL XAGUSD (Vel -0.01228%)
+[19:18:03] SUCCESS: Auto-Trade SELL Filled @ 73.297
+[19:18:34] HFT: SELL XAGUSD (Vel -0.00681%)
+[19:18:34] SUCCESS: Auto-Trade SELL Filled @ 73.372
+[19:20:11] HFT: BUY GBPUSD (Vel 0.00519%)
+[19:20:11] SUCCESS: Auto-Trade BUY Filled @ 1.34916
+[19:20:22] HFT: SELL USDJPY (Vel -0.00768%)
+[19:20:22] SUCCESS: Auto-Trade SELL Filled @ 156.203
+[19:23:02] HFT: SELL XAGUSD (Vel -0.01775%)
+[19:23:02] SUCCESS: Auto-Trade SELL Filled @ 73.215
+[19:23:02] HFT: SELL XAGUSD (Vel -0.03415%)
+[19:23:03] SUCCESS: Auto-Trade SELL Filled @ 73.19
+[19:23:04] HFT: SELL XAGUSD (Vel -0.01776%)
+[19:23:04] SUCCESS: Auto-Trade SELL Filled @ 73.186
+[19:23:06] HFT: SELL XAGUSD (Vel -0.03551%)
+[19:23:07] SUCCESS: Auto-Trade SELL Filled @ 73.194
+[19:23:10] HFT: BUY NZDUSD (Vel 0.00518%)
+[19:23:11] SUCCESS: Auto-Trade BUY Filled @ 0.57973
+[19:23:35] HFT: BUY NZDUSD (Vel 0.00518%)
+[19:23:37] SUCCESS: Auto-Trade BUY Filled @ 0.57979
+[19:25:11] HFT: SELL XAGUSD (Vel -0.00957%)
+[19:25:11] SUCCESS: Auto-Trade SELL Filled @ 73.153
+[19:25:12] HFT: SELL XAGUSD (Vel -0.03281%)
+[19:25:13] SUCCESS: Auto-Trade SELL Filled @ 73.133
+[19:25:28] HFT: SELL XAGUSD (Vel -0.01640%)
+[19:25:28] SUCCESS: Auto-Trade SELL Filled @ 73.147
+[19:26:18] HFT: SELL XAGUSD (Vel -0.01094%)
+[19:26:18] SUCCESS: Auto-Trade SELL Filled @ 73.129
+[19:26:26] HFT: SELL XAGUSD (Vel -0.01504%)
+[19:26:27] SUCCESS: Auto-Trade SELL Filled @ 73.143
+[19:27:06] HFT: BUY AUDUSD (Vel 0.00598%)
+[19:27:06] SUCCESS: Auto-Trade BUY Filled @ 0.66939
+[19:27:26] HFT: SELL XAUUSD (Vel -0.00634%)
+[19:27:26] SUCCESS: Auto-Trade SELL Filled @ 4415.89
+[19:27:27] HFT: SELL XAUUSD (Vel -0.00702%)
+[19:27:27] SUCCESS: Auto-Trade SELL Filled @ 4415.48
+[19:27:32] HFT: BUY AUDUSD (Vel 0.00598%)
+[19:27:32] SUCCESS: Auto-Trade BUY Filled @ 0.66953
+[19:27:51] HFT: SELL XAUUSD (Vel -0.01064%)
+[19:27:51] SUCCESS: Auto-Trade SELL Filled @ 4415.69
+[19:28:10] HFT: SELL XAUUSD (Vel -0.00634%)
+[19:28:10] SUCCESS: Auto-Trade SELL Filled @ 4416.64
+[19:28:22] HFT: SELL XAUUSD (Vel -0.01109%)
+[19:28:23] SUCCESS: Auto-Trade SELL Filled @ 4416.82
+[19:28:40] HFT: SELL XAUUSD (Vel -0.00747%)
+[19:28:41] SUCCESS: Auto-Trade SELL Filled @ 4415.95
+[19:28:41] HFT: SELL XAUUSD (Vel -0.00611%)
+[19:28:41] SUCCESS: Auto-Trade SELL Filled @ 4415.68
+[19:28:55] HFT: SELL XAUUSD (Vel -0.00883%)
+[19:28:55] SUCCESS: Auto-Trade SELL Filled @ 4415.17
+[19:29:02] HFT: SELL XAUUSD (Vel -0.00860%)
+[19:29:02] SUCCESS: Auto-Trade SELL Filled @ 4415.57
+[19:29:07] HFT: SELL XAUUSD (Vel -0.00770%)
+[19:29:07] SUCCESS: Auto-Trade SELL Filled @ 4417.31
+[19:29:50] HFT: BUY GBPUSD (Vel 0.00519%)
+[19:29:50] SUCCESS: Auto-Trade BUY Filled @ 1.34938
+[19:30:48] HFT: SELL XAUUSD (Vel -0.00702%)
+[19:30:48] SUCCESS: Auto-Trade SELL Filled @ 4414.46
+[19:31:03] HFT: SELL XAUUSD (Vel -0.00703%)
+[19:31:04] SUCCESS: Auto-Trade SELL Filled @ 4412.23
+[19:31:16] HFT: SELL XAUUSD (Vel -0.00748%)
+[19:31:17] SUCCESS: Auto-Trade SELL Filled @ 4410.52
+[19:31:27] HFT: SELL XAUUSD (Vel -0.00817%)
+[19:31:30] SUCCESS: Auto-Trade SELL Filled @ 4407.26
+[19:31:30] HFT: SELL XAUUSD (Vel -0.00545%)
+[19:31:31] SUCCESS: Auto-Trade SELL Filled @ 4407.02
+[19:31:35] HFT: SELL XAUUSD (Vel -0.00703%)
+[19:31:35] SUCCESS: Auto-Trade SELL Filled @ 4407.01
+[19:31:49] HFT: SELL AUDJPY (Vel -0.00574%)
+[19:31:49] SUCCESS: Auto-Trade SELL Filled @ 104.525
+[19:31:53] HFT: SELL XAUUSD (Vel -0.00794%)
+[19:31:53] SUCCESS: Auto-Trade SELL Filled @ 4406.38
+[19:31:56] HFT: SELL XAGUSD (Vel -0.02051%)
+[19:31:56] SUCCESS: Auto-Trade SELL Filled @ 73.104
+[19:31:56] HFT: SELL XAGUSD (Vel -0.01094%)
+[19:31:57] SUCCESS: Auto-Trade SELL Filled @ 73.096
+[19:31:57] HFT: SELL XAGUSD (Vel -0.02189%)
+[19:31:58] SUCCESS: Auto-Trade SELL Filled @ 73.08
+[19:32:00] HFT: SELL XAUUSD (Vel -0.00613%)
+[19:32:00] SUCCESS: Auto-Trade SELL Filled @ 4406.88
+[19:32:08] HFT: SELL XAUUSD (Vel -0.00567%)
+[19:32:11] SUCCESS: Auto-Trade SELL Filled @ 4406.34
+[19:32:26] HFT: SELL XAUUSD (Vel -0.00635%)
+[19:32:27] SUCCESS: Auto-Trade SELL Filled @ 4409.38
+[19:32:46] HFT: SELL XAUUSD (Vel -0.00726%)
+[19:32:46] SUCCESS: Auto-Trade SELL Filled @ 4407.56
+[19:32:51] HFT: SELL XAUUSD (Vel -0.00862%)
+[19:32:51] SUCCESS: Auto-Trade SELL Filled @ 4407.99
+[19:32:55] HFT: SELL XAUUSD (Vel -0.00658%)
+[19:32:55] SUCCESS: Auto-Trade SELL Filled @ 4406.98
+[19:32:56] HFT: SELL XAUUSD (Vel -0.00703%)
+[19:32:56] SUCCESS: Auto-Trade SELL Filled @ 4406.67
+[19:33:02] HFT: SELL XAUUSD (Vel -0.01294%)
+[19:33:02] SUCCESS: Auto-Trade SELL Filled @ 4404.71
+[19:33:05] HFT: SELL XAUUSD (Vel -0.00567%)
+[19:33:05] SUCCESS: Auto-Trade SELL Filled @ 4405.22
+[19:33:06] HFT: SELL XAUUSD (Vel -0.00590%)
+[19:33:06] SUCCESS: Auto-Trade SELL Filled @ 4404.96
+[19:33:16] HFT: SELL XAGUSD (Vel -0.00686%)
+[19:33:16] SUCCESS: Auto-Trade SELL Filled @ 72.88
+[19:33:18] HFT: SELL XAGUSD (Vel -0.22236%)
+[19:33:18] SUCCESS: Auto-Trade SELL Filled @ 72.694
+[19:33:19] HFT: SELL XAGUSD (Vel -0.00688%)
+[19:33:20] SUCCESS: Auto-Trade SELL Filled @ 72.694
+[19:33:20] HFT: SELL XAGUSD (Vel -0.04264%)
+[19:33:21] SUCCESS: Auto-Trade SELL Filled @ 72.663
+[19:33:25] HFT: SELL AUDJPY (Vel -0.01052%)
+[19:33:25] SUCCESS: Auto-Trade SELL Filled @ 104.51
+[19:33:29] HFT: SELL XAGUSD (Vel -0.02200%)
+[19:33:29] SUCCESS: Auto-Trade SELL Filled @ 72.707
+[19:33:31] HFT: BUY EURUSD (Vel 0.00680%)
+[19:33:31] SUCCESS: Auto-Trade BUY Filled @ 1.17706
+[19:33:32] HFT: SELL XAUUSD (Vel -0.01226%)
+[19:33:32] SUCCESS: Auto-Trade SELL Filled @ 4403.4
+[19:33:33] HFT: SELL XAUUSD (Vel -0.00727%)
+[19:33:33] SUCCESS: Auto-Trade SELL Filled @ 4403.73
+[19:33:35] HFT: SELL XAUUSD (Vel -0.01567%)
+[19:33:35] SUCCESS: Auto-Trade SELL Filled @ 4403.1
+[19:33:53] HFT: BUY XAUUSD (Vel 0.04953%)
+[19:33:59] SUCCESS: Auto-Trade BUY Filled @ 4403.43
+[19:34:00] HFT: SELL XAUUSD (Vel -0.03316%)
+[19:34:00] SUCCESS: Auto-Trade SELL Filled @ 4401.72
+[19:34:11] HFT: SELL XAUUSD (Vel -0.01408%)
+[19:34:11] SUCCESS: Auto-Trade SELL Filled @ 4401.72
+[19:34:14] HFT: SELL XAUUSD (Vel -0.00545%)
+[19:34:15] SUCCESS: Auto-Trade SELL Filled @ 4405.0
+[19:34:33] HFT: SELL XAUUSD (Vel -0.01999%)
+[19:34:33] SUCCESS: Auto-Trade SELL Filled @ 4402.25
+[19:34:38] HFT: SELL XAUUSD (Vel -0.00886%)
+[19:34:38] SUCCESS: Auto-Trade SELL Filled @ 4401.96
+[19:34:39] HFT: SELL XAUUSD (Vel -0.01931%)
+[19:34:39] SUCCESS: Auto-Trade SELL Filled @ 4401.11
+[19:34:50] HFT: SELL XAUUSD (Vel -0.01000%)
+[19:34:51] SUCCESS: Auto-Trade SELL Filled @ 4400.08
+[19:34:51] HFT: SELL XAUUSD (Vel -0.01068%)
+[19:34:52] SUCCESS: Auto-Trade SELL Filled @ 4399.61
+[19:34:55] HFT: SELL XAGUSD (Vel -0.00964%)
+[19:34:58] SUCCESS: Auto-Trade SELL Filled @ 72.612
+[19:35:00] HFT: SELL XAGUSD (Vel -0.00826%)
+[19:35:00] SUCCESS: Auto-Trade SELL Filled @ 72.649
+[19:35:01] HFT: SELL XAUUSD (Vel -0.00636%)
+[19:35:02] SUCCESS: Auto-Trade SELL Filled @ 4400.62
+[19:35:02] HFT: SELL XAGUSD (Vel -0.00687%)
+[19:35:03] SUCCESS: Auto-Trade SELL Filled @ 72.722
+[19:35:52] HFT: SELL XAUUSD (Vel -0.02181%)
+[19:35:52] SUCCESS: Auto-Trade SELL Filled @ 4401.05
+[19:36:05] HFT: SELL XAUUSD (Vel -0.00659%)
+[19:36:05] SUCCESS: Auto-Trade SELL Filled @ 4399.75
+[19:36:07] HFT: SELL XAUUSD (Vel -0.01182%)
+[19:36:07] SUCCESS: Auto-Trade SELL Filled @ 4399.44
+[19:36:08] HFT: SELL XAUUSD (Vel -0.02977%)
+[19:36:08] SUCCESS: Auto-Trade SELL Filled @ 4398.43
+[19:36:21] HFT: SELL XAGUSD (Vel -0.00828%)
+[19:36:21] SUCCESS: Auto-Trade SELL Filled @ 72.496
+[19:36:25] HFT: SELL XAGUSD (Vel -0.01930%)
+[19:36:25] SUCCESS: Auto-Trade SELL Filled @ 72.534
+[19:36:26] HFT: SELL XAUUSD (Vel -0.05117%)
+[19:36:26] SUCCESS: Auto-Trade SELL Filled @ 4394.82
+[19:36:27] HFT: SELL XAGUSD (Vel -0.09099%)
+[19:36:27] SUCCESS: Auto-Trade SELL Filled @ 72.468
+[19:36:28] HFT: SELL XAUUSD (Vel -0.00614%)
+[19:36:29] SUCCESS: Auto-Trade SELL Filled @ 4394.21
+[19:36:32] HFT: SELL AUDUSD (Vel -0.00598%)
+[19:36:32] SUCCESS: Auto-Trade SELL Filled @ 0.66885
+[19:36:35] HFT: SELL XAUUSD (Vel -0.00819%)
+[19:36:35] SUCCESS: Auto-Trade SELL Filled @ 4392.93
+[19:36:39] HFT: SELL XAUUSD (Vel -0.00956%)
+[19:36:39] SUCCESS: Auto-Trade SELL Filled @ 4393.94
+[19:36:43] HFT: SELL XAUUSD (Vel -0.00888%)
+[19:36:43] SUCCESS: Auto-Trade SELL Filled @ 4392.89
+[19:36:49] HFT: SELL XAUUSD (Vel -0.01798%)
+[19:36:50] SUCCESS: Auto-Trade SELL Filled @ 4393.17
+[19:36:51] HFT: SELL XAUUSD (Vel -0.00569%)
+[19:36:51] SUCCESS: Auto-Trade SELL Filled @ 4392.62
+[19:36:55] HFT: SELL XAUUSD (Vel -0.01937%)
+[19:36:55] SUCCESS: Auto-Trade SELL Filled @ 4387.72
+[19:37:23] HFT: SELL XAGUSD (Vel -0.01242%)
+[19:37:24] SUCCESS: Auto-Trade SELL Filled @ 72.434
+[19:37:25] HFT: SELL XAGUSD (Vel -0.00552%)
+[19:37:25] SUCCESS: Auto-Trade SELL Filled @ 72.45
+[19:37:27] HFT: SELL XAGUSD (Vel -0.01517%)
+[19:37:27] SUCCESS: Auto-Trade SELL Filled @ 72.481
+[19:37:54] HFT: SELL XAGUSD (Vel -0.03037%)
+[19:37:55] SUCCESS: Auto-Trade SELL Filled @ 72.429
+[19:37:55] HFT: SELL XAGUSD (Vel -0.01519%)
+[19:37:55] SUCCESS: Auto-Trade SELL Filled @ 72.418
+[19:37:59] HFT: SELL XAGUSD (Vel -0.02346%)
+[19:37:59] SUCCESS: Auto-Trade SELL Filled @ 72.449
+[19:38:04] HFT: SELL XAUUSD (Vel -0.00933%)
+[19:38:04] SUCCESS: Auto-Trade SELL Filled @ 4391.58
+[19:38:05] HFT: SELL XAUUSD (Vel -0.00706%)
+[19:38:05] SUCCESS: Auto-Trade SELL Filled @ 4391.49
+[19:38:39] HFT: SELL XAUUSD (Vel -0.00524%)
+[19:38:39] SUCCESS: Auto-Trade SELL Filled @ 4391.23
+[19:38:40] HFT: SELL XAUUSD (Vel -0.01753%)
+[19:38:40] SUCCESS: Auto-Trade SELL Filled @ 4390.46
+[19:38:46] HFT: SELL XAGUSD (Vel -0.01243%)
+[19:38:46] SUCCESS: Auto-Trade SELL Filled @ 72.376
+[19:38:47] HFT: SELL XAUUSD (Vel -0.00729%)
+[19:38:48] SUCCESS: Auto-Trade SELL Filled @ 4390.71
+[19:38:54] HFT: SELL XAGUSD (Vel -0.02625%)
+[19:38:54] SUCCESS: Auto-Trade SELL Filled @ 72.363
+[19:38:57] HFT: SELL XAGUSD (Vel -0.00691%)
+[19:38:58] SUCCESS: Auto-Trade SELL Filled @ 72.329
+[19:38:59] HFT: SELL XAGUSD (Vel -0.05115%)
+[19:39:00] SUCCESS: Auto-Trade SELL Filled @ 72.302
+[19:39:12] HFT: SELL XAUUSD (Vel -0.01048%)
+[19:39:12] SUCCESS: Auto-Trade SELL Filled @ 4390.68
+[19:39:13] HFT: SELL XAUUSD (Vel -0.00751%)
+[19:39:14] SUCCESS: Auto-Trade SELL Filled @ 4391.15
+[19:39:52] HFT: SELL XAUUSD (Vel -0.00592%)
+[19:39:52] SUCCESS: Auto-Trade SELL Filled @ 4391.62
+[19:40:03] HFT: SELL XAUUSD (Vel -0.00752%)
+[19:40:03] SUCCESS: Auto-Trade SELL Filled @ 4390.2
+[19:40:10] HFT: SELL XAUUSD (Vel -0.00910%)
+[19:40:11] SUCCESS: Auto-Trade SELL Filled @ 4393.93
+[19:40:17] HFT: SELL XAUUSD (Vel -0.00660%)
+[19:40:18] SUCCESS: Auto-Trade SELL Filled @ 4394.45
+[19:42:47] HFT: SELL XAUUSD (Vel -0.00979%)
+[19:42:48] SUCCESS: Auto-Trade SELL Filled @ 4392.63
+[19:42:49] HFT: SELL XAUUSD (Vel -0.00569%)
+[19:42:49] SUCCESS: Auto-Trade SELL Filled @ 4392.28
+[19:43:26] HFT: SELL XAGUSD (Vel -0.01512%)
+[19:43:26] SUCCESS: Auto-Trade SELL Filled @ 72.764
+[19:43:27] HFT: SELL XAGUSD (Vel -0.00687%)
+[19:43:27] SUCCESS: Auto-Trade SELL Filled @ 72.759
+[19:43:41] HFT: SELL XAUUSD (Vel -0.00682%)
+[19:43:42] SUCCESS: Auto-Trade SELL Filled @ 4399.15
+[19:43:47] HFT: SELL XAUUSD (Vel -0.01000%)
+[19:43:47] SUCCESS: Auto-Trade SELL Filled @ 4398.79
+[19:44:07] HFT: SELL XAUUSD (Vel -0.00591%)
+[19:44:07] SUCCESS: Auto-Trade SELL Filled @ 4397.83
+[19:44:18] HFT: SELL XAUUSD (Vel -0.00500%)
+[19:44:19] SUCCESS: Auto-Trade SELL Filled @ 4398.43
+[19:44:32] HFT: SELL XAGUSD (Vel -0.01101%)
+[19:44:33] SUCCESS: Auto-Trade SELL Filled @ 72.644
+[19:44:34] HFT: SELL XAUUSD (Vel -0.01455%)
+[19:44:35] SUCCESS: Auto-Trade SELL Filled @ 4397.41
+[19:44:35] HFT: SELL XAGUSD (Vel -0.01101%)
+[19:44:36] SUCCESS: Auto-Trade SELL Filled @ 72.635
+[19:44:37] HFT: SELL XAUUSD (Vel -0.01091%)
+[19:44:37] SUCCESS: Auto-Trade SELL Filled @ 4397.41
+[19:44:56] HFT: SELL XAGUSD (Vel -0.01100%)
+[19:44:56] SUCCESS: Auto-Trade SELL Filled @ 72.708
+[19:44:57] HFT: SELL XAGUSD (Vel -0.03851%)
+[19:44:57] SUCCESS: Auto-Trade SELL Filled @ 72.68
+[19:45:02] HFT: BUY AUDJPY (Vel 0.00765%)
+[19:45:02] SUCCESS: Auto-Trade BUY Filled @ 104.589
+[19:48:56] HFT: SELL XAGUSD (Vel -0.01240%)
+[19:48:56] SUCCESS: Auto-Trade SELL Filled @ 72.553
+[19:49:02] HFT: SELL XAGUSD (Vel -0.04831%)
+[19:49:03] SUCCESS: Auto-Trade SELL Filled @ 72.416
+[19:49:11] HFT: SELL XAUUSD (Vel -0.01001%)
+[19:49:12] SUCCESS: Auto-Trade SELL Filled @ 4393.32
+[19:49:26] HFT: SELL XAGUSD (Vel -0.00965%)
+[19:49:27] SUCCESS: Auto-Trade SELL Filled @ 72.522
+[19:49:32] HFT: SELL XAUUSD (Vel -0.00523%)
+[19:49:32] SUCCESS: Auto-Trade SELL Filled @ 4396.27
+[19:49:33] HFT: SELL XAUUSD (Vel -0.00591%)
+[19:49:33] SUCCESS: Auto-Trade SELL Filled @ 4396.01
+[19:49:46] HFT: SELL XAUUSD (Vel -0.01296%)
+[19:49:46] SUCCESS: Auto-Trade SELL Filled @ 4396.14
+[19:49:47] HFT: SELL XAUUSD (Vel -0.00569%)
+[19:49:47] SUCCESS: Auto-Trade SELL Filled @ 4395.89
+[19:50:01] HFT: SELL XAUUSD (Vel -0.00569%)
+[19:50:01] SUCCESS: Auto-Trade SELL Filled @ 4395.09
+[19:50:03] HFT: SELL XAUUSD (Vel -0.01092%)
+[19:50:04] SUCCESS: Auto-Trade SELL Filled @ 4395.11
+[19:50:21] HFT: SELL XAUUSD (Vel -0.01183%)
+[19:50:21] SUCCESS: Auto-Trade SELL Filled @ 4395.11
+[19:50:31] HFT: SELL XAUUSD (Vel -0.00683%)
+[19:50:31] SUCCESS: Auto-Trade SELL Filled @ 4394.31
+[19:50:38] HFT: SELL XAUUSD (Vel -0.01319%)
+[19:50:38] SUCCESS: Auto-Trade SELL Filled @ 4395.17
+[19:50:50] HFT: SELL XAUUSD (Vel -0.00751%)
+[19:50:50] SUCCESS: Auto-Trade SELL Filled @ 4394.52
+[19:50:52] HFT: SELL USDJPY (Vel -0.00576%)
+[19:50:52] SUCCESS: Auto-Trade SELL Filled @ 156.156
+[19:53:07] HFT: SELL XAUUSD (Vel -0.00501%)
+[19:53:07] SUCCESS: Auto-Trade SELL Filled @ 4391.97
+[19:53:17] HFT: SELL XAUUSD (Vel -0.01161%)
+[19:53:17] SUCCESS: Auto-Trade SELL Filled @ 4392.77
+[19:53:34] HFT: SELL XAUUSD (Vel -0.00637%)
+[19:53:35] SUCCESS: Auto-Trade SELL Filled @ 4392.3
+[19:54:43] HFT: SELL XAGUSD (Vel -0.02210%)
+[19:54:43] SUCCESS: Auto-Trade SELL Filled @ 72.39
+[19:54:49] HFT: SELL XAUUSD (Vel -0.00797%)
+[19:54:49] SUCCESS: Auto-Trade SELL Filled @ 4389.9
+[19:54:50] HFT: SELL XAUUSD (Vel -0.01139%)
+[19:54:51] SUCCESS: Auto-Trade SELL Filled @ 4389.35
+[19:55:05] HFT: SELL XAUUSD (Vel -0.00569%)
+[19:55:05] SUCCESS: Auto-Trade SELL Filled @ 4390.55
+[19:55:15] HFT: SELL XAGUSD (Vel -0.01105%)
+[19:55:15] SUCCESS: Auto-Trade SELL Filled @ 72.418
+[19:55:19] HFT: SELL XAUUSD (Vel -0.00546%)
+[19:55:19] SUCCESS: Auto-Trade SELL Filled @ 4391.38
+[19:55:42] HFT: SELL XAUUSD (Vel -0.00980%)
+[19:55:43] SUCCESS: Auto-Trade SELL Filled @ 4387.01
+[19:55:50] HFT: SELL XAGUSD (Vel -0.00829%)
+[19:55:51] SUCCESS: Auto-Trade SELL Filled @ 72.342
+[19:55:53] HFT: SELL XAUUSD (Vel -0.00775%)
+[19:55:53] SUCCESS: Auto-Trade SELL Filled @ 4387.97
+[19:55:53] HFT: SELL XAGUSD (Vel -0.04147%)
+[19:55:54] SUCCESS: Auto-Trade SELL Filled @ 72.314
+[19:56:02] HFT: SELL XAUUSD (Vel -0.00661%)
+[19:56:03] SUCCESS: Auto-Trade SELL Filled @ 4388.94
+[19:58:19] HFT: SELL XAGUSD (Vel -0.00692%)
+[19:58:19] SUCCESS: Auto-Trade SELL Filled @ 72.256
+[19:58:23] HFT: SELL XAUUSD (Vel -0.00888%)
+[19:58:23] SUCCESS: Auto-Trade SELL Filled @ 4389.49
+[19:58:24] HFT: SELL XAGUSD (Vel -0.00967%)
+[19:58:24] SUCCESS: Auto-Trade SELL Filled @ 72.367
+[19:58:26] HFT: SELL XAGUSD (Vel -0.02624%)
+[19:58:26] SUCCESS: Auto-Trade SELL Filled @ 72.396
+[20:00:07] HFT: SELL XAGUSD (Vel -0.01528%)
+[20:00:07] SUCCESS: Auto-Trade SELL Filled @ 71.988
+[20:00:21] HFT: SELL XAGUSD (Vel -0.00833%)
+[20:00:21] SUCCESS: Auto-Trade SELL Filled @ 72.042
+[20:00:23] HFT: SELL XAGUSD (Vel -0.02636%)
+[20:00:23] SUCCESS: Auto-Trade SELL Filled @ 72.062
+[20:01:26] HFT: SELL XAGUSD (Vel -0.00969%)
+[20:01:27] SUCCESS: Auto-Trade SELL Filled @ 72.196
+[20:01:34] HFT: SELL XAGUSD (Vel -0.00693%)
+[20:01:34] SUCCESS: Auto-Trade SELL Filled @ 72.179
+[20:02:51] HFT: SELL XAUUSD (Vel -0.00846%)
+[20:02:51] SUCCESS: Auto-Trade SELL Filled @ 4374.63
+[20:02:52] HFT: SELL XAUUSD (Vel -0.01394%)
+[20:02:52] SUCCESS: Auto-Trade SELL Filled @ 4374.02
+[20:03:05] HFT: SELL XAUUSD (Vel -0.00548%)
+[20:03:05] SUCCESS: Auto-Trade SELL Filled @ 4375.52
+[20:03:12] HFT: SELL XAUUSD (Vel -0.00891%)
+[20:03:12] SUCCESS: Auto-Trade SELL Filled @ 4377.68
+[20:03:21] HFT: SELL XAUUSD (Vel -0.00594%)
+[20:03:21] SUCCESS: Auto-Trade SELL Filled @ 4377.52
+[20:03:32] HFT: SELL XAUUSD (Vel -0.00663%)
+[20:03:32] SUCCESS: Auto-Trade SELL Filled @ 4375.65
+[20:03:34] HFT: SELL XAUUSD (Vel -0.01577%)
+[20:03:34] SUCCESS: Auto-Trade SELL Filled @ 4374.97
+[20:03:42] HFT: SELL XAUUSD (Vel -0.00937%)
+[20:03:43] SUCCESS: Auto-Trade SELL Filled @ 4374.86
+[20:03:51] HFT: SELL XAUUSD (Vel -0.00708%)
+[20:03:52] SUCCESS: Auto-Trade SELL Filled @ 4378.76
+[20:04:11] HFT: SELL XAUUSD (Vel -0.00548%)
+[20:04:11] SUCCESS: Auto-Trade SELL Filled @ 4379.2
+[20:04:34] HFT: SELL XAUUSD (Vel -0.00868%)
+[20:04:35] SUCCESS: Auto-Trade SELL Filled @ 4378.65
+[20:05:10] HFT: SELL XAUUSD (Vel -0.00547%)
+[20:05:10] SUCCESS: Auto-Trade SELL Filled @ 4383.34
+[20:05:15] HFT: SELL XAUUSD (Vel -0.00799%)
+[20:05:15] SUCCESS: Auto-Trade SELL Filled @ 4382.23
+[20:05:28] HFT: SELL XAUUSD (Vel -0.00593%)
+[20:05:28] SUCCESS: Auto-Trade SELL Filled @ 4381.97
+[20:07:34] HFT: SELL XAUUSD (Vel -0.00776%)
+[20:07:34] SUCCESS: Auto-Trade SELL Filled @ 4380.18
+[20:07:47] HFT: SELL XAUUSD (Vel -0.00731%)
+[20:07:48] SUCCESS: Auto-Trade SELL Filled @ 4379.87
+[20:08:04] HFT: SELL XAUUSD (Vel -0.00548%)
+[20:08:05] SUCCESS: Auto-Trade SELL Filled @ 4378.67
+[20:08:24] HFT: SELL XAUUSD (Vel -0.00754%)
+[20:08:24] SUCCESS: Auto-Trade SELL Filled @ 4377.35
+[20:08:45] HFT: SELL XAUUSD (Vel -0.01074%)
+[20:08:45] SUCCESS: Auto-Trade SELL Filled @ 4373.73
+[20:08:45] HFT: SELL XAUUSD (Vel -0.01006%)
+[20:08:46] SUCCESS: Auto-Trade SELL Filled @ 4373.29
+[20:08:51] HFT: SELL XAUUSD (Vel -0.00526%)
+[20:08:51] SUCCESS: Auto-Trade SELL Filled @ 4374.32
+[20:09:11] HFT: SELL XAUUSD (Vel -0.00777%)
+[20:09:11] SUCCESS: Auto-Trade SELL Filled @ 4378.21
+[20:09:17] HFT: SELL XAUUSD (Vel -0.00640%)
+[20:09:17] SUCCESS: Auto-Trade SELL Filled @ 4377.35
+[20:09:30] HFT: SELL XAUUSD (Vel -0.00617%)
+[20:09:31] SUCCESS: Auto-Trade SELL Filled @ 4375.34
+[20:09:37] HFT: SELL XAUUSD (Vel -0.00915%)
+[20:09:37] SUCCESS: Auto-Trade SELL Filled @ 4373.46
+[20:09:41] HFT: SELL XAUUSD (Vel -0.00663%)
+[20:09:41] SUCCESS: Auto-Trade SELL Filled @ 4374.06
+[20:09:56] HFT: SELL XAUUSD (Vel -0.00526%)
+[20:09:56] SUCCESS: Auto-Trade SELL Filled @ 4372.94
+[20:09:59] HFT: SELL XAUUSD (Vel -0.00800%)
+[20:10:00] SUCCESS: Auto-Trade SELL Filled @ 4372.55
+[20:10:00] HFT: SELL XAUUSD (Vel -0.00915%)
+[20:10:00] SUCCESS: Auto-Trade SELL Filled @ 4372.15
+[20:10:23] HFT: SELL XAUUSD (Vel -0.01144%)
+[20:10:23] SUCCESS: Auto-Trade SELL Filled @ 4369.2
+[20:10:24] HFT: SELL XAUUSD (Vel -0.01053%)
+[20:10:24] SUCCESS: Auto-Trade SELL Filled @ 4368.74
+[20:10:32] HFT: SELL XAUUSD (Vel -0.00961%)
+[20:10:32] SUCCESS: Auto-Trade SELL Filled @ 4368.12
+[20:10:43] HFT: SELL XAUUSD (Vel -0.00664%)
+[20:10:44] SUCCESS: Auto-Trade SELL Filled @ 4368.83
+[20:10:46] HFT: SELL XAUUSD (Vel -0.00641%)
+[20:10:46] SUCCESS: Auto-Trade SELL Filled @ 4369.27
+[20:10:49] HFT: SELL XAUUSD (Vel -0.00893%)
+[20:10:49] SUCCESS: Auto-Trade SELL Filled @ 4368.05
+[20:10:55] HFT: SELL XAUUSD (Vel -0.00984%)
+[20:10:55] SUCCESS: Auto-Trade SELL Filled @ 4368.49
+[20:11:22] HFT: SELL XAUUSD (Vel -0.00504%)
+[20:11:22] SUCCESS: Auto-Trade SELL Filled @ 4366.16
+[20:11:35] HFT: SELL XAGUSD (Vel -0.01386%)
+[20:11:35] SUCCESS: Auto-Trade SELL Filled @ 72.13
+[20:12:43] HFT: SELL USDJPY (Vel -0.00641%)
+[20:12:43] SUCCESS: Auto-Trade SELL Filled @ 156.095
+[20:12:45] HFT: SELL XAGUSD (Vel -0.01109%)
+[20:12:45] SUCCESS: Auto-Trade SELL Filled @ 72.111
+[20:13:13] HFT: SELL XAGUSD (Vel -0.00832%)
+[20:13:13] SUCCESS: Auto-Trade SELL Filled @ 72.079
+[20:14:02] HFT: SELL XAUUSD (Vel -0.00779%)
+[20:14:02] SUCCESS: Auto-Trade SELL Filled @ 4366.11
+[20:14:04] HFT: SELL XAUUSD (Vel -0.00687%)
+[20:14:05] SUCCESS: Auto-Trade SELL Filled @ 4366.36
+[20:14:05] HFT: SELL XAUUSD (Vel -0.00504%)
+[20:14:06] SUCCESS: Auto-Trade SELL Filled @ 4366.64
+[20:14:13] HFT: SELL XAUUSD (Vel -0.00916%)
+[20:14:13] SUCCESS: Auto-Trade SELL Filled @ 4366.57
+[20:15:16] COMMAND: Starting Close All (Profitable Only: True)...
+[20:15:16] CLOSING: Ticket 54477985364 (Profit: 1.3900000000000001)
+[20:15:17] SUCCESS: Closed Position 54477985364 @ 1.36655
+[20:15:17] CLOSING: Ticket 54477989223 (Profit: 1.38)
+[20:15:17] SUCCESS: Closed Position 54477989223 @ 1.36655
+[20:15:17] CLOSING: Ticket 54478108393 (Profit: 0.47)
+[20:15:18] SUCCESS: Closed Position 54478108393 @ 0.78901
+[20:15:18] CLOSING: Ticket 54478117586 (Profit: 0.42)
+[20:15:18] SUCCESS: Closed Position 54478117586 @ 0.78901
+[20:15:19] CLOSING: Ticket 54478370890 (Profit: 0.89)
+[20:15:19] SUCCESS: Closed Position 54478370890 @ 0.58057
+[20:15:20] CLOSING: Ticket 54478388886 (Profit: 0.83)
+[20:15:20] SUCCESS: Closed Position 54478388886 @ 0.58057
+[20:15:20] CLOSING: Ticket 54478487422 (Profit: 0.61)
+[20:15:20] SUCCESS: Closed Position 54478487422 @ 0.66997
+[20:15:21] CLOSING: Ticket 54478499674 (Profit: 0.47)
+[20:15:21] SUCCESS: Closed Position 54478499674 @ 0.66999
+[20:15:22] CLOSING: Ticket 54478703782 (Profit: 1.41)
+[20:15:22] SUCCESS: Closed Position 54478703782 @ 1.17847
+[20:15:22] CLOSING: Ticket 54480039180 (Profit: 0.05)
+[20:15:22] SUCCESS: Closed Position 54480039180 @ 156.085
+[20:15:23] COMMAND: Close All Completed. Total Closed: 10
+[20:15:32] HFT: SELL USDCHF (Vel -0.00887%)
+[20:15:33] SUCCESS: Auto-Trade SELL Filled @ 0.7888
+[20:15:33] HFT: SELL USDCAD (Vel -0.00805%)
+[20:15:33] SUCCESS: Auto-Trade SELL Filled @ 1.36649
+[20:15:34] HFT: BUY NZDUSD (Vel 0.00861%)
+[20:15:35] SUCCESS: Auto-Trade BUY Filled @ 0.58067
+[20:15:35] HFT: BUY EURUSD (Vel 0.00594%)
+[20:15:36] SUCCESS: Auto-Trade BUY Filled @ 1.17859
+[20:15:36] HFT: SELL USDJPY (Vel -0.00833%)
+[20:15:36] SUCCESS: Auto-Trade SELL Filled @ 156.071
+[20:15:47] HFT: BUY NZDUSD (Vel 0.00517%)
+[20:15:47] SUCCESS: Auto-Trade BUY Filled @ 0.58066
+[20:15:53] HFT: SELL USDCHF (Vel -0.00507%)
+[20:15:54] SUCCESS: Auto-Trade SELL Filled @ 0.78879
+[20:16:10] HFT: SELL USDCHF (Vel -0.01268%)
+[20:16:10] SUCCESS: Auto-Trade SELL Filled @ 0.78865
+[20:16:20] HFT: BUY GBPUSD (Vel 0.00666%)
+[20:16:20] SUCCESS: Auto-Trade BUY Filled @ 1.3505099999999999
+[20:17:19] HFT: SELL USDCAD (Vel -0.00585%)
+[20:17:20] SUCCESS: Auto-Trade SELL Filled @ 1.36665
+[20:19:42] HFT: SELL USDJPY (Vel -0.00513%)
+[20:19:42] SUCCESS: Auto-Trade SELL Filled @ 156.053
+[20:26:01] HFT: BUY EURUSD (Vel 0.00509%)
+[20:26:01] SUCCESS: Auto-Trade BUY Filled @ 1.17824
+[20:27:41] HFT: SELL XAUUSD (Vel -0.00619%)
+[20:27:41] SUCCESS: Auto-Trade SELL Filled @ 4364.15
+[20:27:42] HFT: SELL XAUUSD (Vel -0.00504%)
+[20:27:42] SUCCESS: Auto-Trade SELL Filled @ 4363.93
+[20:27:46] HFT: SELL XAUUSD (Vel -0.00688%)
+[20:27:46] SUCCESS: Auto-Trade SELL Filled @ 4363.0
+[20:27:51] HFT: SELL XAUUSD (Vel -0.01512%)
+[20:27:51] SUCCESS: Auto-Trade SELL Filled @ 4363.04
+[20:27:52] HFT: SELL XAUUSD (Vel -0.00986%)
+[20:27:52] SUCCESS: Auto-Trade SELL Filled @ 4362.61
+[20:28:10] HFT: SELL XAUUSD (Vel -0.00504%)
+[20:28:11] SUCCESS: Auto-Trade SELL Filled @ 4361.57
+[20:28:11] HFT: SELL XAUUSD (Vel -0.00665%)
+[20:28:12] SUCCESS: Auto-Trade SELL Filled @ 4361.32
+[20:28:22] HFT: SELL XAUUSD (Vel -0.00596%)
+[20:28:23] SUCCESS: Auto-Trade SELL Filled @ 4361.76
+[20:28:28] HFT: SELL XAUUSD (Vel -0.00596%)
+[20:28:28] SUCCESS: Auto-Trade SELL Filled @ 4362.42
+[20:28:30] HFT: SELL XAUUSD (Vel -0.00596%)
+[20:28:30] SUCCESS: Auto-Trade SELL Filled @ 4362.26
+[20:28:55] HFT: SELL XAUUSD (Vel -0.00550%)
+[20:28:55] SUCCESS: Auto-Trade SELL Filled @ 4360.17
+[20:28:56] HFT: SELL XAUUSD (Vel -0.00573%)
+[20:28:57] SUCCESS: Auto-Trade SELL Filled @ 4359.8
+[20:29:01] HFT: SELL XAUUSD (Vel -0.01078%)
+[20:29:01] SUCCESS: Auto-Trade SELL Filled @ 4359.3
+[20:29:31] HFT: SELL XAUUSD (Vel -0.00780%)
+[20:29:32] SUCCESS: Auto-Trade SELL Filled @ 4361.32
+[20:29:32] HFT: SELL XAUUSD (Vel -0.00757%)
+[20:29:33] SUCCESS: Auto-Trade SELL Filled @ 4360.99
+[20:34:31] HFT: SELL AUDJPY (Vel -0.00670%)
+[20:34:32] SUCCESS: Auto-Trade SELL Filled @ 104.473
+[07:41:14] INFO: Smart Connect: Already connected to MT5.
+[07:41:14] INFO: MT5 Connected. Account: 5042587631
+[07:41:14] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[07:41:14] INFO: System Warmup Active. Trading paused for 15s...
+[07:41:40] INFO: Profit Guardian (ATR Trailing) Started.
+[07:41:40] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[07:41:56] INFO: Smart Connect: Already connected to MT5.
+[07:41:56] INFO: MT5 Connected. Account: 5042587631
+[07:41:56] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[07:41:56] INFO: System Warmup Active. Trading paused for 15s...
+[07:42:15] INFO: Profit Guardian (ATR Trailing) Started.
+[07:42:15] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[07:42:57] INFO: Smart Connect: Already connected to MT5.
+[07:42:57] INFO: MT5 Connected. Account: 5042587631
+[07:42:57] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[07:42:57] INFO: System Warmup Active. Trading paused for 15s...
+[07:43:04] INFO: Profit Guardian (ATR Trailing) Started.
+[07:43:04] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[07:45:34] HFT: BUY XAUUSD (Vel 0.00528%)
+[07:45:35] SUCCESS: Auto-Trade BUY Filled @ 4355.93
+[07:48:27] HFT: BUY XAUUSD (Vel 0.02320%)
+[07:48:27] SUCCESS: Auto-Trade BUY Filled @ 4354.72
+[07:48:33] HFT: BUY XAUUSD (Vel 0.00551%)
+[07:48:33] SUCCESS: Auto-Trade BUY Filled @ 4354.96
+[07:49:01] HFT: SELL AUDUSD (Vel -0.00597%)
+[07:49:01] SUCCESS: Auto-Trade SELL Filled @ 0.66989
+[07:49:10] HFT: BUY XAUUSD (Vel 0.01079%)
+[07:49:10] SUCCESS: Auto-Trade BUY Filled @ 4356.59
+[07:49:11] HFT: BUY XAUUSD (Vel 0.00620%)
+[07:49:11] SUCCESS: Auto-Trade BUY Filled @ 4356.97
+[07:49:37] HFT: BUY XAUUSD (Vel 0.00620%)
+[07:49:37] SUCCESS: Auto-Trade BUY Filled @ 4356.31
+[07:49:41] HFT: SELL AUDUSD (Vel -0.00597%)
+[07:49:41] SUCCESS: Auto-Trade SELL Filled @ 0.66984
+[07:51:04] HFT: BUY EURUSD (Vel 0.00934%)
+[07:51:05] SUCCESS: Auto-Trade BUY Filled @ 1.1775
+[08:00:34] COMMAND: Starting Close All (Profitable Only: True)...
+[08:00:34] CLOSING: Ticket 54479117193 (Profit: 0.48)
+[08:00:34] ERROR: Close Failed: Request rejected due to absence of network connection (10031)
+[08:00:34] CLOSING: Ticket 54480166440 (Profit: 0.02)
+[08:00:34] ERROR: Close Failed: Request rejected due to absence of network connection (10031)
+[08:00:34] COMMAND: Close All Completed. Total Closed: 0
+[08:08:18] INFO: Smart Connect: Already connected to MT5.
+[08:08:19] INFO: MT5 Connected. Account: 5042587631
+[08:08:19] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[08:08:19] INFO: System Warmup Active. Trading paused for 15s...
+[08:08:20] INFO: Profit Guardian (ATR Trailing) Started.
+[08:08:20] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[08:09:20] SUCCESS: Closed Position 54479117193 @ 104.734
+[08:16:58] HFT: BUY XAUUSD (Vel 0.01193%)
+[08:16:58] SUCCESS: Auto-Trade BUY Filled @ 4358.72
+[08:17:18] HFT: BUY XAUUSD (Vel 0.01032%)
+[08:17:18] SUCCESS: Auto-Trade BUY Filled @ 4359.04
+[08:17:24] HFT: BUY XAUUSD (Vel 0.00528%)
+[08:17:25] SUCCESS: Auto-Trade BUY Filled @ 4358.44
+[08:19:31] HFT: BUY XAUUSD (Vel 0.00505%)
+[08:19:31] SUCCESS: Auto-Trade BUY Filled @ 4359.07
+[08:19:32] HFT: BUY XAUUSD (Vel 0.00872%)
+[08:19:32] SUCCESS: Auto-Trade BUY Filled @ 4359.63
+[08:22:19] HFT: BUY AUDJPY (Vel 0.00859%)
+[08:22:19] SUCCESS: Auto-Trade BUY Filled @ 104.796
+[08:24:14] HFT: BUY XAUUSD (Vel 0.00894%)
+[08:24:14] SUCCESS: Auto-Trade BUY Filled @ 4362.99
+[08:24:34] HFT: BUY USDCHF (Vel 0.00507%)
+[08:24:34] SUCCESS: Auto-Trade BUY Filled @ 0.78917
+[08:46:20] HFT: SELL USDCHF (Vel -0.00887%)
+[08:46:20] SUCCESS: Auto-Trade SELL Filled @ 0.78899
+[08:48:48] HFT: BUY XAUUSD (Vel 0.00825%)
+[08:48:49] SUCCESS: Auto-Trade BUY Filled @ 4363.44
+[08:48:50] HFT: BUY XAUUSD (Vel 0.00917%)
+[08:48:50] SUCCESS: Auto-Trade BUY Filled @ 4363.86
+[08:48:51] HFT: BUY XAUUSD (Vel 0.00527%)
+[08:48:51] SUCCESS: Auto-Trade BUY Filled @ 4364.05
+[08:49:55] HFT: BUY XAUUSD (Vel 0.00642%)
+[08:49:55] SUCCESS: Auto-Trade BUY Filled @ 4364.67
+[08:50:00] HFT: BUY XAUUSD (Vel 0.00619%)
+[08:50:00] SUCCESS: Auto-Trade BUY Filled @ 4364.85
+[08:50:05] HFT: BUY XAUUSD (Vel 0.00894%)
+[08:50:06] SUCCESS: Auto-Trade BUY Filled @ 4365.23
+[08:51:08] HFT: BUY XAUUSD (Vel 0.00894%)
+[08:51:09] SUCCESS: Auto-Trade BUY Filled @ 4364.34
+[08:51:23] HFT: BUY XAUUSD (Vel 0.00527%)
+[08:51:23] SUCCESS: Auto-Trade BUY Filled @ 4364.48
+[08:55:33] HFT: BUY XAUUSD (Vel 0.00802%)
+[08:55:33] SUCCESS: Auto-Trade BUY Filled @ 4365.85
+[17:45:19] INFO: Smart Connect: Already connected to MT5.
+[17:45:19] INFO: MT5 Connected. Account: 5042587631
+[17:45:19] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[17:45:19] INFO: System Warmup Active. Trading paused for 15s...
+[17:45:24] INFO: Profit Guardian (ATR Trailing) Started.
+[17:45:25] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[17:46:59] INFO: Smart Connect: Already connected to MT5.
+[17:46:59] INFO: MT5 Connected. Account: 5042587631
+[17:46:59] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[17:46:59] INFO: System Warmup Active. Trading paused for 15s...
+[17:47:01] INFO: Profit Guardian (ATR Trailing) Started.
+[17:47:01] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[17:52:34] HFT: BUY XAUUSD (Vel 0.00864%)
+[17:52:34] SUCCESS: Auto-Trade BUY Filled @ 4397.6
+[17:52:40] HFT: BUY XAUUSD (Vel 0.00500%)
+[17:52:41] SUCCESS: Auto-Trade BUY Filled @ 4397.76
+[17:52:48] HFT: BUY XAUUSD (Vel 0.00500%)
+[17:52:48] SUCCESS: Auto-Trade BUY Filled @ 4397.22
+[17:55:09] HFT: BUY XAUUSD (Vel 0.00569%)
+[17:55:09] SUCCESS: Auto-Trade BUY Filled @ 4397.22
+[17:55:58] HFT: BUY XAUUSD (Vel 0.00500%)
+[17:56:00] SUCCESS: Auto-Trade BUY Filled @ 4397.47
+[18:08:37] HFT: BUY USDJPY (Vel 0.00769%)
+[18:09:03] SUCCESS: Auto-Trade BUY Filled @ 155.989
+[18:57:14] HFT: SELL XAUUSD (Vel -0.00751%)
+[18:57:15] SUCCESS: Auto-Trade SELL Filled @ 4396.61
+[18:57:17] HFT: SELL XAUUSD (Vel -0.00591%)
+[18:57:17] SUCCESS: Auto-Trade SELL Filled @ 4396.29
+[18:57:21] HFT: SELL XAUUSD (Vel -0.00842%)
+[18:57:21] SUCCESS: Auto-Trade SELL Filled @ 4395.36
+[18:57:39] HFT: SELL XAUUSD (Vel -0.00500%)
+[18:57:39] SUCCESS: Auto-Trade SELL Filled @ 4395.45
+[18:57:45] HFT: SELL XAUUSD (Vel -0.00705%)
+[18:57:45] SUCCESS: Auto-Trade SELL Filled @ 4395.53
+[18:57:46] HFT: SELL XAUUSD (Vel -0.00842%)
+[18:57:47] SUCCESS: Auto-Trade SELL Filled @ 4395.16
+[18:57:50] COMMAND: Starting Close All (Profitable Only: True)...
+[18:57:50] CLOSING: Ticket 54488427659 (Profit: 0.89)
+[18:57:51] SUCCESS: Closed Position 54488427659 @ 0.78987
+[18:57:51] CLOSING: Ticket 54495317403 (Profit: 0.25)
+[18:57:51] SUCCESS: Closed Position 54495317403 @ 0.6702
+[18:57:52] CLOSING: Ticket 54495577176 (Profit: 0.72)
+[18:57:52] SUCCESS: Closed Position 54495577176 @ 156.096
+[18:57:52] COMMAND: Close All Completed. Total Closed: 3
+[18:57:59] COMMAND: Starting Close All (Profitable Only: True)...
+[18:57:59] CLOSING: Ticket 54496457781 (Profit: 1.09)
+[18:58:00] SUCCESS: Closed Position 54496457781 @ 4394.36
+[18:58:00] HFT: SELL XAUUSD (Vel -0.00774%)
+[18:58:00] SUCCESS: Auto-Trade SELL Filled @ 4394.05
+[18:58:00] CLOSING: Ticket 54496459540 (Profit: 1.16)
+[18:58:01] SUCCESS: Closed Position 54496459540 @ 4394.02
+[18:58:01] CLOSING: Ticket 54496459828 (Profit: 0.89)
+[18:58:02] SUCCESS: Closed Position 54496459828 @ 4394.04
+[18:58:02] COMMAND: Close All Completed. Total Closed: 3
+[18:58:16] HFT: SELL XAUUSD (Vel -0.00501%)
+[18:58:17] SUCCESS: Auto-Trade SELL Filled @ 4394.69
+[18:58:31] HFT: BUY USDJPY (Vel 0.00641%)
+[18:58:31] SUCCESS: Auto-Trade BUY Filled @ 156.117
+[18:58:34] HFT: SELL XAUUSD (Vel -0.01183%)
+[18:58:34] SUCCESS: Auto-Trade SELL Filled @ 4395.18
+[18:59:03] HFT: SELL XAUUSD (Vel -0.00660%)
+[18:59:04] SUCCESS: Auto-Trade SELL Filled @ 4394.03
+[18:59:19] HFT: SELL XAUUSD (Vel -0.00523%)
+[18:59:19] SUCCESS: Auto-Trade SELL Filled @ 4393.59
+[18:59:35] HFT: SELL XAUUSD (Vel -0.00842%)
+[18:59:36] SUCCESS: Auto-Trade SELL Filled @ 4393.41
+[18:59:36] HFT: SELL XAUUSD (Vel -0.00797%)
+[18:59:36] SUCCESS: Auto-Trade SELL Filled @ 4393.04
+[18:59:45] HFT: SELL XAUUSD (Vel -0.00546%)
+[18:59:46] SUCCESS: Auto-Trade SELL Filled @ 4393.26
+[19:00:25] HFT: SELL XAUUSD (Vel -0.00592%)
+[19:00:26] SUCCESS: Auto-Trade SELL Filled @ 4392.51
+[19:01:01] HFT: BUY USDCHF (Vel 0.00506%)
+[19:01:01] SUCCESS: Auto-Trade BUY Filled @ 0.79024
+[19:03:02] HFT: SELL XAUUSD (Vel -0.00502%)
+[19:03:03] SUCCESS: Auto-Trade SELL Filled @ 4381.19
+[19:03:03] HFT: SELL XAUUSD (Vel -0.01849%)
+[19:03:04] SUCCESS: Auto-Trade SELL Filled @ 4380.38
+[19:03:07] HFT: SELL XAUUSD (Vel -0.00593%)
+[19:03:07] SUCCESS: Auto-Trade SELL Filled @ 4381.43
+[19:04:19] HFT: SELL XAUUSD (Vel -0.00616%)
+[19:04:20] SUCCESS: Auto-Trade SELL Filled @ 4382.55
+[19:04:37] HFT: SELL XAUUSD (Vel -0.00502%)
+[19:04:37] SUCCESS: Auto-Trade SELL Filled @ 4382.72
+[19:04:37] HFT: SELL XAUUSD (Vel -0.00593%)
+[19:04:38] SUCCESS: Auto-Trade SELL Filled @ 4382.46
+[19:14:13] HFT: SELL XAUUSD (Vel -0.00754%)
+[19:14:13] SUCCESS: Auto-Trade SELL Filled @ 4378.93
+[19:14:22] HFT: SELL XAUUSD (Vel -0.00662%)
+[19:14:23] SUCCESS: Auto-Trade SELL Filled @ 4378.53
+[19:14:29] HFT: SELL XAUUSD (Vel -0.00502%)
+[19:14:29] SUCCESS: Auto-Trade SELL Filled @ 4378.65
+[19:17:27] HFT: SELL XAUUSD (Vel -0.01758%)
+[19:17:28] SUCCESS: Auto-Trade SELL Filled @ 4378.17
+[19:36:30] HFT: BUY USDJPY (Vel 0.00640%)
+[19:36:30] SUCCESS: Auto-Trade BUY Filled @ 156.163
+[19:52:50] COMMAND: Starting Close All (Profitable Only: True)...
+[19:52:50] CLOSING: Ticket 54488088845 (Profit: 0.32)
+[19:52:50] SUCCESS: Closed Position 54488088845 @ 0.66978
+[19:52:51] CLOSING: Ticket 54488089053 (Profit: 0.51)
+[19:52:51] SUCCESS: Closed Position 54488089053 @ 0.87189
+[19:52:51] CLOSING: Ticket 54488140518 (Profit: 0.07)
+[19:52:52] SUCCESS: Closed Position 54488140518 @ 0.66982
+[19:52:52] CLOSING: Ticket 54488145515 (Profit: 0.03)
+[19:52:53] SUCCESS: Closed Position 54488145515 @ 0.66982
+[19:52:53] CLOSING: Ticket 54496448677 (Profit: 0.01)
+[19:52:54] SUCCESS: Closed Position 54496448677 @ 1.17574
+[19:52:54] CLOSING: Ticket 54496529609 (Profit: 0.66)
+[19:52:55] SUCCESS: Closed Position 54496529609 @ 0.79076
+[19:52:55] CLOSING: Ticket 54497325565 (Profit: 0.14)
+[19:52:55] SUCCESS: Closed Position 54497325565 @ 156.185
+[19:52:56] COMMAND: Close All Completed. Total Closed: 7
+[19:55:32] HFT: BUY USDJPY (Vel 0.00576%)
+[19:55:32] SUCCESS: Auto-Trade BUY Filled @ 156.189
+[20:00:06] HFT: SELL AUDUSD (Vel -0.00597%)
+[20:00:06] SUCCESS: Auto-Trade SELL Filled @ 0.66952
+[20:05:49] HFT: SELL XAUUSD (Vel -0.00822%)
+[20:05:49] SUCCESS: Auto-Trade SELL Filled @ 4377.49
+[20:05:53] HFT: SELL XAUUSD (Vel -0.00799%)
+[20:05:53] SUCCESS: Auto-Trade SELL Filled @ 4377.88
+[20:06:11] HFT: SELL XAUUSD (Vel -0.00548%)
+[20:06:12] SUCCESS: Auto-Trade SELL Filled @ 4376.94
+[20:06:28] HFT: SELL XAUUSD (Vel -0.00616%)
+[20:06:28] SUCCESS: Auto-Trade SELL Filled @ 4379.8
+[20:06:29] HFT: SELL XAUUSD (Vel -0.00822%)
+[20:06:29] SUCCESS: Auto-Trade SELL Filled @ 4379.44
+[20:06:35] HFT: BUY AUDUSD (Vel 0.00597%)
+[20:06:36] SUCCESS: Auto-Trade BUY Filled @ 0.67003
+[20:07:05] HFT: SELL XAUUSD (Vel -0.01461%)
+[20:07:05] SUCCESS: Auto-Trade SELL Filled @ 4379.14
+[20:08:25] HFT: SELL XAUUSD (Vel -0.00594%)
+[20:08:25] SUCCESS: Auto-Trade SELL Filled @ 4378.14
+[20:08:58] HFT: SELL XAUUSD (Vel -0.00526%)
+[20:08:58] SUCCESS: Auto-Trade SELL Filled @ 4375.1
+[20:09:07] HFT: SELL XAUUSD (Vel -0.00914%)
+[20:09:07] SUCCESS: Auto-Trade SELL Filled @ 4375.89
+[20:09:11] HFT: SELL XAUUSD (Vel 0.00000%)
+[20:09:12] SUCCESS: Auto-Trade SELL Filled @ 4375.76
+[20:10:08] HFT: SELL XAUUSD (Vel -0.00777%)
+[20:10:09] SUCCESS: Auto-Trade SELL Filled @ 4373.83
+[20:10:09] HFT: SELL XAUUSD (Vel -0.00709%)
+[20:10:10] SUCCESS: Auto-Trade SELL Filled @ 4373.87
+[20:10:10] HFT: SELL XAUUSD (Vel -0.00892%)
+[20:10:11] SUCCESS: Auto-Trade SELL Filled @ 4373.71
+[20:10:32] HFT: SELL XAUUSD (Vel -0.00732%)
+[20:10:32] SUCCESS: Auto-Trade SELL Filled @ 4371.83
+[20:10:35] HFT: SELL XAUUSD (Vel -0.00572%)
+[20:10:35] SUCCESS: Auto-Trade SELL Filled @ 4372.06
+[20:10:35] HFT: SELL XAUUSD (Vel -0.00755%)
+[20:10:36] SUCCESS: Auto-Trade SELL Filled @ 4371.73
+[20:15:01] HFT: SELL XAUUSD (Vel -0.00892%)
+[20:15:01] SUCCESS: Auto-Trade SELL Filled @ 4371.07
+[20:15:09] HFT: SELL XAUUSD (Vel -0.00526%)
+[20:15:09] SUCCESS: Auto-Trade SELL Filled @ 4370.58
+[20:15:11] HFT: SELL XAUUSD (Vel -0.00503%)
+[20:15:11] SUCCESS: Auto-Trade SELL Filled @ 4370.19
+[20:15:18] HFT: SELL XAUUSD (Vel -0.01121%)
+[20:15:19] SUCCESS: Auto-Trade SELL Filled @ 4369.56
+[20:15:30] HFT: SELL XAUUSD (Vel -0.00595%)
+[20:15:30] SUCCESS: Auto-Trade SELL Filled @ 4371.85
+[20:16:03] HFT: SELL XAUUSD (Vel -0.01351%)
+[20:16:04] SUCCESS: Auto-Trade SELL Filled @ 4365.31
+[20:16:04] HFT: SELL XAUUSD (Vel -0.00573%)
+[20:16:05] SUCCESS: Auto-Trade SELL Filled @ 4365.06
+[20:16:49] COMMAND: Starting Close All (Profitable Only: True)...
+[20:16:49] CLOSING: Ticket 54497622022 (Profit: 0.52)
+[20:16:49] SUCCESS: Closed Position 54497622022 @ 156.27
+[20:16:50] CLOSING: Ticket 54498141206 (Profit: 4.43)
+[20:16:50] SUCCESS: Closed Position 54498141206 @ 4361.65
+[20:16:50] COMMAND: Close All Completed. Total Closed: 2
+[20:16:54] HFT: BUY USDJPY (Vel 0.00640%)
+[20:16:55] SUCCESS: Auto-Trade BUY Filled @ 156.282
+[20:18:57] HFT: SELL XAUUSD (Vel -0.01146%)
+[20:18:57] SUCCESS: Auto-Trade SELL Filled @ 4362.17
+[20:18:58] HFT: SELL XAUUSD (Vel -0.00596%)
+[20:18:58] SUCCESS: Auto-Trade SELL Filled @ 4361.91
+[20:18:59] HFT: SELL XAUUSD (Vel -0.02499%)
+[20:19:01] SUCCESS: Auto-Trade SELL Filled @ 4361.3
+[20:19:08] HFT: SELL XAUUSD (Vel -0.01582%)
+[20:19:09] SUCCESS: Auto-Trade SELL Filled @ 4360.66
+[20:19:11] HFT: SELL XAUUSD (Vel -0.00734%)
+[20:19:11] SUCCESS: Auto-Trade SELL Filled @ 4361.19
+[20:19:27] HFT: SELL XAUUSD (Vel -0.02362%)
+[20:19:27] SUCCESS: Auto-Trade SELL Filled @ 4359.2
+[20:19:31] HFT: SELL XAUUSD (Vel -0.00894%)
+[20:19:31] SUCCESS: Auto-Trade SELL Filled @ 4359.97
+[20:19:36] HFT: SELL XAUUSD (Vel -0.01147%)
+[20:19:36] SUCCESS: Auto-Trade SELL Filled @ 4360.36
+[20:20:41] HFT: SELL XAUUSD (Vel -0.00802%)
+[20:20:41] SUCCESS: Auto-Trade SELL Filled @ 4363.63
+[20:20:45] HFT: SELL XAUUSD (Vel -0.00848%)
+[20:20:45] SUCCESS: Auto-Trade SELL Filled @ 4364.33
+[20:20:46] HFT: SELL XAUUSD (Vel -0.00939%)
+[20:20:46] SUCCESS: Auto-Trade SELL Filled @ 4363.93
+[20:21:08] HFT: SELL XAUUSD (Vel -0.00596%)
+[20:21:09] SUCCESS: Auto-Trade SELL Filled @ 4364.6
+[20:21:15] HFT: SELL XAUUSD (Vel -0.00894%)
+[20:21:15] SUCCESS: Auto-Trade SELL Filled @ 4364.46
+[13:24:32] HFT: BUY USDCHF (Vel 0.33523%)
+[13:24:32] SUCCESS: Auto-Trade BUY Filled @ 0.79325
+[13:25:16] INFO: Smart Connect: Already connected to MT5.
+[13:25:16] INFO: MT5 Connected. Account: 5042587631
+[13:25:16] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[13:25:16] INFO: System Warmup Active. Trading paused for 15s...
+[13:25:18] INFO: Profit Guardian (ATR Trailing) Started.
+[13:25:18] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[13:25:29] COMMAND: Starting Close All (Profitable Only: True)...
+[13:25:29] CLOSING: Ticket 54467679533 (Profit: 0.87)
+[13:25:29] SUCCESS: Closed Position 54467679533 @ 156.582
+[13:25:30] CLOSING: Ticket 54467680194 (Profit: 0.86)
+[13:25:30] SUCCESS: Closed Position 54467680194 @ 156.582
+[13:25:30] CLOSING: Ticket 54478841676 (Profit: 0.1)
+[13:25:31] SUCCESS: Closed Position 54478841676 @ 0.66875
+[13:25:31] CLOSING: Ticket 54497703724 (Profit: 0.78)
+[13:25:31] SUCCESS: Closed Position 54497703724 @ 0.66875
+[13:25:31] CLOSING: Ticket 54498181570 (Profit: 1.92)
+[13:25:32] SUCCESS: Closed Position 54498181570 @ 156.583
+[13:25:33] COMMAND: Close All Completed. Total Closed: 5
+[13:25:41] HFT: SELL XAUUSD (Vel -0.00531%)
+[13:25:41] SUCCESS: Auto-Trade SELL Filled @ 4327.53
+[13:30:19] HFT: SELL USDJPY (Vel -0.00703%)
+[13:30:19] SUCCESS: Auto-Trade SELL Filled @ 156.544
+[13:30:53] HFT: SELL USDJPY (Vel -0.00511%)
+[13:30:53] SUCCESS: Auto-Trade SELL Filled @ 156.547
+[13:35:40] HFT: SELL USDJPY (Vel -0.00894%)
+[13:35:41] SUCCESS: Auto-Trade SELL Filled @ 156.558
+[13:36:37] HFT: SELL XAUUSD (Vel -0.03882%)
+[13:36:37] SUCCESS: Auto-Trade SELL Filled @ 4326.01
+[13:36:43] HFT: SELL XAUUSD (Vel -0.00578%)
+[13:36:43] SUCCESS: Auto-Trade SELL Filled @ 4326.15
+[13:37:01] HFT: SELL XAUUSD (Vel -0.00508%)
+[13:37:01] SUCCESS: Auto-Trade SELL Filled @ 4326.53
+[13:37:15] HFT: SELL XAUUSD (Vel -0.00740%)
+[13:37:15] SUCCESS: Auto-Trade SELL Filled @ 4326.42
+[13:40:01] HFT: SELL XAUUSD (Vel -0.00509%)
+[13:40:01] SUCCESS: Auto-Trade SELL Filled @ 4322.51
+[13:41:30] HFT: SELL XAGUSD (Vel -0.00972%)
+[13:41:31] SUCCESS: Auto-Trade SELL Filled @ 72.03
+[13:53:51] HFT: SELL XAUUSD (Vel -0.00694%)
+[13:53:52] SUCCESS: Auto-Trade SELL Filled @ 4323.83
+[13:54:03] HFT: SELL XAUUSD (Vel -0.00532%)
+[13:54:03] SUCCESS: Auto-Trade SELL Filled @ 4324.67
+[13:57:14] HFT: SELL AUDUSD (Vel -0.00599%)
+[13:57:14] SUCCESS: Auto-Trade SELL Filled @ 0.66816
+[13:57:40] HFT: SELL AUDUSD (Vel -0.00599%)
+[13:57:40] SUCCESS: Auto-Trade SELL Filled @ 0.66813
+[14:01:42] HFT: SELL XAUUSD (Vel -0.00509%)
+[14:01:43] SUCCESS: Auto-Trade SELL Filled @ 4323.5
+[14:02:40] HFT: SELL XAUUSD (Vel -0.00833%)
+[14:02:40] SUCCESS: Auto-Trade SELL Filled @ 4323.9
+[14:03:21] HFT: SELL XAUUSD (Vel -0.00555%)
+[14:03:21] SUCCESS: Auto-Trade SELL Filled @ 4323.83
+[14:06:52] HFT: SELL XAUUSD (Vel -0.00555%)
+[14:06:52] SUCCESS: Auto-Trade SELL Filled @ 4322.51
+[14:06:54] HFT: SELL XAUUSD (Vel -0.00555%)
+[14:06:54] SUCCESS: Auto-Trade SELL Filled @ 4322.31
+[14:07:07] HFT: SELL XAUUSD (Vel -0.00694%)
+[14:07:07] SUCCESS: Auto-Trade SELL Filled @ 4322.18
+[14:07:55] HFT: SELL XAUUSD (Vel -0.00810%)
+[14:07:55] SUCCESS: Auto-Trade SELL Filled @ 4321.37
+[14:09:14] HFT: SELL XAUUSD (Vel -0.00763%)
+[14:09:14] SUCCESS: Auto-Trade SELL Filled @ 4323.05
+[14:09:29] HFT: SELL XAUUSD (Vel -0.00925%)
+[14:09:29] SUCCESS: Auto-Trade SELL Filled @ 4322.04
+[14:10:00] HFT: SELL XAUUSD (Vel -0.00532%)
+[14:10:01] SUCCESS: Auto-Trade SELL Filled @ 4322.4
+[14:11:16] HFT: SELL XAUUSD (Vel -0.00532%)
+[14:11:17] SUCCESS: Auto-Trade SELL Filled @ 4322.42
+[14:11:31] HFT: SELL XAUUSD (Vel -0.00810%)
+[14:11:32] SUCCESS: Auto-Trade SELL Filled @ 4322.09
+[14:18:20] HFT: SELL XAGUSD (Vel -0.00556%)
+[14:18:20] SUCCESS: Auto-Trade SELL Filled @ 71.991
+[14:18:21] HFT: SELL XAGUSD (Vel -0.00833%)
+[14:18:21] SUCCESS: Auto-Trade SELL Filled @ 71.985
+[14:19:33] HFT: SELL XAGUSD (Vel -0.00696%)
+[14:19:33] SUCCESS: Auto-Trade SELL Filled @ 71.859
+[14:19:33] HFT: SELL XAGUSD (Vel -0.01670%)
+[14:19:34] SUCCESS: Auto-Trade SELL Filled @ 71.847
+[14:19:34] HFT: SELL XAGUSD (Vel -0.00696%)
+[14:19:35] SUCCESS: Auto-Trade SELL Filled @ 71.842
+[14:20:41] HFT: SELL XAUUSD (Vel -0.01135%)
+[14:20:42] SUCCESS: Auto-Trade SELL Filled @ 4316.17
+[14:30:08] HFT: SELL XAUUSD (Vel -0.00626%)
+[14:30:08] SUCCESS: Auto-Trade SELL Filled @ 4310.81
+[14:30:09] HFT: SELL XAUUSD (Vel -0.04152%)
+[14:30:09] SUCCESS: Auto-Trade SELL Filled @ 4309.02
+[14:30:18] HFT: SELL XAUUSD (Vel -0.00510%)
+[14:30:18] SUCCESS: Auto-Trade SELL Filled @ 4309.37
+[14:30:47] HFT: SELL XAUUSD (Vel -0.00766%)
+[14:30:47] SUCCESS: Auto-Trade SELL Filled @ 4309.85
+[14:30:51] HFT: SELL XAUUSD (Vel -0.00510%)
+[14:30:51] SUCCESS: Auto-Trade SELL Filled @ 4309.87
+[14:30:55] HFT: SELL XAUUSD (Vel -0.00742%)
+[14:30:55] SUCCESS: Auto-Trade SELL Filled @ 4310.29
+[14:31:06] HFT: SELL XAGUSD (Vel -0.01121%)
+[14:31:06] SUCCESS: Auto-Trade SELL Filled @ 71.365
+[14:31:07] HFT: SELL XAGUSD (Vel -0.00841%)
+[14:31:07] SUCCESS: Auto-Trade SELL Filled @ 71.359
+[14:31:32] HFT: SELL XAUUSD (Vel -0.00742%)
+[14:31:32] SUCCESS: Auto-Trade SELL Filled @ 4309.82
+[14:31:44] HFT: SELL XAUUSD (Vel -0.00534%)
+[14:31:44] SUCCESS: Auto-Trade SELL Filled @ 4309.12
+[14:31:46] HFT: SELL XAUUSD (Vel -0.00998%)
+[14:31:47] SUCCESS: Auto-Trade SELL Filled @ 4308.5
+[14:32:06] HFT: SELL XAUUSD (Vel -0.00882%)
+[14:32:06] SUCCESS: Auto-Trade SELL Filled @ 4308.43
+[14:32:07] HFT: SELL XAUUSD (Vel -0.00650%)
+[14:32:07] SUCCESS: Auto-Trade SELL Filled @ 4308.15
+[14:32:15] HFT: SELL XAGUSD (Vel -0.00701%)
+[14:32:16] SUCCESS: Auto-Trade SELL Filled @ 71.348
+[14:32:16] HFT: SELL XAGUSD (Vel -0.01121%)
+[14:32:17] SUCCESS: Auto-Trade SELL Filled @ 71.34
+[14:32:18] HFT: SELL XAGUSD (Vel -0.00841%)
+[14:32:18] SUCCESS: Auto-Trade SELL Filled @ 71.353
+[20:13:18] INFO: Smart Connect: Already connected to MT5.
+[20:13:18] INFO: MT5 Connected. Account: 5042587631
+[20:13:18] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[20:13:18] INFO: System Warmup Active. Trading paused for 15s...
+[20:13:21] INFO: Profit Guardian (ATR Trailing) Started.
+[20:13:21] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[20:13:57] COMMAND: Starting Close All (Profitable Only: True)...
+[20:13:57] CLOSING: Ticket 54467642969 (Profit: 0.32)
+[20:13:57] SUCCESS: Closed Position 54467642969 @ 114.568
+[20:13:57] CLOSING: Ticket 54468157067 (Profit: 0.33)
+[20:13:57] SUCCESS: Closed Position 54468157067 @ 114.568
+[20:13:57] HFT: BUY CADJPY (Vel 0.00611%)
+[20:13:58] SUCCESS: Auto-Trade BUY Filled @ 114.586
+[20:13:58] CLOSING: Ticket 54468185135 (Profit: 0.34)
+[20:13:59] SUCCESS: Closed Position 54468185135 @ 114.574
+[20:13:59] CLOSING: Ticket 54509584208 (Profit: 0.55)
+[20:13:59] SUCCESS: Closed Position 54509584208 @ 0.66761
+[20:13:59] CLOSING: Ticket 54509590365 (Profit: 0.52)
+[20:14:00] SUCCESS: Closed Position 54509590365 @ 0.6676
+[20:14:00] COMMAND: Close All Completed. Total Closed: 5
+[20:14:01] HFT: BUY CADJPY (Vel 0.00698%)
+[20:14:01] SUCCESS: Auto-Trade BUY Filled @ 114.593
+[20:14:05] HFT: BUY CADJPY (Vel 0.01135%)
+[20:14:06] SUCCESS: Auto-Trade BUY Filled @ 114.595
+[20:19:57] HFT: SELL AUDUSD (Vel -0.00599%)
+[20:19:59] SUCCESS: Auto-Trade SELL Filled @ 0.66746
+[20:27:28] HFT: BUY USDCHF (Vel 0.00631%)
+[20:27:29] SUCCESS: Auto-Trade BUY Filled @ 0.79315
+[20:32:19] HFT: SELL AUDUSD (Vel -0.05245%)
+[20:32:21] SUCCESS: Auto-Trade SELL Filled @ 0.66701
+[21:05:50] HFT: BUY USDCHF (Vel 0.00504%)
+[21:06:07] SUCCESS: Auto-Trade BUY Filled @ 0.79358
+[15:11:16] INFO: Smart Connect: Already connected to MT5.
+[15:11:16] INFO: MT5 Connected. Account: 5042587631
+[15:11:16] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[15:11:16] INFO: System Warmup Active. Trading paused for 15s...
+[15:11:18] INFO: Profit Guardian (ATR Trailing) Started.
+[15:11:18] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[15:15:32] ERROR: Close Failed: No prices (10021)
+[15:18:22] INFO: Smart Connect: Already connected to MT5.
+[15:18:22] INFO: MT5 Connected. Account: 5042587631
+[15:18:22] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[15:18:22] INFO: System Warmup Active. Trading paused for 15s...
+[15:18:24] INFO: Profit Guardian (ATR Trailing) Started.
+[15:18:24] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[16:54:19] INFO: Smart Connect: Already connected to MT5.
+[16:54:19] INFO: MT5 Connected. Account: 5042587631
+[16:54:19] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[16:54:19] INFO: System Warmup Active. Trading paused for 15s...
+[16:54:20] INFO: Profit Guardian (ATR Trailing) Started.
+[16:54:21] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[16:54:49] COMMAND: Starting Close All (Profitable Only: True)...
+[16:54:49] COMMAND: Close All Completed. Total Closed: 0
+[16:55:07] ERROR: Close Failed: Request rejected due to absence of network connection (10031)
+[16:55:07] ERROR: Close Failed: Request rejected due to absence of network connection (10031)
+[16:56:31] ERROR: Close Failed: No prices (10021)
+[17:02:45] INFO: Smart Connect: Already connected to MT5.
+[17:02:45] INFO: MT5 Connected. Account: 5042587631
+[17:02:45] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[17:02:45] INFO: System Warmup Active. Trading paused for 15s...
+[17:02:47] INFO: Profit Guardian (ATR Trailing) Started.
+[17:02:47] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[17:02:57] ERROR: Close Failed: No prices (10021)
+[19:25:54] INFO: Smart Connect: Already connected to MT5.
+[19:25:54] INFO: MT5 Connected. Account: 5042587631
+[19:25:54] INFO: Spidy HFT Scalper + Spider Web Started (Speed: 0.1s)
+[19:25:54] INFO: System Warmup Active. Trading paused for 15s...
+[19:25:55] INFO: Profit Guardian (ATR Trailing) Started.
+[19:25:55] WARNING: NewsFetcher missing. Defaulting to NEUTRAL mode.
+[19:26:10] TRADE: Received Manual SELL on EURUSD (Vol: 0.01)
+[19:26:10] TRADE: Received Manual SELL on EURUSD (Vol: 0.01)
+[19:26:10] ERROR: Auto-Trade Order Failed: No prices (10021)

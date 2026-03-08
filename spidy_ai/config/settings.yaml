@@ -1,0 +1,22 @@
+mt5:
+  login: 0 # User needs to fill this
+  password: "" # User needs to fill this
+  server: "MetaQuotes-Demo"
+  path: "C:\\Program Files\\MetaTrader 5\\terminal64.exe" # Verified Path
+
+symbols:
+  - "EURUSD"
+  - "GBPUSD"
+  - "XAUUSD"
+  - "BTCUSD"
+
+timeframes:
+  - "M1"
+  - "M5"
+  - "M15"
+  - "H1"
+  - "D1"
+
+risk:
+  max_drawdown_percent: 5.0
+  risk_per_trade_percent: 1.0

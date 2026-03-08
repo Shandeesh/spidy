@@ -1,0 +1,10 @@
+﻿Activation context generation failed for "C:\Program Files\MetaTrader 5\terminal64.exe".Error in manifest or policy file "C:\Program Files\MetaTrader 5\terminal64.exe" on line 0.
+Invalid Xml syntax.
+Activation context generation failed for "C:\Program Files\MetaTrader 5\terminal64.exe".Error in manifest or policy file "C:\Program Files\MetaTrader 5\terminal64.exe" on line 0.
+Invalid Xml syntax.
+Activation context generation failed for "C:\Program Files\MetaTrader 5\terminal64.exe".Error in manifest or policy file "C:\Program Files\MetaTrader 5\terminal64.exe" on line 0.
+Invalid Xml syntax.
+Activation context generation failed for "C:\Program Files\MetaTrader 5\terminal64.exe".Error in manifest or policy file "C:\Program Files\MetaTrader 5\terminal64.exe" on line 0.
+Invalid Xml syntax.
+Activation context generation failed for "C:\Program Files\MetaTrader 5\terminal64.exe".Error in manifest or policy file "C:\Program Files\MetaTrader 5\terminal64.exe" on line 0.
+Invalid Xml syntax.

@@ -1,0 +1,14 @@
+---------------------------------------------------
+     SPIDY LIVE EXECUTION VERIFICATION (MT5)       
+---------------------------------------------------
+[OK] Connected to: MetaTrader 5
+[OK] Algo Trading Allowed: True
+
+[INFO] Attempting to place PENDING BUY LIMIT @ 1.13599...
+[PASS] Order Placed Successfully! Ticket: 54810911890
+[INFO] Deleting Test Order 54810911890...
+[PASS] Order Deleted Successfully.
+
+---------------------------------------------------
+     EXECUTION ENGINE VERIFIED: OPERATIONAL        
+---------------------------------------------------

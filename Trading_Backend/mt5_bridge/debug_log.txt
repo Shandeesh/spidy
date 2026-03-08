@@ -1,0 +1,100 @@
+﻿[2026-01-13 22:34:33] INFO: Target MT5 Path: C:\Program Files\MetaTrader 5\terminal64.exe
+[2026-01-13 22:34:33] INFO: Launching MT5 Native: C:\Program Files\MetaTrader 5\terminal64.exe
+[2026-01-13 22:34:52] SUCCESS: Connected after Native Launch.
+[2026-01-13 22:34:52] SUCCESS: MT5 Connected (CONNECTED_FORCE)
+[2026-01-13 22:34:52] HFT: SELL USDJPY (Vel -0.01320%)
+[2026-01-13 22:34:52] COMMAND: Starting Close All (Profitable Only: True, Threshold: $0.0)...
+[2026-01-13 22:34:52] DEBUG RISK: USDJPY Vol:0.05 Contract:100000.0 | CalcSL:0.00060 StdSL:0.50000 -> FinalSL:0.00060
+[2026-01-13 22:34:52] ðŸ›‘ RISK REJECT: USDJPY Spread (0.00300) too high for Risk Limit 3.0. Req SL: 0.00060
+[2026-01-13 22:34:53] HFT FILTER: USDCHF Signal Ignored: Trend is BULLISH (Price > EMA50)
+[2026-01-13 22:34:53] HFT FILTER: AUDUSD Signal Ignored: Trend is BEARISH (Price < EMA50)
+[2026-01-13 22:34:53] HFT FILTER: NZDUSD Signal Ignored: Trend is BEARISH (Price < EMA50)
+[2026-01-13 22:34:53] HFT: SELL EURJPY (Vel -0.00648%)
+[2026-01-13 22:34:53] DEBUG RISK: EURJPY Vol:0.05 Contract:100000.0 | CalcSL:0.00060 StdSL:0.50000 -> FinalSL:0.00060
+[2026-01-13 22:34:53] ðŸ›‘ RISK REJECT: EURJPY Spread (0.02000) too high for Risk Limit 3.0. Req SL: 0.00060
+[2026-01-13 22:34:53] HFT: SELL GBPJPY (Vel -0.01637%)
+[2026-01-13 22:34:53] DEBUG RISK: GBPJPY Vol:0.05 Contract:100000.0 | CalcSL:0.00060 StdSL:0.50000 -> FinalSL:0.00060
+[2026-01-13 22:34:53] ðŸ›‘ RISK REJECT: GBPJPY Spread (0.02000) too high for Risk Limit 3.0. Req SL: 0.00060
+[2026-01-13 22:34:53] HFT: BUY AUDJPY (Vel 0.01223%)
+[2026-01-13 22:34:53] DEBUG RISK: AUDJPY Vol:0.05 Contract:100000.0 | CalcSL:0.00060 StdSL:0.50000 -> FinalSL:0.00060
+[2026-01-13 22:34:53] ðŸ›‘ RISK REJECT: AUDJPY Spread (0.01400) too high for Risk Limit 3.0. Req SL: 0.00060
+[2026-01-13 22:34:53] HFT: SELL CADJPY (Vel -0.00262%)
+[2026-01-13 22:34:53] DEBUG RISK: CADJPY Vol:0.05 Contract:100000.0 | CalcSL:0.00060 StdSL:0.50000 -> FinalSL:0.00060
+[2026-01-13 22:34:53] ðŸ›‘ RISK REJECT: CADJPY Spread (0.01300) too high for Risk Limit 3.0. Req SL: 0.00060
+[2026-01-13 22:35:04] HFT: BUY XAUUSD (Vel 0.10871%)
+[2026-01-13 22:35:04] COMMAND: Starting Close All (Profitable Only: True, Threshold: $0.0)...
+[2026-01-13 22:35:04] WARNING: Safety Cap Enforced: Reduced XAUUSD volume from 0.05 to 0.01
+[2026-01-13 22:35:04] DEBUG RISK: XAUUSD Vol:0.01 Contract:100.0 | CalcSL:3.00000 StdSL:5.00000 -> FinalSL:3.00000
+[2026-01-13 22:35:04] DEBUG: Sending Order (MainThread): action=BUY vol=0.01 price=4614.05
+[2026-01-13 22:35:23] SUCCESS: Auto-Trade BUY Filled @ 4614.05
+[2026-01-13 22:35:23] COMMAND: Starting Close All (Profitable Only: True, Threshold: $0.0)...
+[2026-01-13 22:35:24] HFT: BUY XAGUSD (Vel 0.06981%)
+[2026-01-13 22:35:24] WARNING: Safety Cap Enforced: Reduced XAGUSD volume from 0.05 to 0.01
+[2026-01-13 22:35:24] DEBUG RISK: XAGUSD Vol:0.01 Contract:5000.0 | CalcSL:0.06000 StdSL:0.50000 -> FinalSL:0.06000
+[2026-01-13 22:35:24] DEBUG: Sending Order (MainThread): action=BUY vol=0.01 price=88.887
+[2026-01-13 22:35:30] SUCCESS: Auto-Trade BUY Filled @ 88.887
+[2026-01-13 22:35:30] HFT FILTER: WTI Signal Ignored: Spread too high (0.00546) - Limit 0.0003
+[2026-01-13 22:35:30] HFT FILTER: US30 Signal Ignored: Trade Mode DISABLED
+[2026-01-13 22:35:30] COMMAND: Starting Close All (Profitable Only: True, Threshold: $0.0)...
+[2026-01-13 22:35:33] HFT FILTER: USDJPY Signal Ignored: Trend is BULLISH (Price > EMA50)
+[2026-01-13 22:35:33] HFT FILTER: USDCHF Signal Ignored: Trend is BULLISH (Price > EMA50)
+[2026-01-13 22:35:33] HFT: SELL EURJPY (Vel -0.01295%)
+[2026-01-13 22:35:33] DEBUG RISK: EURJPY Vol:0.05 Contract:100000.0 | CalcSL:0.00060 StdSL:0.50000 -> FinalSL:0.00060
+[2026-01-13 22:35:33] ðŸ›‘ RISK REJECT: EURJPY Spread (0.02000) too high for Risk Limit 3.0. Req SL: 0.00060
+[2026-01-13 22:35:33] HFT: SELL GBPJPY (Vel -0.01310%)
+[2026-01-13 22:35:33] DEBUG RISK: GBPJPY Vol:0.05 Contract:100000.0 | CalcSL:0.00060 StdSL:0.50000 -> FinalSL:0.00060
+[2026-01-13 22:35:33] ðŸ›‘ RISK REJECT: GBPJPY Spread (0.02000) too high for Risk Limit 3.0. Req SL: 0.00060
+[2026-01-13 22:35:33] HFT: SELL AUDJPY (Vel -0.00941%)
+[2026-01-13 22:35:33] DEBUG RISK: AUDJPY Vol:0.05 Contract:100000.0 | CalcSL:0.00060 StdSL:0.50000 -> FinalSL:0.00060
+[2026-01-13 22:35:33] ðŸ›‘ RISK REJECT: AUDJPY Spread (0.01400) too high for Risk Limit 3.0. Req SL: 0.00060
+[2026-01-13 22:35:34] HFT: SELL CADJPY (Vel -0.02182%)
+[2026-01-13 22:35:34] DEBUG RISK: CADJPY Vol:0.05 Contract:100000.0 | CalcSL:0.00060 StdSL:0.50000 -> FinalSL:0.00060
+[2026-01-13 22:35:34] ðŸ›‘ RISK REJECT: CADJPY Spread (0.01300) too high for Risk Limit 3.0. Req SL: 0.00060
+[2026-01-13 22:35:34] HFT: SELL XAUUSD (Vel -0.02341%)
+[2026-01-13 22:35:34] WARNING: Safety Cap Enforced: Reduced XAUUSD volume from 0.05 to 0.01
+[2026-01-13 22:35:34] DEBUG RISK: XAUUSD Vol:0.01 Contract:100.0 | CalcSL:3.00000 StdSL:5.00000 -> FinalSL:3.00000
+[2026-01-13 22:35:34] DEBUG: Sending Order (MainThread): action=SELL vol=0.01 price=4612.59
+[2026-01-13 22:35:34] SUCCESS: Auto-Trade SELL Filled @ 4612.59
+[2026-01-13 22:35:34] HFT: SELL XAGUSD (Vel -0.15190%)
+[2026-01-13 22:35:34] WARNING: Safety Cap Enforced: Reduced XAGUSD volume from 0.05 to 0.01
+[2026-01-13 22:35:34] DEBUG RISK: XAGUSD Vol:0.01 Contract:5000.0 | CalcSL:0.06000 StdSL:0.50000 -> FinalSL:0.06000
+[2026-01-13 22:35:34] DEBUG: Sending Order (MainThread): action=SELL vol=0.01 price=88.737
+[2026-01-13 22:35:35] SUCCESS: Auto-Trade SELL Filled @ 88.737
+[2026-01-13 22:35:35] INFO: Technical Analysis Updated for 11 symbols (Parallel Mode).
+[2026-01-13 22:35:35] HFT: BUY EURJPY (Vel 0.00702%)
+[2026-01-13 22:35:35] DEBUG RISK: EURJPY Vol:0.05 Contract:100000.0 | CalcSL:0.00060 StdSL:0.50000 -> FinalSL:0.00060
+[2026-01-13 22:35:35] ðŸ›‘ RISK REJECT: EURJPY Spread (0.02000) too high for Risk Limit 3.0. Req SL: 0.00060
+[2026-01-13 22:35:35] HFT FILTER: XAUUSD Signal Ignored: Trend is BEARISH (Price < EMA50)
+[2026-01-13 22:35:35] HFT: SELL XAGUSD (Vel -0.00676%)
+[2026-01-13 22:35:35] WARNING: Safety Cap Enforced: Reduced XAGUSD volume from 0.05 to 0.01
+[2026-01-13 22:35:35] DEBUG RISK: XAGUSD Vol:0.01 Contract:5000.0 | CalcSL:0.06000 StdSL:0.50000 -> FinalSL:0.06000
+[2026-01-13 22:35:35] DEBUG: Sending Order (MainThread): action=SELL vol=0.01 price=88.731
+[2026-01-13 22:35:37] SUCCESS: Auto-Trade SELL Filled @ 88.731
+[2026-01-13 22:35:37] HFT: SELL EURJPY (Vel -0.00810%)
+[2026-01-13 22:35:37] DEBUG RISK: EURJPY Vol:0.05 Contract:100000.0 | CalcSL:0.00060 StdSL:0.50000 -> FinalSL:0.00060
+[2026-01-13 22:35:37] ðŸ›‘ RISK REJECT: EURJPY Spread (0.02000) too high for Risk Limit 3.0. Req SL: 0.00060
+[2026-01-13 22:35:37] HFT: SELL XAUUSD (Vel -0.00477%)
+[2026-01-13 22:35:37] WARNING: Safety Cap Enforced: Reduced XAUUSD volume from 0.05 to 0.01
+[2026-01-13 22:35:37] DEBUG RISK: XAUUSD Vol:0.01 Contract:100.0 | CalcSL:3.00000 StdSL:5.00000 -> FinalSL:3.00000
+[2026-01-13 22:35:37] DEBUG: Sending Order (MainThread): action=SELL vol=0.01 price=4612.62
+[2026-01-13 22:35:39] SUCCESS: Auto-Trade SELL Filled @ 4612.62
+[2026-01-13 22:35:39] HFT FILTER: XAUUSD Signal Ignored: Trend is BEARISH (Price < EMA50)
+[2026-01-13 22:35:39] HFT FILTER: XAGUSD Signal Ignored: Trend is BEARISH (Price < EMA50)
+[2026-01-13 22:35:40] HFT FILTER: XAGUSD Signal Ignored: Trend is BEARISH (Price < EMA50)
+[2026-01-13 22:35:40] HFT: BUY XAGUSD (Vel 0.02817%)
+[2026-01-13 22:35:40] WARNING: Safety Cap Enforced: Reduced XAGUSD volume from 0.05 to 0.01
+[2026-01-13 22:35:40] DEBUG RISK: XAGUSD Vol:0.01 Contract:5000.0 | CalcSL:0.06000 StdSL:0.50000 -> FinalSL:0.06000
+[2026-01-13 22:35:40] DEBUG: Sending Order (MainThread): action=BUY vol=0.01 price=88.778
+[2026-01-13 22:36:35] ERROR: Auto-Trade Order Failed: Request rejected due to absence of network connection (10031)
+[2026-01-13 22:36:40] INFO: Technical Analysis Updated for 11 symbols (Parallel Mode).
+[2026-01-13 22:37:47] INFO: Technical Analysis Updated for 11 symbols (Parallel Mode).
+[2026-01-13 22:38:00] DEBUG: Guardian Scanning 25 positions...
+[2026-01-13 22:38:11] ðŸ§  AI BRAIN ANALYSIS: NEUTRAL (Deep Thought)
+[2026-01-13 22:38:50] INFO: Technical Analysis Updated for 11 symbols (Parallel Mode).
+[2026-01-13 22:39:00] DEBUG: Guardian Scanning 25 positions...
+[2026-01-13 22:39:26] ðŸ§  AI BRAIN ANALYSIS: NEUTRAL (Deep Thought)
+[2026-01-13 22:39:52] INFO: Technical Analysis Updated for 11 symbols (Parallel Mode).
+[2026-01-13 22:40:00] DEBUG: Guardian Scanning 25 positions...
+[2026-01-13 22:40:36] ðŸ§  AI BRAIN ANALYSIS: NEUTRAL (Deep Thought)
+[2026-01-13 22:40:53] INFO: Technical Analysis Updated for 11 symbols (Parallel Mode).
+[2026-01-13 22:41:00] DEBUG: Guardian Scanning 25 positions...

@@ -1,0 +1,13 @@
+{
+    "atr_multiplier": 1.5,
+    "fixed_lot_size": 0.05,
+    "scalp_target_usd": 1.0,
+    "breakeven_pct": 0.005,
+    "mode": "CONSERVATIVE",
+    "auto_secure": {
+        "enabled": true,
+        "threshold": 0.1
+    },
+    "auto_trade_enabled": true,
+    "max_daily_loss": 50.0
+}

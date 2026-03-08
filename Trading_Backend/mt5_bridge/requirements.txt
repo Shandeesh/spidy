@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+pandas
+yfinance
+pyautogui
+numpy
+requests
+NorenRestApiPy
+websocket-client
+python-dotenv
+influxdb-client
+MetaTrader5
+websockets

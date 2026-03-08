@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+requests
+pandas
+psutil
+websocket-client
+# NorenRestApiPy # Install manually via git if pip fails, but listing here for completeness

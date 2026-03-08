@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Default Theme (Cyberpunk/Spidy) */
+  --bg-primary: #0a0a0a;
+  --bg-card: #111111;
+  --color-primary: #ff0033; /* Spidy Red */
+  --color-accent: #00ccff; /* Electric Blue */
+  --text-primary: #e5e7eb;
+  --text-secondary: #9ca3af;
+  
+  --foreground-rgb: 229, 231, 235;
+  --background-start-rgb: 10, 10, 10;
+  --background-end-rgb: 10, 10, 10;
+}
+
+/* Corporate Theme */
+.theme-corporate {
+  --bg-primary: #f8fafc;
+  --bg-card: #ffffff;
+  --color-primary: #2563eb;
+  --color-accent: #64748b;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --foreground-rgb: 15, 23, 42;
+  --background-start-rgb: 248, 250, 252;
+  --background-end-rgb: 248, 250, 252;
+}
+
+/* Nature Theme */
+.theme-nature {
+  --bg-primary: #1a2f1c;
+  --bg-card: #243c26;
+  --color-primary: #4ade80;
+  --color-accent: #facc15;
+  --text-primary: #f0fdf4;
+  --text-secondary: #bbf7d0;
+  --foreground-rgb: 240, 253, 244;
+  --background-start-rgb: 26, 47, 28;
+  --background-end-rgb: 26, 47, 28;
+}
+
+/* Retro Theme */
+.theme-retro {
+  --bg-primary: #2b213a;
+  --bg-card: #36294a;
+  --color-primary: #ff00ff;
+  --color-accent: #00ffff;
+  --text-primary: #fae8ff;
+  --text-secondary: #d8b4fe;
+  --foreground-rgb: 250, 232, 255;
+  --background-start-rgb: 43, 33, 58;
+  --background-end-rgb: 43, 33, 58;
+}
+
+/* Minimal Theme */
+.theme-minimal {
+  --bg-primary: #ffffff;
+  --bg-card: #f3f4f6;
+  --color-primary: #111827;
+  --color-accent: #9ca3af;
+  --text-primary: #000000;
+  --text-secondary: #4b5563;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 255, 255, 255;
+}
+
+/* UPGRADE 14: Ocean Theme — Premium dark teal */
+.theme-ocean {
+  --bg-primary: #040d14;
+  --bg-card: #0a1929;
+  --color-primary: #00e5ff;  /* Electric Teal */
+  --color-accent: #0072e5;   /* Deep Blue */
+  --text-primary: #e0f7fa;
+  --text-secondary: #80deea;
+  --foreground-rgb: 224, 247, 250;
+  --background-start-rgb: 4, 13, 20;
+  --background-end-rgb: 4, 13, 20;
+}
+
+body {
+  /* UPGRADE 13: Use Inter font */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+/* UPGRADE 13: Premium elegant scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Focus ring improvements */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}

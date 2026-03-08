@@ -1,0 +1,110 @@
+--- Event Time: 2026-02-10 13:54:25 ---
+Insert[0]: 
+Insert[1]: 
+Insert[2]: 
+Insert[3]: 
+Insert[4]: 
+Insert[5]: 
+Insert[6]: 
+Insert[7]: 
+Insert[8]: 
+Insert[9]: 
+Insert[10]: C:\Program Files\MetaTrader 5\terminal64.exe
+Insert[11]: C:\Program Files\MetaTrader 5\terminal64.exe
+Insert[12]: 0
+Insert[13]: 
+Insert[14]: 
+Insert[15]: 
+Insert[16]: 
+Insert[17]: 
+Insert[18]: 
+Insert[19]: 
+
+--- Event Time: 2026-02-10 13:49:55 ---
+Insert[0]: 
+Insert[1]: 
+Insert[2]: 
+Insert[3]: 
+Insert[4]: 
+Insert[5]: 
+Insert[6]: 
+Insert[7]: 
+Insert[8]: 
+Insert[9]: 
+Insert[10]: C:\Program Files\MetaTrader 5\terminal64.exe
+Insert[11]: C:\Program Files\MetaTrader 5\terminal64.exe
+Insert[12]: 0
+Insert[13]: 
+Insert[14]: 
+Insert[15]: 
+Insert[16]: 
+Insert[17]: 
+Insert[18]: 
+Insert[19]: 
+
+--- Event Time: 2026-02-10 13:48:55 ---
+Insert[0]: 
+Insert[1]: 
+Insert[2]: 
+Insert[3]: 
+Insert[4]: 
+Insert[5]: 
+Insert[6]: 
+Insert[7]: 
+Insert[8]: 
+Insert[9]: 
+Insert[10]: C:\Program Files\MetaTrader 5\terminal64.exe
+Insert[11]: C:\Program Files\MetaTrader 5\terminal64.exe
+Insert[12]: 0
+Insert[13]: 
+Insert[14]: 
+Insert[15]: 
+Insert[16]: 
+Insert[17]: 
+Insert[18]: 
+Insert[19]: 
+
+--- Event Time: 2026-02-10 13:48:16 ---
+Insert[0]: 
+Insert[1]: 
+Insert[2]: 
+Insert[3]: 
+Insert[4]: 
+Insert[5]: 
+Insert[6]: 
+Insert[7]: 
+Insert[8]: 
+Insert[9]: 
+Insert[10]: C:\Program Files\MetaTrader 5\terminal64.exe
+Insert[11]: C:\Program Files\MetaTrader 5\terminal64.exe
+Insert[12]: 0
+Insert[13]: 
+Insert[14]: 
+Insert[15]: 
+Insert[16]: 
+Insert[17]: 
+Insert[18]: 
+Insert[19]: 
+
+--- Event Time: 2026-02-10 13:46:12 ---
+Insert[0]: 
+Insert[1]: 
+Insert[2]: 
+Insert[3]: 
+Insert[4]: 
+Insert[5]: 
+Insert[6]: 
+Insert[7]: 
+Insert[8]: 
+Insert[9]: 
+Insert[10]: C:\Program Files\MetaTrader 5\terminal64.exe
+Insert[11]: C:\Program Files\MetaTrader 5\terminal64.exe
+Insert[12]: 0
+Insert[13]: 
+Insert[14]: 
+Insert[15]: 
+Insert[16]: 
+Insert[17]: 
+Insert[18]: 
+Insert[19]: 
+

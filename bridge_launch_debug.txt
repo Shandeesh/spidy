@@ -1,0 +1,2 @@
+[Batch Start] 14-01-2026 16:48:01.37 
+Raw Arg 1: ["C:\Users\Shandeesh R P\AppData\Local\Microsoft\WindowsApps\python.exe"] 

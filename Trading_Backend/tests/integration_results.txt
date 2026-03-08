@@ -1,0 +1,8 @@
+test_buy_execution_flow (__main__.TestIntegration.test_buy_execution_flow) ... ok
+test_close_logic_flow (__main__.TestIntegration.test_close_logic_flow) ... ok
+test_strategy_manager_wiring (__main__.TestIntegration.test_strategy_manager_wiring) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 8.475s
+
+OK

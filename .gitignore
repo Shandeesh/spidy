@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.db
+venv/
+.venv/
+
+# Node
+node_modules/
+.next/
+out/
+build/
+
+# Environment Variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# Spidy Specific
+brain.log
+brain.err
+bridge.log
+bridge.err
+*.mq5.log

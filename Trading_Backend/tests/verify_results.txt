@@ -1,0 +1,66 @@
+---------------------------------------------------
+     SPIDY LIVE STRATEGY VERIFICATION (MT5)        
+---------------------------------------------------
+MT5 Connected: MetaTrader 5
+[OK] StrategyManager Loaded. Total Strategies: 52
+
+[INFO] Fetching Live Data for EURUSD...
+[INFO] Current Price: 1.18589
+[INFO] Updating Technical State...
+
+STRATEGY NAME                       | STATUS | SIGNAL
+---------------------------------------------------------------------------
+RegimeDetector                      | PASS   | INFO (1.0)
+EMACross_5_12                       | PASS   | HOLD (0.0)
+SMACross_5_12                       | PASS   | HOLD (0.0)
+EMACross_9_21                       | PASS   | HOLD (0.0)
+SMACross_9_21                       | PASS   | SELL (0.9)
+EMACross_10_20                      | PASS   | HOLD (0.0)
+SMACross_10_20                      | PASS   | HOLD (0.0)
+EMACross_20_50                      | PASS   | HOLD (0.0)
+SMACross_20_50                      | PASS   | HOLD (0.0)
+EMACross_50_100                     | PASS   | HOLD (0.0)
+SMACross_50_100                     | PASS   | HOLD (0.0)
+EMACross_50_200                     | PASS   | HOLD (0.0)
+SMACross_50_200                     | PASS   | HOLD (0.0)
+EMACross_100_200                    | PASS   | HOLD (0.0)
+SMACross_100_200                    | PASS   | HOLD (0.0)
+EMACross_200_400                    | PASS   | HOLD (0.0)
+SMACross_200_400                    | PASS   | HOLD (0.0)
+MACDTrend                           | PASS   | HOLD (0.0)
+MACDTrend                           | PASS   | HOLD (0.0)
+MACDTrend                           | PASS   | HOLD (0.0)
+SuperTrend                          | PASS   | HOLD (0.0)
+SuperTrend                          | PASS   | HOLD (0.0)
+SuperTrend                          | PASS   | HOLD (0.0)
+Ichimoku_Cloud                      | PASS   | HOLD (0.0)
+ParabolicSAR_0.02_0.2               | PASS   | HOLD
+ParabolicSAR_0.01_0.2               | PASS   | HOLD
+ParabolicSAR_0.04_0.2               | PASS   | HOLD
+ADX_Trend_25                        | PASS   | HOLD
+ADX_Trend_20                        | PASS   | HOLD
+ADX_Trend_30                        | PASS   | HOLD
+RSIMeanReversion_30_70              | PASS   | HOLD (0.0)
+RSIMeanReversion_20_80              | PASS   | HOLD (0.0)
+StochRSI                            | PASS   | HOLD (0.0)
+StochRSI                            | PASS   | BUY (0.85)
+Williams %R                         | PASS   | HOLD (0.0)
+Williams %R                         | PASS   | HOLD (0.0)
+CCI_Reversal                        | PASS   | HOLD (0.0)
+CCI_Reversal                        | PASS   | HOLD (0.0)
+CCI_Reversal                        | PASS   | HOLD (0.0)
+AwesomeOsc_5_34                     | PASS   | HOLD
+Pivot_Reversal                      | PASS   | SELL (0.6)
+BBSqueeze                           | PASS   | HOLD (0.0)
+KeltnerChan                         | PASS   | HOLD (0.0)
+ATR_Breakout                        | PASS   | HOLD
+ATR_Breakout                        | PASS   | HOLD
+ATR_Breakout                        | PASS   | HOLD
+DonchianBreakout_20                 | PASS   | HOLD
+DonchianBreakout_50                 | PASS   | HOLD
+DonchianBreakout_10                 | PASS   | HOLD
+LinReg_Predictor                    | PASS   | HOLD (0.0)
+LSTM_DeepTrend                      | PASS   | SELL (0.88)
+VWAP_Trend                          | PASS   | HOLD (0.0)
+---------------------------------------------------------------------------
+VERIFICATION COMPLETE: 52 PASSED, 0 FAILED

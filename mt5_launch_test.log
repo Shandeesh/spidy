@@ -1,0 +1,8 @@
+[2026-01-13 17:26:14] --- Starting MT5 Launch Test ---
+[2026-01-13 17:26:14] MetaTrader5 Version: 5.0.5430
+[2026-01-13 17:26:14] Checking path: C:\Program Files\MetaTrader 5\terminal64.exe
+[2026-01-13 17:26:14] Path exists.
+[2026-01-13 17:26:14] Attempting mt5.initialize()...
+[2026-01-13 17:26:18] SUCCESS: MT5 Initialized via Python API
+[2026-01-13 17:26:18] Terminal Info: TerminalInfo(community_account=True, community_connection=True, connected=True, dlls_allowed=False, trade_allowed=True, tradeapi_disabled=False, email_enabled=False, ftp_enabled=False, notifications_enabled=False, mqid=False, build=5499, maxbars=100000, codepage=0, ping_last=215936, community_balance=0.0, retransmission=0.0, company='MetaQuotes Ltd.', name='MetaTrader 5', language='English', path='C:\\Program Files\\MetaTrader 5', data_path='C:\\Users\\Shandeesh R P\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075', commondata_path='C:\\Users\\Shandeesh R P\\AppData\\Roaming\\MetaQuotes\\Terminal\\Common')
+[2026-01-13 17:26:18] --- Test Complete ---

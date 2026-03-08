@@ -1,0 +1,25 @@
+c:\Users\Shandeesh R P\spidy\Trading_Backend\mt5_bridge\bridge_server.py:483: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+INFO:     Started server process [14776]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:51814 - "WebSocket /ws/logs" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     127.0.0.1:63287 - "WebSocket /ws/logs" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     127.0.0.1:64829 - "WebSocket /ws/logs" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     127.0.0.1:61464 - "WebSocket /ws/logs" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     127.0.0.1:50827 - "WebSocket /ws/logs" [accepted]
+INFO:     connection open

@@ -1,0 +1,13 @@
+MT5 Initialized. Version: (500, 5499, '10 Jan 2026')
+Server Time (EURUSD Tick): 2026-01-12 18:46:04 (Ts: 1768223764)
+Local Time (System):       2026-01-12 16:46:05.188088 (Ts: 1768216565.188088)
+Offset (Server - Local):   7198.811912059784 seconds
+
+--- Checking Active Positions ---
+Found 44 active positions.
+First Pos Time: 1768217352 -> 2026-01-12 16:59:12
+
+--- Checking Trade History (Last 30 Days) ---
+Found 5589 total deals.
+Deal Types Distribution: {0: 2815, 1: 2774, 2: 0, 3: 0, 'Other': 0}
+Legend: 0=IN (Open), 1=OUT (Close), 2=INOUT (Reverse), 3=OUT_BY (CloseBy)

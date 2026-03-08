@@ -1,0 +1,313 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20260114163403
+Username: SANDY\Shandeesh R P
+RunAs User: SANDY\Shandeesh R P
+Configuration Name: 
+Machine: SANDY (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoExit -ExecutionPolicy Bypass -File C:\Users\Shandeesh R P\spidy\spidy_launcher.ps1
+Process ID: 33904
+PSVersion: 5.1.26100.7462
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7462
+BuildVersion: 10.0.26100.7462
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+[16:34:03] Launcher Started.
+============================
+   Starting Spidy AI...
+============================
+Starting Backend Services...
+Checking Virtual Environment...
+PS>TerminatingError(python.exe): "The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: Traceback (most recent call last):"
+ [BROKEN/MISSING]
+   - Venv path exists? True
+   - Missing dependencies (e.g. pandas). falling back...
+Checking Global Python...
+ [OK]
+Using Global Python.
+[16:34:05] Selected Python: C:\Users\Shandeesh R P\AppData\Local\Microsoft\WindowsApps\python.exe
+[16:34:06] Version: Python 3.11.9
+MT5 Bridge started (PID: 22744).
+AI Brain Server started (PID: 33896).
+Node.js Backend started (PID: 26384).
+Starting Frontend Server (Next.js)...
+Frontend started (PID: 32084).
+Waiting for Dashboard to come online...
+
+Dashboard is UP!
+Launching App Interface...
+
+Spidy AI is running!
+Keep this window OPEN.
+Press any key to stop servers and exit...
+
+Stopping servers...
+Servers stopped. Goodbye!
+**********************
+Windows PowerShell transcript start
+Start time: 20260114164304
+Username: SANDY\Shandeesh R P
+RunAs User: SANDY\Shandeesh R P
+Configuration Name: 
+Machine: SANDY (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoExit -ExecutionPolicy Bypass -File C:\Users\Shandeesh R P\spidy\spidy_launcher.ps1
+Process ID: 26532
+PSVersion: 5.1.26100.7462
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7462
+BuildVersion: 10.0.26100.7462
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+[16:43:04] Launcher Started.
+============================
+   Starting Spidy AI...
+============================
+Starting Backend Services...
+Checking Virtual Environment...
+PS>TerminatingError(python.exe): "The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: Traceback (most recent call last):"
+ [BROKEN/MISSING]
+   - Venv path exists? True
+   - Missing dependencies (e.g. pandas). falling back...
+Checking Global Python...
+ [OK]
+Using Global Python.
+[16:43:06] Selected Python: C:\Users\Shandeesh R P\AppData\Local\Microsoft\WindowsApps\python.exe
+[16:43:06] Version: Python 3.11.9
+MT5 Bridge started (PID: 6132).
+AI Brain Server started (PID: 14356).
+Node.js Backend started (PID: 18352).
+Starting Frontend Server (Next.js)...
+Frontend started (PID: 35568).
+Waiting for Dashboard to come online...
+
+Dashboard is UP!
+Launching App Interface...
+
+Spidy AI is running!
+Keep this window OPEN.
+Press any key to stop servers and exit...
+**********************
+Windows PowerShell transcript start
+Start time: 20260114164356
+Username: SANDY\Shandeesh R P
+RunAs User: SANDY\Shandeesh R P
+Configuration Name: 
+Machine: SANDY (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoExit -ExecutionPolicy Bypass -File C:\Users\Shandeesh R P\spidy\spidy_launcher.ps1
+Process ID: 8720
+PSVersion: 5.1.26100.7462
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7462
+BuildVersion: 10.0.26100.7462
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+[16:43:57] Launcher Started.
+============================
+   Starting Spidy AI...
+============================
+Starting Backend Services...
+Checking Virtual Environment...
+PS>TerminatingError(python.exe): "The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: Traceback (most recent call last):"
+ [BROKEN/MISSING]
+   - Venv path exists? True
+   - Missing dependencies (e.g. pandas). falling back...
+Checking Global Python...
+ [OK]
+Using Global Python.
+[16:43:58] Selected Python: C:\Users\Shandeesh R P\AppData\Local\Microsoft\WindowsApps\python.exe
+[16:43:59] Version: Python 3.11.9
+MT5 Bridge started (PID: 21288).
+AI Brain Server started (PID: 21128).
+Node.js Backend started (PID: 16540).
+Starting Frontend Server (Next.js)...
+Frontend started (PID: 34808).
+Waiting for Dashboard to come online...
+
+Dashboard is UP!
+Launching App Interface...
+
+Spidy AI is running!
+Keep this window OPEN.
+Press any key to stop servers and exit...
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20260114164759
+Username: SANDY\Shandeesh R P
+RunAs User: SANDY\Shandeesh R P
+Configuration Name: 
+Machine: SANDY (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoExit -ExecutionPolicy Bypass -File C:\Users\Shandeesh R P\spidy\spidy_launcher.ps1
+Process ID: 9644
+PSVersion: 5.1.26100.7462
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7462
+BuildVersion: 10.0.26100.7462
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+[16:47:59] Launcher Started.
+============================
+   Starting Spidy AI...
+============================
+Starting Backend Services...
+Checking Virtual Environment...
+PS>TerminatingError(python.exe): "The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: Traceback (most recent call last):"
+ [BROKEN/MISSING]
+   - Venv path exists? True
+   - Missing dependencies (e.g. pandas). falling back...
+Checking Global Python...
+ [OK]
+Using Global Python.
+[16:48:00] Selected Python: C:\Users\Shandeesh R P\AppData\Local\Microsoft\WindowsApps\python.exe
+[16:48:01] Version: Python 3.11.9
+MT5 Bridge started (PID: 6760).
+AI Brain Server started (PID: 35644).
+Node.js Backend started (PID: 20724).
+Starting Frontend Server (Next.js)...
+Frontend started (PID: 14392).
+Waiting for Dashboard to come online...
+
+Dashboard is UP!
+Launching App Interface...
+
+Spidy AI is running!
+Keep this window OPEN.
+Press any key to stop servers and exit...
+
+Stopping servers...
+Servers stopped. Goodbye!
+**********************
+Windows PowerShell transcript start
+Start time: 20260114170327
+Username: SANDY\Shandeesh R P
+RunAs User: SANDY\Shandeesh R P
+Configuration Name: 
+Machine: SANDY (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoExit -ExecutionPolicy Bypass -File C:\Users\Shandeesh R P\spidy\spidy_launcher.ps1
+Process ID: 31740
+PSVersion: 5.1.26100.7462
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7462
+BuildVersion: 10.0.26100.7462
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+[17:03:27] Launcher Started.
+============================
+   Starting Spidy AI...
+============================
+Starting Backend Services...
+Checking Virtual Environment...
+ [OK]
+Using Virtual Environment Python.
+[17:03:28] Selected Python: C:\Users\Shandeesh R P\spidy\.venv\Scripts\python.exe
+[17:03:28] Version: Python 3.11.0
+MT5 Bridge started (PID: 13780).
+AI Brain Server started (PID: 1440).
+Node.js Backend started (PID: 15160).
+Starting Frontend Server (Next.js)...
+Frontend started (PID: 20412).
+Waiting for Dashboard to come online...
+
+Dashboard is UP!
+Launching App Interface...
+
+Spidy AI is running!
+Keep this window OPEN.
+Press any key to stop servers and exit...
+**********************
+Windows PowerShell transcript start
+Start time: 20260114170840
+Username: SANDY\Shandeesh R P
+RunAs User: SANDY\Shandeesh R P
+Configuration Name: 
+Machine: SANDY (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoExit -ExecutionPolicy Bypass -File C:\Users\Shandeesh R P\spidy\spidy_launcher.ps1
+Process ID: 27748
+PSVersion: 5.1.26100.7462
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7462
+BuildVersion: 10.0.26100.7462
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+[17:08:40] Launcher Started.
+============================
+   Starting Spidy AI...
+============================
+Starting Backend Services...
+Checking Virtual Environment...
+ [OK]
+Using Virtual Environment Python.
+[17:08:42] Selected Python: C:\Users\Shandeesh R P\spidy\.venv\Scripts\python.exe
+[17:08:42] Version: Python 3.11.0
+MT5 Bridge started (PID: 35264).
+AI Brain Server started (PID: 32256).
+Node.js Backend started (PID: 11436).
+Starting Frontend Server (Next.js)...
+Frontend started (PID: 9712).
+Waiting for Dashboard to come online...
+
+Dashboard is UP!
+Launching App Interface...
+
+Spidy AI is running!
+Keep this window OPEN.
+Press any key to stop servers and exit...
+**********************
+Windows PowerShell transcript start
+Start time: 20260114171218
+Username: SANDY\Shandeesh R P
+RunAs User: SANDY\Shandeesh R P
+Configuration Name: 
+Machine: SANDY (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoExit -ExecutionPolicy Bypass -File C:\Users\Shandeesh R P\spidy\spidy_launcher.ps1
+Process ID: 2012
+PSVersion: 5.1.26100.7462
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7462
+BuildVersion: 10.0.26100.7462
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+[17:12:18] Launcher Started.
+============================
+   Starting Spidy AI...
+============================
+Starting Backend Services...
+Checking Virtual Environment...
+ [OK]
+Using Virtual Environment Python.
+[17:12:22] Selected Python: C:\Users\Shandeesh R P\spidy\.venv\Scripts\python.exe
+[17:12:22] Version: Python 3.11.0
+MT5 Bridge started (PID: 7980).
+AI Brain Server started (PID: 29464).
+Node.js Backend started (PID: 3216).
+Starting Frontend Server (Next.js)...
+Frontend started (PID: 13480).
+Waiting for Dashboard to come online...
+
+Dashboard is UP!
+Launching App Interface...
+
+Spidy AI is running!
+Keep this window OPEN.
+Press any key to stop servers and exit...

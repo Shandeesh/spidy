@@ -1,0 +1,78 @@
+---------------------------------------------------
+STRATEGY DIAGNOSTIC TOOL
+---------------------------------------------------
+
+Scanning 52 registered strategies...
+
+⚠️ [SILENT]  RegimeDetector -> Signal: INFO
+⚠️ [SILENT]  EMACross_5_12 -> Signal: HOLD
+⚠️ [SILENT]  SMACross_5_12 -> Signal: HOLD
+⚠️ [SILENT]  EMACross_9_21 -> Signal: HOLD
+⚠️ [SILENT]  SMACross_9_21 -> Signal: HOLD
+⚠️ [SILENT]  EMACross_10_20 -> Signal: HOLD
+⚠️ [SILENT]  SMACross_10_20 -> Signal: HOLD
+⚠️ [SILENT]  EMACross_20_50 -> Signal: HOLD
+⚠️ [SILENT]  SMACross_20_50 -> Signal: HOLD
+⚠️ [SILENT]  EMACross_50_100 -> Signal: HOLD
+⚠️ [SILENT]  SMACross_50_100 -> Signal: HOLD
+⚠️ [SILENT]  EMACross_50_200 -> Signal: HOLD
+⚠️ [SILENT]  SMACross_50_200 -> Signal: HOLD
+⚠️ [SILENT]  EMACross_100_200 -> Signal: HOLD
+⚠️ [SILENT]  SMACross_100_200 -> Signal: HOLD
+⚠️ [SILENT]  EMACross_200_400 -> Signal: HOLD
+⚠️ [SILENT]  SMACross_200_400 -> Signal: HOLD
+⚠️ [SILENT]  MACDTrend -> Signal: HOLD
+⚠️ [SILENT]  MACDTrend -> Signal: HOLD
+⚠️ [SILENT]  MACDTrend -> Signal: HOLD
+⚠️ [SILENT]  SuperTrend -> Signal: HOLD
+⚠️ [SILENT]  SuperTrend -> Signal: HOLD
+⚠️ [SILENT]  SuperTrend -> Signal: HOLD
+⚠️ [SILENT]  Ichimoku_Cloud -> Signal: HOLD
+⚠️ [SILENT]  ParabolicSAR_0.02_0.2 -> Signal: HOLD
+⚠️ [SILENT]  ParabolicSAR_0.01_0.2 -> Signal: HOLD
+✅ [WORKING] ParabolicSAR_0.04_0.2 -> Signal: SELL
+⚠️ [SILENT]  ADX_Trend_25 -> Signal: HOLD
+⚠️ [SILENT]  ADX_Trend_20 -> Signal: HOLD
+⚠️ [SILENT]  ADX_Trend_30 -> Signal: HOLD
+⚠️ [SILENT]  RSIMeanReversion_30_70 -> Signal: HOLD
+⚠️ [SILENT]  RSIMeanReversion_20_80 -> Signal: HOLD
+⚠️ [SILENT]  StochRSI -> Signal: HOLD
+⚠️ [SILENT]  StochRSI -> Signal: HOLD
+⚠️ [SILENT]  Williams %R -> Signal: HOLD
+⚠️ [SILENT]  Williams %R -> Signal: HOLD
+⚠️ [SILENT]  CCI_Reversal -> Signal: HOLD
+⚠️ [SILENT]  CCI_Reversal -> Signal: HOLD
+⚠️ [SILENT]  CCI_Reversal -> Signal: HOLD
+⚠️ [SILENT]  AwesomeOsc_5_34 -> Signal: HOLD
+⚠️ [SILENT]  Pivot_Reversal -> Signal: HOLD
+⚠️ [SILENT]  BBSqueeze -> Signal: HOLD
+⚠️ [SILENT]  KeltnerChan -> Signal: HOLD
+⚠️ [SILENT]  ATR_Breakout -> Signal: HOLD
+⚠️ [SILENT]  ATR_Breakout -> Signal: HOLD
+⚠️ [SILENT]  ATR_Breakout -> Signal: HOLD
+✅ [WORKING] DonchianBreakout_20 -> Signal: SELL
+⚠️ [SILENT]  DonchianBreakout_50 -> Signal: HOLD
+✅ [WORKING] DonchianBreakout_10 -> Signal: SELL
+✅ [WORKING] LinReg_Predictor -> Signal: BUY
+⚠️ [SILENT]  LSTM_DeepTrend -> Signal: HOLD
+✅ [WORKING] VWAP_Trend -> Signal: SELL
+
+---------------------------------------------------
+SUMMARY Results:
+WORKING: 5
+SILENT:  47 (Technically working, just no trade)
+BROKEN:  0
+---------------------------------------------------
+
+---------------------------------------------------
+TESTING MANAGER CONSENSUS
+---------------------------------------------------
+Requesting Signal from Manager (Expect Consensus)...
+✅ CONSENSUS SIGNAL: SELL
+   Reason: Consensus SELL (Votes: 7.5 vs 1.0) | Contributors: ParabolicSAR_0.04_0.2(1.5), DonchianBreakout_20(2.0), DonchianBreakout_10(2.0)
+   Strategy: MetaConsensus
+
+---------------------------------------------------
+TESTING SOLO STRONG STRATEGY (SUPERTREND)
+---------------------------------------------------
+✅ SOLO TEST PASSED: SuperTrend (0.95) -> BUY (Consensus BUY (Votes: 2.0 vs 0.0) | Contributors: SuperTrend(2.0))
