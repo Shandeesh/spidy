@@ -1,643 +1,538 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Activity, Shield, Wallet, TrendingUp, TrendingDown, DollarSign, Clock, Hash, Lock, ShieldCheck, FileKey, Zap, Check, ChevronDown, Download, X, RefreshCw } from 'lucide-react';
-import { Combobox, Dialog } from '@headlessui/react';
+import {
+    Activity, Shield, Wallet, TrendingUp, TrendingDown, DollarSign,
+    Clock, Hash, Lock, ShieldCheck, Zap, Check, ChevronDown,
+    Download, X, RefreshCw, BarChart2, Target, AlertTriangle,
+    ArrowUpRight, ArrowDownRight, Crosshair, Settings, BookOpen,
+} from 'lucide-react';
+import { Combobox } from '@headlessui/react';
 import axios from 'axios';
+import MarketIntelligence from './MarketIntelligence';
 
-// Anime Physics Variants
-const animeAppear = {
-    hidden: { opacity: 0, scale: 0.8, filter: 'blur(10px)' },
-    visible: {
-        opacity: 1,
-        scale: 1,
-        filter: 'blur(0px)',
-        transition: { type: "spring", stiffness: 300, damping: 20 }
-    },
-    exit: { opacity: 0, scale: 0.8, filter: 'blur(10px)' }
+const API = 'http://localhost:8000';
+
+// ── Animation Variants ────────────────────────────────────────────────────────
+const fadeIn = {
+    hidden: { opacity: 0, scale: 0.95, filter: 'blur(6px)' },
+    visible: { opacity: 1, scale: 1, filter: 'blur(0px)', transition: { type: 'spring', stiffness: 280, damping: 22 } },
+    exit: { opacity: 0, scale: 0.9, filter: 'blur(4px)' },
 };
 
-const animeHover = {
-    scale: 1.05,
-    boxShadow: "0px 0px 8px rgb(var(--spidy-primary))",
-    transition: { type: "spring", stiffness: 400, damping: 10 }
-};
+// ── Live Ticker Tape ──────────────────────────────────────────────────────────
+function TickerTape({ positions, mt5Status }) {
+    const tickerRef = useRef(null);
+    const SYMBOLS = ['EURUSD', 'GBPUSD', 'USDJPY', 'XAUUSD', 'US30', 'BTCUSD', 'NAS100', 'WTI'];
 
+    // Build ticker items from live positions + defaults
+    const liveMap = {};
+    (positions || []).forEach(p => { liveMap[p.symbol] = p; });
+
+    const items = SYMBOLS.map(sym => ({
+        symbol: sym,
+        price: liveMap[sym]?.price || null,
+        profit: liveMap[sym]?.profit || null,
+        isOpen: !!liveMap[sym],
+    }));
+    const doubled = [...items, ...items]; // Infinite scroll trick
+
+    return (
+        <div className="w-full bg-black/60 border-b border-white/5 py-1.5 overflow-hidden relative flex-shrink-0">
+            <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-black/80 to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black/80 to-transparent z-10 pointer-events-none" />
+            <motion.div
+                ref={tickerRef}
+                className="flex gap-8 whitespace-nowrap"
+                animate={{ x: [0, -1200] }}
+                transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+            >
+                {doubled.map((item, i) => (
+                    <div key={i} className="flex items-center gap-2 text-xs font-mono flex-shrink-0">
+                        <span className={`font-bold ${item.isOpen ? 'text-spidy-primary' : 'text-gray-400'}`}>
+                            {item.symbol}
+                        </span>
+                        {item.price ? (
+                            <span className="text-white">{parseFloat(item.price).toFixed(item.symbol.includes('JPY') ? 3 : 5)}</span>
+                        ) : (
+                            <span className="text-gray-600">−−−−−</span>
+                        )}
+                        {item.profit !== null && (
+                            <span className={`text-[9px] font-bold px-1 rounded ${item.profit >= 0 ? 'text-green-400 bg-green-500/10' : 'text-red-400 bg-red-500/10'}`}>
+                                {item.profit >= 0 ? '+' : ''}{item.profit.toFixed(2)}
+                            </span>
+                        )}
+                        <span className="text-white/10">│</span>
+                    </div>
+                ))}
+            </motion.div>
+        </div>
+    );
+}
+
+// ── Analytics Bar ─────────────────────────────────────────────────────────────
+function AnalyticsBar() {
+    const [analytics, setAnalytics] = useState(null);
+
+    useEffect(() => {
+        const fetch = async () => {
+            try { const r = await axios.get(`${API}/analytics`, { timeout: 4000 }); setAnalytics(r.data); }
+            catch (e) { /* silent */ }
+        };
+        fetch();
+        const i = setInterval(fetch, 15000);
+        return () => clearInterval(i);
+    }, []);
+
+    if (!analytics?.today) return null;
+    const t = analytics.today;
+
+    return (
+        <div className="w-full bg-black/40 border-b border-white/5 px-4 py-1.5 flex items-center gap-6 text-[10px] font-mono text-gray-500 overflow-x-auto flex-shrink-0">
+            <span className="text-gray-600 font-bold uppercase tracking-widest">Today</span>
+            <div className="flex items-center gap-1">
+                <span>Trades:</span>
+                <span className="text-white font-bold">{t.total_trades}</span>
+            </div>
+            <div className="flex items-center gap-1">
+                <span>Win Rate:</span>
+                <span className={`font-bold ${t.win_rate >= 50 ? 'text-green-400' : 'text-red-400'}`}>{t.win_rate}%</span>
+            </div>
+            <div className="flex items-center gap-1">
+                <span>Avg Win:</span>
+                <span className="text-green-400 font-bold">+${t.avg_profit}</span>
+            </div>
+            <div className="flex items-center gap-1">
+                <span>Avg Loss:</span>
+                <span className="text-red-400 font-bold">${t.avg_loss}</span>
+            </div>
+            <div className="flex items-center gap-1">
+                <span>Daily PnL:</span>
+                <span className={`font-black ${t.daily_pnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                    {t.daily_pnl >= 0 ? '+' : ''}${t.daily_pnl}
+                </span>
+            </div>
+        </div>
+    );
+}
+
+// ── Stat Card ─────────────────────────────────────────────────────────────────
+function StatCard({ label, value, icon, valueColor, borderColor, glow, highlight, active, delay = 0 }) {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay, type: 'spring' }}
+            className={`relative overflow-hidden bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md rounded-2xl border ${borderColor || 'border-white/10'} p-5 shadow-xl ${glow ? `shadow-${glow}` : ''} ${highlight ? 'ring-1 ring-white/10' : ''}`}
+        >
+            <div className="flex items-center justify-between mb-3">
+                <span className="text-xs text-gray-400 uppercase tracking-widest font-bold">{label}</span>
+                <div className={`p-2 rounded-lg ${active ? 'bg-white/10' : 'bg-white/5'}`}>{icon}</div>
+            </div>
+            <p className={`text-2xl font-black font-mono ${valueColor || 'text-white'}`}>{value}</p>
+            <div className="absolute bottom-0 right-0 w-20 h-20 bg-white/2 rounded-full blur-2xl pointer-events-none" />
+        </motion.div>
+    );
+}
+
+// ── Trade Details Modal ────────────────────────────────────────────────────────
+function TradeDetailsModal({ trade, onClose }) {
+    if (!trade) return null;
+    const profit = parseFloat(trade.profit);
+    const profitColor = profit >= 0 ? 'text-green-400' : 'text-red-400';
+    const entryPrice = parseFloat(trade.open_price);
+    const exitPrice = parseFloat(trade.close_price);
+    let pctChange = entryPrice > 0 ? ((exitPrice - entryPrice) / entryPrice) * 100 : 0;
+    if (trade.type === 'SELL') pctChange *= -1;
+
+    let durationStr = 'N/A';
+    if (trade.open_time && trade.close_time) {
+        const ms = new Date(trade.close_time) - new Date(trade.open_time);
+        if (!isNaN(ms)) {
+            const h = Math.floor(ms / 3600000);
+            const m = Math.floor((ms % 3600000) / 60000);
+            durationStr = `${h}h ${m}m`;
+        }
+    }
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={onClose}>
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+                className="bg-gray-900 border border-white/10 rounded-2xl shadow-2xl p-6 max-w-sm w-full relative"
+                onClick={e => e.stopPropagation()}>
+                <div className="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                            {trade.symbol}
+                            <span className={`text-xs px-2 py-0.5 rounded ${trade.type === 'BUY' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>{trade.type}</span>
+                        </h3>
+                        <p className="text-xs text-gray-500 font-mono">#{trade.ticket}</p>
+                    </div>
+                    <button onClick={onClose} className="p-1 hover:bg-white/10 rounded-full"><X size={18} className="text-gray-400" /></button>
+                </div>
+                <div className="bg-white/5 p-4 rounded-xl mb-4 flex justify-between items-center">
+                    <div>
+                        <p className="text-xs text-gray-400 uppercase">Net Profit</p>
+                        <p className={`text-2xl font-black font-mono ${profitColor}`}>{profit >= 0 ? '+' : ''}{profit.toFixed(2)}</p>
+                    </div>
+                    <div className="text-right">
+                        <p className={`text-sm font-mono font-bold ${pctChange >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                            {pctChange >= 0 ? '▲' : '▼'} {Math.abs(pctChange).toFixed(3)}%
+                        </p>
+                        <p className="text-[10px] text-gray-500">Duration: {durationStr}</p>
+                    </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="bg-black/20 p-3 rounded-lg"><p className="text-[10px] text-gray-500 uppercase">Entry</p><p className="font-mono text-gray-200">{trade.open_price}</p></div>
+                    <div className="bg-black/20 p-3 rounded-lg text-right"><p className="text-[10px] text-gray-500 uppercase">Exit</p><p className="font-mono text-gray-200">{trade.close_price}</p></div>
+                </div>
+            </motion.div>
+        </div>
+    );
+}
+
+// ── Main Component ────────────────────────────────────────────────────────────
 export default function TradingDashboard({ mt5Status, logs, logsEndRef }) {
-
-    // Manual Trading State
-    const [manualSymbol, setManualSymbol] = useState("EURUSD");
-    const [manualVolume, setManualVolume] = useState("0.01");
-    // Removed duplicate declaration
+    const [manualSymbol, setManualSymbol] = useState('EURUSD');
+    const [manualVolume, setManualVolume] = useState('0.01');
+    const [manualSL, setManualSL] = useState('');
+    const [manualTP, setManualTP] = useState('');
     const [loading, setLoading] = useState(false);
     const [availableSymbols, setAvailableSymbols] = useState([]);
     const [query, setQuery] = useState('');
-    const [selectedTrade, setSelectedTrade] = useState(null); // For InfoModal
-
-    // Helper: Format Reason for UI
-    const getFormattedReason = (reason, strategy) => {
-        // Priority 1: Specific Bot Close Actions
-        const r = reason || "";
-        if (r.includes("AutoSecure")) return "Secure (Auto)";
-        if (r.includes("Secure Now")) return "Secure (Manual)";
-
-        // Priority 2: Manual Close Override
-        // If reason is explicitly "User" (Manual Close), show "User" regardless of strategy.
-        if (r === "User" || r.includes("User") || r.includes("Client")) return "User";
-
-        // Priority 3: Strategy Source (AI vs User)
-        // If reason is SL/TP or Manual, we use the Strategy tag.
-        const s = strategy || "Manual";
-        if (s.includes("SmartPeak") || s.includes("HFT") || s.includes("Bot")) return "AI (SmartPeak)";
-
-        // Default Fallback (Covers Manual, User, Stop Loss, Take Profit on manual trades)
-        return "User";
-    };
-
-    // Modal Component
-    const TradeDetailsModal = ({ trade, onClose }) => {
-        if (!trade) return null;
-
-        // Calcs
-        const profitColor = trade.profit >= 0 ? "text-green-400" : "text-red-400";
-        const entryPrice = parseFloat(trade.open_price);
-        const exitPrice = parseFloat(trade.close_price);
-        const profit = parseFloat(trade.profit);
-
-        // Percent Return
-        let pctChange = 0;
-        if (entryPrice > 0) {
-            pctChange = ((exitPrice - entryPrice) / entryPrice) * 100;
-            if (trade.type === "SELL") pctChange *= -1;
-        }
-
-        // Duration
-        let durationStr = "N/A";
-        if (trade.open_time && trade.close_time) {
-            const start = new Date(trade.open_time);
-            const end = new Date(trade.close_time);
-            const diffMs = end - start;
-            if (!isNaN(diffMs)) {
-                const mins = Math.floor(diffMs / 60000);
-                const secs = Math.floor((diffMs % 60000) / 1000);
-                const hours = Math.floor(mins / 60);
-                durationStr = `${hours}h ${mins % 60}m ${secs}s`;
-            }
-        }
-
-        return (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={onClose}>
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-                    className="bg-gray-900 border border-white/10 rounded-2xl shadow-2xl p-6 max-w-sm w-full relative overflow-hidden"
-                    onClick={(e) => e.stopPropagation()}
-                    onMouseLeave={onClose}
-                >
-                    {/* Background Glow */}
-                    <div className={`absolute top-0 right-0 w-32 h-32 bg-${trade.profit >= 0 ? 'green' : 'red'}-500/10 blur-3xl rounded-full pointer-events-none`}></div>
-
-                    <div className="flex justify-between items-start mb-4">
-                        <div>
-                            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                                {trade.symbol}
-                                <span className={`text-xs px-2 py-0.5 rounded ${trade.type === 'BUY' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
-                                    {trade.type}
-                                </span>
-                            </h3>
-                            <p className="text-xs text-gray-500 font-mono">#{trade.ticket}</p>
-                        </div>
-                        <button onClick={onClose} className="p-1 hover:bg-white/10 rounded-full transition-colors">
-                            <X size={18} className="text-gray-400" />
-                        </button>
-                    </div>
-
-                    <div className="space-y-4">
-                        {/* Main Result */}
-                        <div className="flex items-center justify-between bg-white/5 p-4 rounded-xl border border-white/5">
-                            <div className="flex flex-col">
-                                <span className="text-xs text-gray-400 uppercase tracking-widest">Net Profit</span>
-                                <span className={`text-2xl font-bold font-mono ${profitColor}`}>
-                                    {profit >= 0 ? '+' : ''}{profit.toFixed(2)}
-                                </span>
-                            </div>
-                            <div className="text-right flex flex-col items-end">
-                                <span className={`text-sm font-mono font-bold ${pctChange >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                    {pctChange >= 0 ? '▲' : '▼'} {Math.abs(pctChange).toFixed(2)}%
-                                </span>
-                                <span className="text-[10px] text-gray-500">Price Change</span>
-                            </div>
-                        </div>
-
-                        {/* Grid Details */}
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
-                            <div className="flex flex-col gap-1">
-                                <span className="text-[10px] text-gray-500 uppercase">Close Reason</span>
-                                <span className="font-bold text-gray-200">{getFormattedReason(trade.exit_reason, trade.strategy)}</span>
-                                <span className="text-[9px] text-gray-600 truncate">{trade.exit_reason}</span>
-                            </div>
-                            <div className="flex flex-col gap-1 text-right">
-                                <span className="text-[10px] text-gray-500 uppercase">Duration</span>
-                                <span className="font-mono text-gray-300">{durationStr}</span>
-                            </div>
-
-                            <div className="flex flex-col gap-1 p-2 bg-black/20 rounded-lg">
-                                <span className="text-[10px] text-gray-500 uppercase">Entry Price</span>
-                                <span className="font-mono text-gray-300">{trade.open_price}</span>
-                            </div>
-                            <div className="flex flex-col gap-1 p-2 bg-black/20 rounded-lg text-right">
-                                <span className="text-[10px] text-gray-500 uppercase">Exit Price</span>
-                                <span className="font-mono text-gray-300">{trade.close_price}</span>
-                            </div>
-                            <div className="flex flex-col gap-1 col-span-2">
-                                <span className="text-[10px] text-gray-500 uppercase">Time</span>
-                                <div className="flex justify-between font-mono text-xs text-gray-400">
-                                    <span>Open: {trade.open_time?.split(' ')[1]}</span>
-                                    <span>Close: {trade.close_time?.split(' ')[1]}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </motion.div>
-            </div>
-        );
-    };
-
-    // Jitter removed - using real latency only
-    const [sessionId] = useState(Math.random().toString(36).substring(7).toUpperCase()); // Client Session ID
-
-    // HISTORY STATE
+    const [selectedTrade, setSelectedTrade] = useState(null);
     const [showHistory, setShowHistory] = useState(false);
     const [tradeHistory, setTradeHistory] = useState([]);
-
-    // SORT STATE
     const [sortConfig, setSortConfig] = useState({ key: 'time', direction: 'desc' });
+    const [autoSecureEnabled, setAutoSecureEnabled] = useState(false);
+    const [secureThreshold, setSecureThreshold] = useState('10.0');
+    const [savingSecure, setSavingSecure] = useState(false);
+    const [activeRiskPct, setActiveRiskPct] = useState('1.0');
+    const [tradeMode, setTradeMode] = useState('simple'); // 'simple' | 'advanced'
+    const [sessionId] = useState(Math.random().toString(36).substring(7).toUpperCase());
 
-    const handleSort = (key) => {
-        setSortConfig(prev => ({
-            key,
-            direction: prev.key === key && prev.direction === 'desc' ? 'asc' : 'desc'
-        }));
+    const filteredSymbols = query === ''
+        ? availableSymbols
+        : availableSymbols.filter(s => s.toLowerCase().includes(query.toLowerCase()));
+
+    // Risk calc: USD at risk based on account %
+    const calcRiskUSD = () => {
+        const bal = parseFloat(mt5Status?.balance) || 0;
+        const pct = parseFloat(activeRiskPct) || 1;
+        return ((bal * pct) / 100).toFixed(2);
     };
+
+    const handleSort = key => setSortConfig(prev => ({
+        key, direction: prev.key === key && prev.direction === 'desc' ? 'asc' : 'desc'
+    }));
 
     const getSortedPositions = () => {
-        if (!mt5Status.positions) return [];
-        const sorted = [...mt5Status.positions];
-        sorted.sort((a, b) => {
-            let valA = a[sortConfig.key];
-            let valB = b[sortConfig.key];
-
-            // Special handling for numbers
-            if (sortConfig.key === 'profit' || sortConfig.key === 'volume' || sortConfig.key === 'price') {
-                valA = parseFloat(valA);
-                valB = parseFloat(valB);
-            }
-
-            if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
-            if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
+        if (!mt5Status?.positions) return [];
+        return [...mt5Status.positions].sort((a, b) => {
+            let vA = a[sortConfig.key], vB = b[sortConfig.key];
+            if (['profit', 'volume', 'price'].includes(sortConfig.key)) { vA = parseFloat(vA); vB = parseFloat(vB); }
+            if (vA < vB) return sortConfig.direction === 'asc' ? -1 : 1;
+            if (vA > vB) return sortConfig.direction === 'asc' ? 1 : -1;
             return 0;
         });
-        return sorted;
     };
 
-    // AUTO-SECURE STATE
-    const [autoSecureEnabled, setAutoSecureEnabled] = useState(() => {
-        // Initialize from LocalStorage if available (Instant UX)
-        if (typeof window !== 'undefined') {
-            const saved = localStorage.getItem('spidy_auto_secure_enabled');
-            return saved === 'true';
-        }
-        return false;
-    });
-    const [secureThreshold, setSecureThreshold] = useState(() => {
-        if (typeof window !== 'undefined') {
-            const saved = localStorage.getItem('spidy_auto_secure_threshold');
-            return saved || "10.0";
-        }
-        return "10.0";
-    });
-    const [savingSecure, setSavingSecure] = useState(false);
-
-
-    const filteredSymbols =
-        query === ''
-            ? availableSymbols
-            : availableSymbols.filter((s) => {
-                return s.toLowerCase().includes(query.toLowerCase())
-            })
-
-    // Fetch Symbols & History
-    React.useEffect(() => {
+    useEffect(() => {
         const fetchSymbols = async (retries = 5) => {
             try {
-                const res = await axios.get('http://localhost:8000/symbols');
-                if (res.data && res.data.symbols) {
-                    setAvailableSymbols(res.data.symbols);
-                }
-            } catch (e) {
-                console.warn(`Fetch Symbols Failed. Retries left: ${retries}`, e.message);
-                if (retries > 0) {
-                    setTimeout(() => fetchSymbols(retries - 1), 3000); // Retry every 3s
-                }
+                const r = await axios.get(`${API}/symbols`);
+                if (r.data?.symbols) setAvailableSymbols(r.data.symbols);
+            } catch {
+                if (retries > 0) setTimeout(() => fetchSymbols(retries - 1), 3000);
             }
         };
-
         const fetchSettings = async () => {
             try {
-                const res = await axios.get('http://localhost:8000/status');
-                if (res.data && res.data.risk_settings && res.data.risk_settings.auto_secure) {
-                    const conf = res.data.risk_settings.auto_secure;
-                    setAutoSecureEnabled(conf.enabled);
-                    setSecureThreshold(conf.threshold);
+                const r = await axios.get(`${API}/status`);
+                if (r.data?.risk_settings?.auto_secure) {
+                    const c = r.data.risk_settings.auto_secure;
+                    setAutoSecureEnabled(c.enabled);
+                    setSecureThreshold(c.threshold);
                 }
-            } catch (e) {
-                console.warn("Fetch Settings Failed", e);
-            }
+            } catch { /* silent */ }
         };
-
         const fetchHistory = async () => {
             try {
-                const res = await axios.get('http://localhost:8000/history');
-                if (res.data && res.data.history) {
-                    setTradeHistory(res.data.history);
-                }
-            } catch (e) {
-                console.error("Failed to fetch history", e);
-            }
+                const r = await axios.get(`${API}/history`);
+                if (r.data?.history) setTradeHistory(r.data.history);
+            } catch { /* silent */ }
         };
-
-        fetchSymbols();
-        fetchSettings();
-        fetchHistory();
-
-        // Poll History and Settings occasionally to keep it fresh without spamming
-        const histInterval = setInterval(() => {
-            fetchHistory();
-            fetchSettings();
-        }, 10000);
-        return () => clearInterval(histInterval);
+        fetchSymbols(); fetchSettings(); fetchHistory();
+        const i = setInterval(() => { fetchHistory(); fetchSettings(); }, 10000);
+        return () => clearInterval(i);
     }, []);
 
-
-
-    // Helpers
-    const isProfitable = parseFloat(mt5Status.profit) >= 0;
+    const isProfitable = parseFloat(mt5Status?.profit) >= 0;
 
     const handleManualTrade = async (action) => {
         setLoading(true);
         try {
-            await axios.post('http://localhost:8000/trade', {
-                action: action,
-                symbol: manualSymbol,
-                volume: manualVolume
+            await axios.post(`${API}/trade`, {
+                action, symbol: manualSymbol, volume: manualVolume,
             });
-        } catch (e) {
-            console.error("Trade Failed", e);
-        }
+        } catch (e) { console.error('Trade Failed', e); }
         setLoading(false);
     };
 
     const toggleAutoTrading = async () => {
-        try {
-            await axios.post('http://localhost:8000/toggle_auto', {
-                enable: !mt5Status.auto_trading
-            });
-        } catch (e) {
-            console.error("Toggle Failed", e);
-        }
+        try { await axios.post(`${API}/toggle_auto`, { enable: !mt5Status?.auto_trading }); }
+        catch (e) { console.error('Toggle Failed', e); }
     };
 
     const handleCloseTrade = async (pos) => {
-        if (!confirm(`Close position ${pos.ticket} (${pos.symbol})?`)) return;
-
-        try {
-            await axios.post('http://localhost:8000/close_trade', {
-                ticket: pos.ticket,
-                symbol: pos.symbol
-            });
-        } catch (e) {
-            console.error("Close Trade Failed", e);
-            alert("Failed to close trade: " + e.message);
-        }
+        if (!confirm(`Close ${pos.symbol} (#${pos.ticket})?`)) return;
+        try { await axios.post(`${API}/close_trade`, { ticket: pos.ticket, symbol: pos.symbol }); }
+        catch (e) { alert('Close failed: ' + e.message); }
     };
 
-    // Auto-Secure Handler
+    const handleCloseAllLosses = async () => {
+        if (!confirm('Close ALL losing positions now?')) return;
+        try {
+            await axios.post(`${API}/close_all_trades`, { profitable_only: false });
+        } catch (e) { alert('Failed: ' + e.message); }
+    };
+
+    const handleCloseAllProfits = async () => {
+        if (!confirm('Secure ALL profitable positions now?')) return;
+        try {
+            await axios.post(`${API}/close_all_trades`, { profitable_only: true, threshold: 0.0 });
+        } catch (e) { alert('Failed: ' + e.message); }
+    };
+
     const handleUpdateSecure = async (newEnabled, newThreshold) => {
         setSavingSecure(true);
         try {
             const payload = {};
             if (newEnabled !== undefined) payload.enabled = newEnabled;
             if (newThreshold !== undefined) payload.threshold = parseFloat(newThreshold);
-
-            const res = await axios.post('http://localhost:8000/settings/auto_secure', payload);
-            if (res.data.status === "UPDATED") {
-                if (newEnabled !== undefined) {
-                    setAutoSecureEnabled(newEnabled);
-                    localStorage.setItem('spidy_auto_secure_enabled', newEnabled);
-                }
-                if (newThreshold !== undefined) {
-                    setSecureThreshold(newThreshold);
-                    localStorage.setItem('spidy_auto_secure_threshold', newThreshold);
-                }
+            const r = await axios.post(`${API}/settings/auto_secure`, payload);
+            if (r.data.status === 'UPDATED') {
+                if (newEnabled !== undefined) setAutoSecureEnabled(newEnabled);
+                if (newThreshold !== undefined) setSecureThreshold(newThreshold);
             }
-        } catch (e) {
-            console.error("Update Secure Failed", e);
-        }
+        } catch { /* silent */ }
         setSavingSecure(false);
     };
 
-    const handleSecureNow = async () => {
-        if (!confirm("Secure ALL profitable trades immediately?")) return;
-        try {
-            // "Secure Now" means "Close all Green trades", ignoring the Auto-Secure Target.
-            // We pass threshold: 0 to ensure anything with Net Profit > 0 is closed.
-            await axios.post('http://localhost:8000/close_all_trades', {
-                profitable_only: true,
-                threshold: 0.0
-            });
-            // Refresh history/positions roughly
-            setTimeout(() => {
-                // Trigger re-fetch if we had those functions exposed or fail-safe via standard polling
-            }, 1000);
-        } catch (e) {
-            alert("Failed to secure profits: " + e.message);
-        }
+    const getPositionDuration = (time) => {
+        if (!time) return '—';
+        const ms = Date.now() - new Date(time).getTime();
+        if (isNaN(ms)) return '—';
+        const h = Math.floor(ms / 3600000);
+        const m = Math.floor((ms % 3600000) / 60000);
+        return h > 0 ? `${h}h ${m}m` : `${m}m`;
     };
 
     return (
-        <div className="flex flex-col gap-6 h-full pr-2 overflow-hidden relative">
+        <div className="flex flex-col gap-0 h-full overflow-hidden relative">
             <TradeDetailsModal trade={selectedTrade} onClose={() => setSelectedTrade(null)} />
 
-            {/* Account Stats Bar (Fixed Top) */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-shrink-0">
+            {/* Ticker Tape */}
+            <TickerTape positions={mt5Status?.positions} mt5Status={mt5Status} />
+
+            {/* Analytics Bar */}
+            <AnalyticsBar />
+
+            {/* Account Stats */}
+            <div className="grid grid-cols-3 gap-4 p-4 pb-2 flex-shrink-0">
                 <StatCard
-                    label="Balance"
-                    value={`$${typeof mt5Status.balance === 'number' ? mt5Status.balance.toFixed(2) : (mt5Status.balance || '0.00')}`}
-                    icon={<Wallet size={24} className="text-blue-400" />}
-                    active={mt5Status.connected}
-                    delay={0}
+                    label="Balance" delay={0}
+                    value={`$${typeof mt5Status?.balance === 'number' ? mt5Status.balance.toFixed(2) : '0.00'}`}
+                    icon={<Wallet size={20} className="text-blue-400" />}
+                    active={mt5Status?.connected}
                 />
                 <StatCard
-                    label="Equity"
-                    value={`$${typeof mt5Status.equity === 'number' ? mt5Status.equity.toFixed(2) : (mt5Status.equity || '0.00')}`}
-                    icon={<DollarSign size={24} className="text-purple-400" />}
-                    highlight
-                    active={mt5Status.connected}
-                    delay={0.1}
+                    label="Equity" delay={0.05} highlight
+                    value={`$${typeof mt5Status?.equity === 'number' ? mt5Status.equity.toFixed(2) : '0.00'}`}
+                    icon={<DollarSign size={20} className="text-purple-400" />}
+                    active={mt5Status?.connected}
                 />
                 <StatCard
-                    label="Open Profit"
-                    value={`$${typeof mt5Status.profit === 'number' ? mt5Status.profit.toFixed(2) : (mt5Status.profit || '0.00')}`}
-                    icon={isProfitable ? <TrendingUp size={24} className="text-green-400" /> : <TrendingDown size={24} className="text-red-400" />}
+                    label="Open P/L" delay={0.1}
+                    value={`$${typeof mt5Status?.profit === 'number' ? mt5Status.profit.toFixed(2) : '0.00'}`}
+                    icon={isProfitable ? <TrendingUp size={20} className="text-green-400" /> : <TrendingDown size={20} className="text-red-400" />}
                     valueColor={isProfitable ? 'text-green-400' : 'text-red-400'}
-                    borderColor={isProfitable ? 'border-green-500/30' : 'border-red-500/30'}
-                    glow={isProfitable ? 'shadow-green-500/10' : 'shadow-red-500/10'}
-                    active={mt5Status.connected}
-                    delay={0.2}
+                    borderColor={isProfitable ? 'border-green-500/20' : 'border-red-500/20'}
+                    active={mt5Status?.connected}
                 />
             </div>
 
-            {/* Main Content Area (Flex Grow) */}
-            <div className="flex flex-col lg:flex-row gap-6 flex-1 min-h-0">
+            {/* Main Layout */}
+            <div className="flex flex-1 gap-4 px-4 pb-4 min-h-0 overflow-hidden">
 
-                {/* Left Column: Active Trades & History Table */}
+                {/* LEFT: Positions + History */}
                 <motion.div
-                    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-                    className="lg:col-span-2 lg:w-2/3 bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-md rounded-2xl border border-white/10 overflow-hidden flex flex-col shadow-xl"
+                    initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+                    className="flex-1 bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-md rounded-2xl border border-white/10 overflow-hidden flex flex-col shadow-xl min-w-0"
                 >
-                    {/* STATUS BANNER (Large & Detailed) */}
-                    <div className="border-b border-white/10">
-                        {!mt5Status.connected ? (
-                            <div className="w-full bg-red-500/20 py-3 flex items-center justify-center gap-3 animate-pulse">
-                                <ShieldCheck size={20} className="text-red-500" />
-                                <h2 className="text-lg font-bold text-red-500 tracking-widest uppercase">
-                                    CONNECTION LOST - RETRYING...
-                                </h2>
+                    {/* Status Banner */}
+                    <div className="flex-shrink-0 border-b border-white/10">
+                        {!mt5Status?.connected ? (
+                            <div className="w-full bg-red-500/20 py-3 flex items-center justify-center gap-2 animate-pulse">
+                                <ShieldCheck size={18} className="text-red-500" />
+                                <span className="text-sm font-black text-red-500 uppercase tracking-widest">CONNECTION LOST</span>
                             </div>
-                        ) : mt5Status.market_status === 'ALGO_DISABLED' ? (
-                            <div className="w-full bg-red-500/20 py-4 flex flex-col items-center justify-center gap-1 border-b border-red-500/40 animate-pulse">
-                                <div className="flex items-center gap-3">
-                                    <Lock size={24} className="text-red-500" />
-                                    <h2 className="text-xl font-black text-red-500 tracking-widest uppercase font-mono">
-                                        PERMISSION DENIED
-                                    </h2>
-                                </div>
-                                <p className="text-xs font-mono text-red-400 font-bold uppercase tracking-widest text-center px-4">
-                                    Algo Trading Disabled in MT5 Terminal. Please Enable it to Trade.
-                                </p>
+                        ) : mt5Status?.market_status === 'ALGO_DISABLED' ? (
+                            <div className="w-full bg-red-500/20 py-3 flex flex-col items-center justify-center animate-pulse border-b border-red-500/30">
+                                <div className="flex items-center gap-2"><Lock size={18} className="text-red-500" /><span className="text-sm font-black text-red-500 uppercase">PERMISSION DENIED</span></div>
+                                <p className="text-[9px] text-red-400 font-bold uppercase mt-0.5">Enable Algo Trading in MT5</p>
                             </div>
-                        ) : mt5Status.market_status === 'CLOSED_WEEKEND' ? (
-                            <div className="w-full bg-yellow-500/10 py-4 flex flex-col items-center justify-center gap-1 border-b border-yellow-500/20">
-                                <div className="flex items-center gap-3">
-                                    <Clock size={24} className="text-yellow-500" />
-                                    <h2 className="text-xl font-black text-yellow-500 tracking-widest uppercase font-mono">
-                                        MARKET CLOSED - WEEKEND
-                                    </h2>
-                                </div>
-                                <p className="text-xs font-mono text-yellow-600 font-bold uppercase tracking-widest">
-                                    SERVER TIME: {mt5Status.server_time || "--:--:--"} • MODE: {mt5Status.auto_trading ? "AUTO" : "MANUAL"}
-                                </p>
+                        ) : mt5Status?.market_status === 'CLOSED_WEEKEND' ? (
+                            <div className="w-full bg-yellow-500/10 py-3 flex items-center justify-center gap-2 border-b border-yellow-500/20">
+                                <Clock size={18} className="text-yellow-500" />
+                                <span className="text-sm font-black text-yellow-500 uppercase">MARKET CLOSED — WEEKEND</span>
                             </div>
-                        ) : mt5Status.auto_trading ? (
-                            <div className="w-full bg-green-500/10 py-3 flex flex-col items-center justify-center gap-1 border-b border-green-500/20">
-                                <div className="flex items-center gap-3">
-                                    <Activity size={20} className="text-green-500 animate-pulse" />
-                                    <h2 className="text-lg font-bold text-green-500 tracking-widest uppercase font-mono">
-                                        AUTO-TRADER ACTIVE
-                                    </h2>
-                                </div>
-                                <p className="text-[10px] font-mono text-green-600 font-bold uppercase tracking-widest">
-                                    {mt5Status.market_status || "MARKET OPEN"} • {mt5Status.server_time || "--:--:--"}
-                                </p>
+                        ) : mt5Status?.auto_trading ? (
+                            <div className="w-full bg-green-500/10 py-2.5 flex items-center justify-center gap-2 border-b border-green-500/20">
+                                <Activity size={16} className="text-green-500 animate-pulse" />
+                                <span className="text-sm font-black text-green-500 uppercase tracking-widest">AUTO-TRADER ACTIVE</span>
+                                <span className="text-[9px] text-green-600 font-bold ml-2">{mt5Status?.market_status || 'MARKET OPEN'} • {mt5Status?.server_time}</span>
                             </div>
                         ) : (
-                            <div className="w-full bg-blue-500/10 py-3 flex flex-col items-center justify-center gap-1 border-b border-blue-500/20">
-                                <div className="flex items-center gap-3">
-                                    <Hash size={20} className="text-blue-500" />
-                                    <h2 className="text-lg font-bold text-blue-500 tracking-widest uppercase font-mono">
-                                        MANUAL TRADING MODE
-                                    </h2>
-                                </div>
-                                <p className="text-[10px] font-mono text-blue-400 font-bold uppercase tracking-widest">
-                                    {mt5Status.market_status || "MARKET OPEN"} • {mt5Status.server_time || "--:--:--"}
-                                </p>
+                            <div className="w-full bg-blue-500/10 py-2.5 flex items-center justify-center gap-2 border-b border-blue-500/20">
+                                <Hash size={16} className="text-blue-400" />
+                                <span className="text-sm font-black text-blue-400 uppercase tracking-widest">MANUAL MODE</span>
+                                <span className="text-[9px] text-blue-400/70 font-bold ml-2">{mt5Status?.server_time}</span>
                             </div>
                         )}
                     </div>
 
-                    {/* MACRO ORGANS STATUS BAR */}
-                    {mt5Status.connected && (
-                        <div className="w-full bg-black/40 border-b border-white/5 py-2 px-4 flex items-center justify-between text-[10px] font-mono font-bold tracking-widest uppercase text-gray-400">
+                    {/* Macro Status Row */}
+                    {mt5Status?.connected && (
+                        <div className="flex-shrink-0 bg-black/40 border-b border-white/5 py-1.5 px-4 flex items-center justify-between text-[9px] font-mono font-bold tracking-widest uppercase text-gray-500">
                             <div className="flex items-center gap-4">
-                                {/* 1. Global Sentiment */}
-                                <div className="flex items-center gap-2">
-                                    <span className="text-gray-500">SENTIMENT:</span>
-                                    <span className={`${mt5Status.sentiment === 'BULLISH' ? 'text-green-400' : mt5Status.sentiment === 'BEARISH' ? 'text-red-400' : 'text-yellow-400'}`}>
-                                        {mt5Status.sentiment || "NEUTRAL"}
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-gray-600">SENTIMENT:</span>
+                                    <span className={mt5Status?.sentiment === 'BULLISH' ? 'text-green-400' : mt5Status?.sentiment === 'BEARISH' ? 'text-red-400' : 'text-yellow-400'}>
+                                        {mt5Status?.sentiment || 'NEUTRAL'}
                                     </span>
                                 </div>
-
-                                {/* 2. The Oil Watcher */}
-                                {mt5Status.oil && mt5Status.oil.symbol && (
-                                    <div className="flex items-center gap-2 border-l border-white/10 pl-4">
-                                        <span className="text-gray-500">OIL:</span>
-                                        <span className={`${mt5Status.oil.change_pct >= 0 ? 'text-green-400' : 'text-red-400'} flex items-center gap-1`}>
+                                {mt5Status?.oil?.symbol && (
+                                    <div className="flex items-center gap-1.5 border-l border-white/10 pl-4">
+                                        <span className="text-gray-600">OIL:</span>
+                                        <span className={mt5Status.oil.change_pct >= 0 ? 'text-green-400' : 'text-red-400'}>
                                             {mt5Status.oil.symbol} {mt5Status.oil.change_pct > 0 ? '+' : ''}{parseFloat(mt5Status.oil.change_pct).toFixed(2)}%
-                                            {Math.abs(mt5Status.oil.change_pct) >= 2.0 && <Zap size={10} className="text-yellow-400 animate-pulse" />}
                                         </span>
                                     </div>
                                 )}
-
-                                {/* 3. Global Shield (DXY) */}
-                                {mt5Status.dxy && mt5Status.dxy.status && (
-                                    <div className="flex items-center gap-2 border-l border-white/10 pl-4">
-                                        <span className="text-gray-500">SHIELD (DXY):</span>
-                                        <span className={`${mt5Status.dxy.status === 'BULLISH' ? 'text-green-400' : mt5Status.dxy.status === 'BEARISH' ? 'text-red-400' : 'text-yellow-400'}`}>
-                                            {mt5Status.dxy.status} ({mt5Status.dxy.change_pct > 0 ? '+' : ''}{parseFloat(mt5Status.dxy.change_pct || 0).toFixed(2)}%)
+                                {mt5Status?.dxy?.status && (
+                                    <div className="flex items-center gap-1.5 border-l border-white/10 pl-4">
+                                        <span className="text-gray-600">DXY:</span>
+                                        <span className={mt5Status.dxy.status === 'BULLISH' ? 'text-green-400' : mt5Status.dxy.status === 'BEARISH' ? 'text-red-400' : 'text-yellow-400'}>
+                                            {mt5Status.dxy.status}
                                         </span>
                                     </div>
                                 )}
                             </div>
-
-                            {/* Right Side: Risk Mode */}
-                            <div className="flex items-center gap-2">
-                                <span className="text-gray-500">RISK:</span>
-                                <span className="text-spidy-primary">{mt5Status.risk_settings?.mode || "STANDARD"}</span>
+                            <div className="flex items-center gap-1.5">
+                                <span className="text-gray-600">RISK:</span>
+                                <span className="text-spidy-primary">{mt5Status?.risk_settings?.mode || 'STANDARD'}</span>
+                                <span className="border-l border-white/10 pl-3 text-gray-600">LATENCY:</span>
+                                <span className="text-blue-400">{mt5Status?.latency || '--'}ms</span>
                             </div>
                         </div>
                     )}
 
-                    {/* TABS HEADER */}
-                    <div className="flex border-b border-white/10">
+                    {/* Tabs */}
+                    <div className="flex border-b border-white/10 flex-shrink-0">
                         <button
                             onClick={() => setShowHistory(false)}
-                            className={`flex-1 p-4 flex justify-center items-center gap-2 font-bold tracking-wide transition-colors ${!showHistory ? 'bg-white/10 text-spidy-primary border-b-2 border-spidy-primary' : 'text-gray-400 hover:bg-white/5'}`}
+                            className={`flex-1 py-3 flex justify-center items-center gap-2 text-xs font-bold tracking-wide transition-colors ${!showHistory ? 'bg-white/10 text-spidy-primary border-b-2 border-spidy-primary' : 'text-gray-400 hover:bg-white/5'}`}
                         >
-                            <Activity size={18} />
-                            {/* UPGRADE 12: Show open position count badge */}
-                            ACTIVE POSITIONS
-                            {mt5Status.positions && mt5Status.positions.length > 0 && (
-                                <span className="ml-1 bg-spidy-primary text-white text-[10px] font-black px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                            <Activity size={14} /> ACTIVE POSITIONS
+                            {mt5Status?.positions?.length > 0 && (
+                                <span className="bg-spidy-primary text-white text-[9px] font-black px-1.5 py-0.5 rounded-full min-w-[16px] text-center">
                                     {mt5Status.positions.length}
                                 </span>
                             )}
                         </button>
                         <button
                             onClick={() => setShowHistory(true)}
-                            className={`flex-1 p-4 flex justify-center items-center gap-2 font-bold tracking-wide transition-colors ${showHistory ? 'bg-white/10 text-blue-400 border-b-2 border-blue-400' : 'text-gray-400 hover:bg-white/5'}`}
+                            className={`flex-1 py-3 flex justify-center items-center gap-2 text-xs font-bold tracking-wide transition-colors ${showHistory ? 'bg-white/10 text-blue-400 border-b-2 border-blue-400' : 'text-gray-400 hover:bg-white/5'}`}
                         >
-                            <Clock size={18} />
-                            TRADE HISTORY
+                            <Clock size={14} /> HISTORY
                         </button>
                     </div>
 
-                    <div className="flex-1 overflow-x-auto p-2 overflow-y-auto">
+                    {/* Table Area */}
+                    <div className="flex-1 overflow-auto">
                         {!showHistory ? (
-                            // ACTIVE TRADES TABLE
-                            <table className="w-full text-left text-sm text-gray-400 border-separate border-spacing-y-1">
-                                <thead>
-                                    <tr className="text-xs uppercase font-bold text-gray-500 tracking-wider">
-                                        <th className="px-4 py-2 cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('symbol')}>
-                                            <div className="flex items-center gap-1">
-                                                Symbol
-                                                {sortConfig.key === 'symbol' && (sortConfig.direction === 'asc' ? <ChevronDown size={12} /> : <div className="transform rotate-180"><ChevronDown size={12} /></div>)}
-                                            </div>
-                                        </th>
-                                        <th className="px-4 py-2">Side</th>
-                                        <th className="px-4 py-2 cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('volume')}>
-                                            <div className="flex items-center gap-1">
-                                                Size
-                                                {sortConfig.key === 'volume' && (sortConfig.direction === 'asc' ? <ChevronDown size={12} /> : <div className="transform rotate-180"><ChevronDown size={12} /></div>)}
-                                            </div>
-                                        </th>
-                                        <th className="px-4 py-2">Date</th>
-                                        <th className="px-4 py-2 cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('time')}>
-                                            <div className="flex items-center gap-1">
-                                                Time
-                                                {sortConfig.key === 'time' && (sortConfig.direction === 'asc' ? <ChevronDown size={12} /> : <div className="transform rotate-180"><ChevronDown size={12} /></div>)}
-                                            </div>
-                                        </th>
-                                        <th className="px-4 py-2">Entry</th>
-                                        {/* UPGRADE 10: ROI% column header */}
-                                        <th className="px-4 py-2 text-center text-yellow-500/70">ROI%</th>
-                                        <th className="px-4 py-2 text-right cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('profit')}>
-                                            <div className="flex items-center justify-end gap-1">
-                                                P/L
-                                                {sortConfig.key === 'profit' && (sortConfig.direction === 'asc' ? <ChevronDown size={12} /> : <div className="transform rotate-180"><ChevronDown size={12} /></div>)}
-                                            </div>
-                                        </th>
+                            /* ACTIVE POSITIONS TABLE */
+                            <table className="w-full text-left text-xs text-gray-400 border-separate border-spacing-y-0.5">
+                                <thead className="sticky top-0 bg-black/60 backdrop-blur-sm z-10">
+                                    <tr className="text-[9px] uppercase font-bold text-gray-600 tracking-wider">
+                                        <th className="px-3 py-2 cursor-pointer hover:text-white" onClick={() => handleSort('symbol')}>Symbol</th>
+                                        <th className="px-3 py-2">Side</th>
+                                        <th className="px-3 py-2 cursor-pointer hover:text-white" onClick={() => handleSort('volume')}>Size</th>
+                                        <th className="px-3 py-2">Entry</th>
+                                        <th className="px-3 py-2">Duration</th>
+                                        <th className="px-3 py-2 text-center text-yellow-500/70">ROI%</th>
+                                        <th className="px-3 py-2 text-right cursor-pointer hover:text-white" onClick={() => handleSort('profit')}>P/L</th>
+                                        <th className="px-3 py-2 text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <AnimatePresence>
-                                        {mt5Status.positions && mt5Status.positions.length > 0 ? (
-                                            getSortedPositions().map((pos, i) => (
-                                                <motion.tr
-                                                    key={pos.ticket}
-                                                    variants={animeAppear}
-                                                    initial="hidden"
-                                                    animate="visible"
-                                                    exit="exit"
-                                                    layout
-                                                    className="bg-white/5 hover:bg-white/10 transition-colors group relative overflow-hidden"
-                                                >
-                                                    <td className="px-4 py-3 font-bold text-white rounded-l-xl border-l-4 border-transparent group-hover:border-spidy-primary transition-all">
-                                                        {pos.symbol}
-                                                    </td>
-                                                    <td className="px-4 py-3">
-                                                        <span className={`px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${pos.type === 'BUY' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
-                                                            {pos.type}
-                                                        </span>
-                                                    </td>
-                                                    <td className="px-4 py-3 font-mono text-gray-300">{pos.volume}</td>
-                                                    <td className="px-4 py-3 font-mono text-gray-400 text-xs">
-                                                        {pos.time ? pos.time.split(' ')[0] : '--'}
-                                                    </td>
-                                                    <td className="px-4 py-3 font-mono text-gray-400 text-xs">
-                                                        {pos.time ? pos.time.split(' ')[1] : '--:--'}
-                                                    </td>
-                                                    <td className="px-4 py-3 font-mono text-gray-300">{pos.price}</td>
-                                                    {/* UPGRADE 10: ROI% = profit / balance * 100 */}
-                                                    <td className="px-4 py-3 text-center">
-                                                        {(() => {
-                                                            const balance = parseFloat(mt5Status.balance) || 1;
-                                                            const roi = (pos.profit / balance) * 100;
-                                                            return (
-                                                                <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ${roi >= 0 ? 'text-green-400 bg-green-500/10' : 'text-red-400 bg-red-500/10'
-                                                                    }`}>
-                                                                    {roi >= 0 ? '+' : ''}{roi.toFixed(2)}%
-                                                                </span>
-                                                            );
-                                                        })()}
-                                                    </td>
-                                                    <td className={`px-4 py-3 font-mono font-bold text-right rounded-r-xl ${pos.profit >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                                                        {/* UPGRADE 11: P&L with mini progress bar */}
-                                                        <div className="flex flex-col items-end gap-0.5">
-                                                            <span>{pos.profit >= 0 ? '+' : ''}{pos.profit.toFixed(2)}</span>
-                                                            <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden min-w-[40px]">
-                                                                <div
-                                                                    className={`h-full rounded-full transition-all duration-500 ${pos.profit >= 0 ? 'bg-green-400' : 'bg-red-400'
-                                                                        }`}
-                                                                    style={{ width: `${Math.min(Math.abs(pos.profit / (parseFloat(mt5Status.balance) || 1)) * 2000, 100)}%` }}
-                                                                />
+                                        {mt5Status?.positions?.length > 0 ? (
+                                            getSortedPositions().map((pos) => {
+                                                // Estimate margin assuming $200 per 1.00 lot (1:500 leverage typical average)
+                                                // Prevent division by zero with fallback
+                                                const estimatedMargin = (parseFloat(pos.volume) || 0.01) * 200;
+                                                const roi = ((pos.profit / estimatedMargin) * 100);
+                                                const duration = getPositionDuration(pos.time);
+                                                return (
+                                                    <motion.tr
+                                                        key={pos.ticket}
+                                                        variants={fadeIn} initial="hidden" animate="visible" exit="exit" layout
+                                                        className="bg-white/5 hover:bg-white/10 transition-colors group"
+                                                    >
+                                                        <td className="px-3 py-2.5 font-bold text-white rounded-l-xl border-l-2 border-transparent group-hover:border-spidy-primary transition-all">
+                                                            {pos.symbol}
+                                                        </td>
+                                                        <td className="px-3 py-2.5">
+                                                            <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase ${pos.type === 'BUY' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                                                                {pos.type === 'BUY' ? <ArrowUpRight size={10} className="inline mb-0.5" /> : <ArrowDownRight size={10} className="inline mb-0.5" />} {pos.type}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-3 py-2.5 font-mono text-gray-300">{pos.volume}</td>
+                                                        <td className="px-3 py-2.5 font-mono text-gray-400">{parseFloat(pos.price).toFixed(pos.symbol?.includes('JPY') ? 3 : 5)}</td>
+                                                        <td className="px-3 py-2.5 font-mono text-gray-500 text-[9px]">{duration}</td>
+                                                        <td className="px-3 py-2.5 text-center">
+                                                            <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded ${roi >= 0 ? 'text-green-400 bg-green-500/10' : 'text-red-400 bg-red-500/10'}`}>
+                                                                {roi >= 0 ? '+' : ''}{roi.toFixed(2)}%
+                                                            </span>
+                                                        </td>
+                                                        <td className={`px-3 py-2.5 font-mono font-bold text-right ${pos.profit >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                                            <div className="flex flex-col items-end gap-0.5">
+                                                                <span>{pos.profit >= 0 ? '+' : ''}{pos.profit.toFixed(2)}</span>
+                                                                <div className="w-10 h-0.5 bg-white/5 rounded-full overflow-hidden">
+                                                                    <div className={`h-full rounded-full ${pos.profit >= 0 ? 'bg-green-400' : 'bg-red-400'}`}
+                                                                        style={{ width: `${Math.min(Math.abs(roi) * 10, 100)}%` }} />
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <button
-                                                            onClick={(e) => { e.stopPropagation(); handleCloseTrade(pos); }}
-                                                            className="ml-3 text-[10px] bg-red-500/20 hover:bg-red-500/40 text-red-300 border border-red-500/30 px-2 py-1 rounded transition-colors uppercase font-bold"
-                                                        >
-                                                            Close
-                                                        </button>
-                                                    </td>
-                                                </motion.tr>
-                                            ))
+                                                        </td>
+                                                        <td className="px-3 py-2.5 text-center rounded-r-xl">
+                                                            <button
+                                                                onClick={() => handleCloseTrade(pos)}
+                                                                className="text-[9px] bg-red-500/20 hover:bg-red-500/40 text-red-300 border border-red-500/30 px-2 py-1 rounded transition-colors font-bold"
+                                                            >
+                                                                ✕ Close
+                                                            </button>
+                                                        </td>
+                                                    </motion.tr>
+                                                );
+                                            })
                                         ) : (
                                             <tr>
-                                                <td colSpan="7" className="p-12 text-center text-gray-600">
+                                                <td colSpan="8" className="p-12 text-center">
                                                     <div className="flex flex-col items-center gap-3">
-                                                        <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center">
-                                                            <Activity className="text-gray-600" size={32} />
+                                                        <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center">
+                                                            <Crosshair className="text-gray-600" size={28} />
                                                         </div>
-                                                        <p className="text-lg font-medium text-gray-500">No Active Positions</p>
-                                                        <p className="text-sm">Trades executed by Spidy will appear here.</p>
+                                                        <p className="text-gray-500 font-medium">No Active Positions</p>
+                                                        <p className="text-xs text-gray-600">Spidy AI is scanning for signals...</p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -646,58 +541,54 @@ export default function TradingDashboard({ mt5Status, logs, logsEndRef }) {
                                 </tbody>
                             </table>
                         ) : (
-                            // HISTORY TABLE
-                            <table className="w-full text-left text-sm text-gray-400 border-separate border-spacing-y-1">
-                                <thead>
-                                    <tr className="text-xs uppercase font-bold text-gray-500 tracking-wider">
-                                        <th className="px-4 py-2">Symbol</th>
-                                        <th className="px-4 py-2">Side</th>
-                                        <th className="px-4 py-2">Size</th>
-                                        <th className="px-4 py-2">Closed Date</th>
-                                        <th className="px-4 py-2 text-right">Time</th>
-                                        <th className="px-4 py-2">Price</th>
-                                        <th className="px-4 py-2 text-right">Profit</th>
+                            /* HISTORY TABLE */
+                            <table className="w-full text-left text-xs text-gray-400 border-separate border-spacing-y-0.5">
+                                <thead className="sticky top-0 bg-black/60 backdrop-blur-sm z-10">
+                                    <tr className="text-[9px] uppercase font-bold text-gray-600 tracking-wider">
+                                        <th className="px-3 py-2">Symbol</th>
+                                        <th className="px-3 py-2">Side</th>
+                                        <th className="px-3 py-2">Size</th>
+                                        <th className="px-3 py-2">Closed</th>
+                                        <th className="px-3 py-2">Entry → Exit</th>
+                                        <th className="px-3 py-2 text-right">Profit</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <AnimatePresence>
-                                        {tradeHistory && tradeHistory.length > 0 ? (
+                                        {tradeHistory?.length > 0 ? (
                                             tradeHistory.map((deal, i) => (
                                                 <motion.tr
                                                     key={deal.ticket || i}
                                                     initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                                                    className="bg-white/5 hover:bg-white/10 transition-colors group"
+                                                    className="bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
+                                                    onClick={() => setSelectedTrade(deal)}
                                                 >
-                                                    <td className="px-4 py-3 font-bold text-gray-300 rounded-l-xl">
-                                                        {deal.symbol}
-                                                    </td>
-                                                    <td className="px-4 py-3">
-                                                        <span className={`px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${deal.type === 'BUY' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
+                                                    <td className="px-3 py-2.5 font-bold text-gray-300 rounded-l-xl">{deal.symbol}</td>
+                                                    <td className="px-3 py-2.5">
+                                                        <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase ${deal.type === 'BUY' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
                                                             {deal.type}
                                                         </span>
                                                     </td>
-                                                    <td className="px-4 py-3 font-mono text-gray-500">{deal.volume}</td>
-                                                    <td className="px-4 py-3 font-mono text-gray-400 text-xs">
-                                                        {deal.close_time ? deal.close_time.split(' ')[0] : '--'}
+                                                    <td className="px-3 py-2.5 font-mono text-gray-500">{deal.volume}</td>
+                                                    <td className="px-3 py-2.5 font-mono text-gray-400 text-[9px]">
+                                                        {deal.close_time?.split(' ')[0] || '—'}
                                                     </td>
-                                                    <td className="px-4 py-3 font-mono text-gray-400 text-xs text-right">
-                                                        {deal.close_time ? deal.close_time.split(' ')[1] : (deal.open_time ? deal.open_time.split(' ')[1] : '--:--')}
+                                                    <td className="px-3 py-2.5 font-mono text-gray-500 text-[9px]">
+                                                        {deal.open_price} → {deal.close_price || '—'}
                                                     </td>
-                                                    <td className="px-4 py-3 font-mono text-gray-400">{deal.close_price}</td>
-                                                    <td className={`px-4 py-3 font-mono font-bold text-right rounded-r-xl ${deal.profit >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                                                        {deal.profit >= 0 ? '+' : ''}{deal.profit.toFixed(2)}
+                                                    <td className={`px-3 py-2.5 font-mono font-bold text-right rounded-r-xl ${deal.profit >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                                        {deal.profit >= 0 ? '+' : ''}{parseFloat(deal.profit || 0).toFixed(2)}
                                                     </td>
                                                 </motion.tr>
                                             ))
                                         ) : (
                                             <tr>
-                                                <td colSpan="7" className="p-12 text-center text-gray-600">
+                                                <td colSpan="6" className="p-12 text-center">
                                                     <div className="flex flex-col items-center gap-3">
-                                                        <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center">
-                                                            <Clock className="text-gray-600" size={32} />
+                                                        <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center">
+                                                            <BookOpen className="text-gray-600" size={28} />
                                                         </div>
-                                                        <p className="text-lg font-medium text-gray-500">No History Available</p>
-                                                        <p className="text-sm">Closed trades will be listed here.</p>
+                                                        <p className="text-gray-500">No History Available</p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -707,336 +598,273 @@ export default function TradingDashboard({ mt5Status, logs, logsEndRef }) {
                             </table>
                         )}
                     </div>
+
+                    {/* Quick Actions Bar */}
+                    <div className="flex-shrink-0 border-t border-white/10 p-3 flex items-center gap-2">
+                        <button
+                            onClick={handleCloseAllProfits}
+                            className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-green-500/15 hover:bg-green-500/25 text-green-400 border border-green-500/25 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all"
+                        >
+                            <TrendingUp size={12} /> Close Profits
+                        </button>
+                        <button
+                            onClick={handleCloseAllLosses}
+                            className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-red-500/15 hover:bg-red-500/25 text-red-400 border border-red-500/25 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all"
+                        >
+                            <TrendingDown size={12} /> Close Losses
+                        </button>
+                        <button
+                            onClick={async () => {
+                                if (!confirm('EMERGENCY STOP: Close ALL positions immediately?')) return;
+                                try { await axios.post(`${API}/close_all_trades`, { profitable_only: false }); }
+                                catch (e) { alert('Failed: ' + e.message); }
+                            }}
+                            className="flex items-center justify-center gap-1.5 px-4 py-2 bg-red-600/30 hover:bg-red-600/50 text-red-300 border border-red-600/40 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all"
+                        >
+                            <AlertTriangle size={12} /> STOP ALL
+                        </button>
+                    </div>
                 </motion.div>
 
-                {/* Right Column: Controls, Security & Logs (Fixed Layout) */}
-                <div className="flex flex-col gap-4 lg:w-1/3 h-full">
+                {/* RIGHT: Controls + Market Intelligence */}
+                <div className="flex flex-col gap-3 w-72 flex-shrink-0 overflow-y-auto">
 
-                    {/* COMMAND CONSOLE (Fixed) */}
+                    {/* COMMAND CONSOLE */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.35 }}
-                        className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-5 flex flex-col gap-4 shadow-xl flex-shrink-0"
+                        initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.25 }}
+                        className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-4 flex flex-col gap-3 shadow-xl flex-shrink-0"
                     >
-                        <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                        {/* Header Row */}
+                        <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <Hash size={16} className="text-spidy-primary" />
-                                <h3 className="text-sm font-bold text-gray-200 tracking-wide uppercase">Command Console</h3>
+                                <Crosshair size={14} className="text-spidy-primary" />
+                                <h3 className="text-[11px] font-bold text-gray-200 tracking-widest uppercase">Trade Console</h3>
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className="text-[10px] uppercase font-bold text-gray-500">Auto-Pilot</span>
+                                <span className="text-[9px] text-gray-500 uppercase font-bold">Auto</span>
                                 <button
                                     onClick={toggleAutoTrading}
-                                    className={`w-8 h-4 rounded-full transition-colors relative ${mt5Status.auto_trading ? 'bg-green-500' : 'bg-gray-600'}`}
+                                    className={`w-8 h-4 rounded-full transition-all relative ${mt5Status?.auto_trading ? 'bg-green-500' : 'bg-gray-600'}`}
                                 >
-                                    <div className={`absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full shadow-sm transition-transform duration-300 ${mt5Status.auto_trading ? 'translate-x-4' : 'translate-x-0'}`} />
+                                    <div className={`absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full shadow-sm transition-transform ${mt5Status?.auto_trading ? 'translate-x-4' : 'translate-x-0'}`} />
                                 </button>
                             </div>
                         </div>
 
-                        <div className="flex flex-col gap-3">
-                            <div className="grid grid-cols-2 gap-3">
-                                <div className="flex flex-col gap-1">
-                                    <label className="text-[10px] font-bold text-gray-500 uppercase">Symbol</label>
-                                    <div className="relative">
-                                        <Combobox value={manualSymbol} onChange={setManualSymbol}>
-                                            <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-black/20 text-left border border-white/10 focus-within:border-spidy-primary/50 focus-within:ring-1 focus-within:ring-spidy-primary/50 sm:text-sm">
-                                                <Combobox.Input
-                                                    className="w-full border-none py-2 pl-3 pr-10 text-xs font-mono leading-5 text-white bg-transparent focus:ring-0 focus:outline-none uppercase"
-                                                    onChange={(event) => setQuery(event.target.value)}
-                                                    displayValue={(person) => person}
-                                                />
-                                                <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-                                                    <ChevronDown
-                                                        className="h-4 w-4 text-gray-400"
-                                                        aria-hidden="true"
-                                                    />
-                                                </Combobox.Button>
-                                            </div>
-                                            <AnimatePresence>
-                                                <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-gray-900 border border-white/20 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-[100] scrollbar-thin scrollbar-thumb-gray-700">
-                                                    {filteredSymbols.length === 0 && query !== '' ? (
-                                                        <div className="relative cursor-default select-none py-2 px-4 text-gray-400 text-xs font-mono">
-                                                            Nothing found.
-                                                        </div>
-                                                    ) : (
-                                                        filteredSymbols.slice(0, 50).map((s) => (
-                                                            <Combobox.Option
-                                                                key={s}
-                                                                className={({ active }) =>
-                                                                    `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-spidy-primary/20 text-white' : 'text-gray-300'
-                                                                    }`
-                                                                }
-                                                                value={s}
-                                                            >
-                                                                {({ selected, active }) => (
-                                                                    <>
-                                                                        <span
-                                                                            className={`block truncate font-mono text-xs ${selected ? 'font-bold text-spidy-primary' : 'font-normal'
-                                                                                }`}
-                                                                        >
-                                                                            {s}
-                                                                        </span>
-                                                                        {selected ? (
-                                                                            <span
-                                                                                className={`absolute inset-y-0 left-0 flex items-center pl-3 ${active ? 'text-white' : 'text-spidy-primary'
-                                                                                    }`}
-                                                                            >
-                                                                                <Check className="h-3 w-3" aria-hidden="true" />
-                                                                            </span>
-                                                                        ) : null}
-                                                                    </>
-                                                                )}
-                                                            </Combobox.Option>
-                                                        ))
-                                                    )}
-                                                </Combobox.Options>
-                                            </AnimatePresence>
-                                        </Combobox>
+                        {/* Mode Toggle */}
+                        <div className="flex gap-1 bg-black/30 rounded-lg p-0.5">
+                            <button
+                                onClick={() => setTradeMode('simple')}
+                                className={`flex-1 py-1 text-[9px] font-bold uppercase rounded-md transition-all ${tradeMode === 'simple' ? 'bg-spidy-primary text-white' : 'text-gray-500 hover:text-white'}`}
+                            >Simple</button>
+                            <button
+                                onClick={() => setTradeMode('advanced')}
+                                className={`flex-1 py-1 text-[9px] font-bold uppercase rounded-md transition-all ${tradeMode === 'advanced' ? 'bg-spidy-primary text-white' : 'text-gray-500 hover:text-white'}`}
+                            >Advanced</button>
+                        </div>
+
+                        {/* Symbol */}
+                        <div className="flex flex-col gap-1">
+                            <label className="text-[9px] font-bold text-gray-500 uppercase tracking-wider">Symbol</label>
+                            <div className="relative">
+                                <Combobox value={manualSymbol} onChange={setManualSymbol}>
+                                    <div className="relative w-full overflow-hidden rounded-lg bg-black/30 border border-white/10 focus-within:border-spidy-primary/50">
+                                        <Combobox.Input
+                                            className="w-full border-none py-2 pl-3 pr-8 text-xs font-mono text-white bg-transparent focus:ring-0 focus:outline-none uppercase"
+                                            onChange={e => setQuery(e.target.value)}
+                                            displayValue={v => v}
+                                        />
+                                        <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+                                            <ChevronDown className="h-3 w-3 text-gray-400" />
+                                        </Combobox.Button>
                                     </div>
-                                </div>
-                                <div className="flex flex-col gap-1">
-                                    <label className="text-[10px] font-bold text-gray-500 uppercase">Volume</label>
-                                    <input
-                                        type="number"
-                                        value={manualVolume}
-                                        onChange={(e) => setManualVolume(e.target.value)}
-                                        step="0.01"
-                                        className="bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-spidy-primary/50 text-center"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-3 mt-1">
-                                <button
-                                    onClick={() => handleManualTrade('BUY')}
-                                    disabled={loading}
-                                    className="bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 text-green-400 py-2.5 rounded-lg text-sm font-bold transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
-                                >
-                                    <TrendingUp size={14} />
-                                    BUY
-                                </button>
-                                <button
-                                    onClick={() => handleManualTrade('SELL')}
-                                    disabled={loading}
-                                    className="bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 py-2.5 rounded-lg text-sm font-bold transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
-                                >
-                                    <TrendingDown size={14} />
-                                    SELL
-                                </button>
+                                    <Combobox.Options className="absolute mt-1 max-h-48 w-full overflow-auto rounded-lg bg-gray-900 border border-white/20 py-1 text-xs shadow-xl z-[100]">
+                                        {filteredSymbols.slice(0, 50).map(s => (
+                                            <Combobox.Option key={s} value={s}
+                                                className={({ active }) => `py-1.5 pl-3 pr-3 cursor-default font-mono ${active ? 'bg-spidy-primary/20 text-white' : 'text-gray-300'}`}
+                                            >{s}</Combobox.Option>
+                                        ))}
+                                    </Combobox.Options>
+                                </Combobox>
                             </div>
                         </div>
 
-                        {/* AUTO-SECURE SECTION */}
-                        <div className="border-t border-white/10 pt-3 flex flex-col gap-2">
-                            <div className="flex items-center justify-between">
-                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1">
-                                    <ShieldCheck size={12} className={autoSecureEnabled ? "text-green-400" : "text-gray-600"} />
-                                    Auto-Secure Profit
-                                </label>
-                                <button
-                                    onClick={() => handleUpdateSecure(!autoSecureEnabled, undefined)}
-                                    disabled={savingSecure}
-                                    className={`w-8 h-4 rounded-full transition-colors relative ${autoSecureEnabled ? 'bg-green-500' : 'bg-gray-600'}`}
-                                >
-                                    <div className={`absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full shadow-sm transition-transform duration-300 ${autoSecureEnabled ? 'translate-x-4' : 'translate-x-0'}`} />
-                                </button>
+                        {/* Volume + Risk % */}
+                        <div className="grid grid-cols-2 gap-2">
+                            <div className="flex flex-col gap-1">
+                                <label className="text-[9px] font-bold text-gray-500 uppercase">Volume</label>
+                                <input
+                                    type="number" step="0.01" min="0.01" value={manualVolume}
+                                    onChange={e => setManualVolume(e.target.value)}
+                                    className="w-full bg-black/30 border border-white/10 rounded-lg py-2 px-3 text-xs font-mono text-white focus:outline-none focus:border-spidy-primary/50"
+                                />
                             </div>
-
-                            <div className="flex items-center gap-2">
-                                <div className="relative flex-1">
-                                    <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 text-xs">$</span>
+                            <div className="flex flex-col gap-1">
+                                <label className="text-[9px] font-bold text-gray-500 uppercase">Risk %</label>
+                                <div className="relative">
                                     <input
-                                        type="number"
-                                        value={secureThreshold}
-                                        onChange={(e) => setSecureThreshold(e.target.value)}
-                                        onBlur={(e) => handleUpdateSecure(undefined, e.target.value)}
-                                        className="w-full bg-black/20 border border-white/10 rounded-lg py-1.5 pl-5 pr-2 text-xs font-mono text-white focus:outline-none focus:border-green-500/50"
-                                        placeholder="10.00"
+                                        type="number" step="0.1" min="0.1" max="10" value={activeRiskPct}
+                                        onChange={e => setActiveRiskPct(e.target.value)}
+                                        className="w-full bg-black/30 border border-white/10 rounded-lg py-2 px-3 text-xs font-mono text-white focus:outline-none focus:border-spidy-primary/50"
                                     />
                                 </div>
-                                <button
-                                    onClick={handleSecureNow}
-                                    className="bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wide transition-all active:scale-95 whitespace-nowrap flex items-center gap-1"
-                                >
-                                    <DollarSign size={12} />
-                                    Secure Now
-                                </button>
+                                <p className="text-[9px] text-gray-600">≈ ${calcRiskUSD()} at risk</p>
                             </div>
+                        </div>
+
+                        {/* Advanced: SL/TP */}
+                        <AnimatePresence>
+                            {tradeMode === 'advanced' && (
+                                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
+                                    className="grid grid-cols-2 gap-2 overflow-hidden">
+                                    <div className="flex flex-col gap-1">
+                                        <label className="text-[9px] font-bold text-red-500/70 uppercase">Stop Loss (pips)</label>
+                                        <input type="number" step="1" min="0" value={manualSL}
+                                            onChange={e => setManualSL(e.target.value)}
+                                            placeholder="e.g. 20"
+                                            className="w-full bg-red-500/5 border border-red-500/20 rounded-lg py-2 px-3 text-xs font-mono text-red-300 focus:outline-none focus:border-red-500/50 placeholder:text-gray-600"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <label className="text-[9px] font-bold text-green-500/70 uppercase">Take Profit (pips)</label>
+                                        <input type="number" step="1" min="0" value={manualTP}
+                                            onChange={e => setManualTP(e.target.value)}
+                                            placeholder="e.g. 40"
+                                            className="w-full bg-green-500/5 border border-green-500/20 rounded-lg py-2 px-3 text-xs font-mono text-green-300 focus:outline-none focus:border-green-500/50 placeholder:text-gray-600"
+                                        />
+                                    </div>
+                                    {(manualSL || manualTP) && (
+                                        <div className="col-span-2 bg-black/20 rounded-lg p-2 text-[9px] text-gray-500">
+                                            {manualSL && <p>Risk: <span className="text-red-400">{manualSL} pips = ~${(parseFloat(manualSL || 0) * parseFloat(manualVolume || 0.01) * 10).toFixed(2)}</span></p>}
+                                            {manualTP && <p>Target: <span className="text-green-400">{manualTP} pips = ~${(parseFloat(manualTP || 0) * parseFloat(manualVolume || 0.01) * 10).toFixed(2)}</span></p>}
+                                        </div>
+                                    )}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        {/* BUY / SELL Buttons */}
+                        <div className="grid grid-cols-2 gap-2 pt-1">
+                            <motion.button
+                                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                                onClick={() => handleManualTrade('BUY')}
+                                disabled={loading}
+                                className="flex items-center justify-center gap-1.5 py-3 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white rounded-xl text-xs font-black uppercase tracking-wider shadow-lg shadow-green-900/40 transition-all disabled:opacity-50"
+                            >
+                                <ArrowUpRight size={14} /> BUY
+                            </motion.button>
+                            <motion.button
+                                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                                onClick={() => handleManualTrade('SELL')}
+                                disabled={loading}
+                                className="flex items-center justify-center gap-1.5 py-3 bg-gradient-to-r from-red-700 to-red-600 hover:from-red-600 hover:to-red-500 text-white rounded-xl text-xs font-black uppercase tracking-wider shadow-lg shadow-red-900/40 transition-all disabled:opacity-50"
+                            >
+                                <ArrowDownRight size={14} /> SELL
+                            </motion.button>
                         </div>
                     </motion.div>
 
-                    {/* SECURITY MATRIX (Fixed) */}
-                    {/* SECURITY MATRIX (Fixed) */}
-                    <div className="flex-shrink-0 grid grid-cols-2 gap-3">
-                        <SecurityItem
-                            label="System"
-                            status={mt5Status.connected ? "ONLINE" : "OFFLINE"}
-                            icon={<Activity size={14} />}
-                            color={mt5Status.connected ? "text-green-400" : "text-red-400"}
-                            details={{
-                                "Uptime": "Real-Time",
-                                "Backend": "Active",
-                                "MT5": mt5Status.connected ? "Linked" : "Missing"
-                            }}
-                        />
-                        <SecurityItem
-                            label="Latency"
-                            status={`${mt5Status.latency !== undefined ? mt5Status.latency : '--'}ms`}
-                            icon={<Zap size={14} />}
-                            color={mt5Status.latency > 100 ? "text-red-400" : "text-yellow-400"}
-                            details={{
-                                "Broker": `${mt5Status.latency || 0}ms`,
-                                "Loss": mt5Status.connected ? "0%" : "100%",
-                                "Ping": "Real-Time"
-                            }}
-                        />
-                    </div>
-
-                    {/* Terminal Window (Scrollable, Flex-1) */}
+                    {/* AUTO-SECURE PANEL */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4 }}
-                        className="bg-black/80 backdrop-blur-xl rounded-2xl border border-gray-800 p-0 flex flex-col flex-1 overflow-hidden min-h-0 shadow-2xl"
+                        initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}
+                        className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-4 flex flex-col gap-3 flex-shrink-0"
                     >
-                        <div className="p-3 bg-gray-900/50 border-b border-gray-800 flex items-center justify-between flex-shrink-0">
+                        <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <div className="flex gap-1.5 mr-2">
-                                    <div className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
-                                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50" />
-                                    <div className="w-2.5 h-2.5 rounded-full bg-green-500/50" />
-                                </div>
-                                <Clock size={14} className="text-gray-500" />
-                                <span className="font-mono text-xs font-bold text-gray-400 tracking-wider">SYSTEM_LOGS.sh</span>
-                                <button
-                                    onClick={() => window.open('http://localhost:8000/logs/download', '_blank')}
-                                    className="ml-2 hover:bg-white/10 p-1 rounded transition-colors"
-                                    title="Download Full Logs"
-                                >
-                                    <Download size={14} className="text-gray-500 hover:text-white" />
-                                </button>
+                                <Shield size={14} className="text-yellow-400" />
+                                <h3 className="text-[11px] font-bold text-gray-200 tracking-widest uppercase">Auto-Secure</h3>
                             </div>
+                            <button
+                                onClick={() => handleUpdateSecure(!autoSecureEnabled, undefined)}
+                                disabled={savingSecure}
+                                className={`w-8 h-4 rounded-full transition-all relative ${autoSecureEnabled ? 'bg-yellow-500' : 'bg-gray-600'}`}
+                            >
+                                <div className={`absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full shadow-sm transition-transform ${autoSecureEnabled ? 'translate-x-4' : 'translate-x-0'}`} />
+                            </button>
                         </div>
-                        <div className="flex-1 overflow-y-auto p-4 font-mono text-xs space-y-1.5 scrollbar-thin scrollbar-thumb-gray-700 hover:scrollbar-thumb-gray-500">
-                            {logs.length === 0 && <p className="text-gray-600 italic opacity-50">Waiting for system events...</p>}
-                            {logs.map((log, i) => (
-                                <div key={i} className="break-words leading-relaxed">
-                                    <span className="text-gray-600 select-none mr-2">$</span>
-                                    <span className={
-                                        log.includes("ERROR") ? "text-red-400 font-bold" :
-                                            log.includes("SUCCESS") ? "text-green-400 font-bold" :
-                                                log.includes("TRADE") ? "text-yellow-400" :
-                                                    log.includes("AUTO-TRADER") ? "text-purple-400 text-opacity-80" :
-                                                        log.includes("ANALYSIS") ? "text-blue-400 font-bold" :
-                                                            "text-gray-300"
-                                    }>
-                                        {log}
-                                    </span>
+                        {autoSecureEnabled && (
+                            <div className="flex flex-col gap-2">
+                                <div className="flex items-center gap-2">
+                                    <label className="text-[9px] text-gray-500 uppercase font-bold flex-1">Close at $</label>
+                                    <input
+                                        type="number" step="0.5" min="0"
+                                        value={secureThreshold}
+                                        onChange={e => setSecureThreshold(e.target.value)}
+                                        onBlur={() => handleUpdateSecure(undefined, secureThreshold)}
+                                        className="w-24 bg-black/30 border border-white/10 rounded-lg py-1.5 px-2 text-xs font-mono text-yellow-300 focus:outline-none focus:border-yellow-500/50 text-right"
+                                    />
                                 </div>
-                            ))}
-                            <div ref={logsEndRef} />
-                        </div>
+                            </div>
+                        )}
                     </motion.div>
 
+                    {/* MARKET INTELLIGENCE PANEL */}
+                    <MarketIntelligence />
                 </div>
             </div>
+
+            {/* SYSTEM LOG PANEL */}
+            <SystemLogPanel logs={logs} logsEndRef={logsEndRef} />
         </div>
     );
 }
 
-function SecurityItem({ label, status, icon, color, details }) {
-    const [isOpen, setIsOpen] = useState(false);
+// ── System Log Panel ──────────────────────────────────────────────────────────
+function SystemLogPanel({ logs, logsEndRef }) {
+    const [collapsed, setCollapsed] = useState(false);
 
-    // Auto-close after 4 seconds
-    React.useEffect(() => {
-        let timer;
-        if (isOpen) {
-            timer = setTimeout(() => {
-                setIsOpen(false);
-            }, 4000);
-        }
-        return () => clearTimeout(timer);
-    }, [isOpen]);
+    const getLogColor = (line) => {
+        if (!line) return 'text-gray-500';
+        const l = line.toLowerCase();
+        if (l.includes('error') || l.includes('fail') || l.includes('❌') || l.includes('🚨')) return 'text-red-400';
+        if (l.includes('warn') || l.includes('⚠️') || l.includes('hold')) return 'text-yellow-400';
+        if (l.includes('success') || l.includes('✅') || l.includes('profit') || l.includes('💰') || l.includes('secured')) return 'text-green-400';
+        if (l.includes('hft') || l.includes('buy') || l.includes('sell') || l.includes('📈') || l.includes('📉')) return 'text-blue-400';
+        if (l.includes('info') || l.includes('🧠') || l.includes('ai')) return 'text-purple-400';
+        return 'text-gray-400';
+    };
 
     return (
-        <motion.div
-            layout
-            onClick={() => setIsOpen(!isOpen)}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className={`relative bg-white/5 border ${isOpen ? 'border-spidy-primary/50 bg-white/10 z-50' : 'border-white/5 z-0'} rounded-lg p-3 flex items-center justify-between transition-all cursor-pointer select-none`}
-        >
-            <div className={`p-1.5 rounded-md bg-black/20 ${color}`}>
-                {icon}
-            </div>
-            <div className="flex flex-col items-end">
-                <span className={`text-[10px] font-bold uppercase transition-colors ${isOpen ? 'text-spidy-primary' : 'text-gray-500'}`}>{label}</span>
-                <span className="text-xs font-mono font-bold text-gray-200">{status}</span>
+        <div className={`flex-shrink-0 border-t border-white/10 bg-black/60 backdrop-blur-md transition-all duration-300 ${collapsed ? 'h-9' : 'h-44'}`}>
+            {/* Log Header */}
+            <div
+                className="flex items-center justify-between px-4 h-9 cursor-pointer hover:bg-white/5 select-none"
+                onClick={() => setCollapsed(p => !p)}
+            >
+                <div className="flex items-center gap-2">
+                    <Activity size={12} className="text-green-400 animate-pulse" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">System Log</span>
+                    {logs?.length > 0 && (
+                        <span className="text-[9px] text-gray-600 font-mono">({logs.length} entries)</span>
+                    )}
+                </div>
+                <div className="flex items-center gap-2">
+                    <span className="text-[9px] text-gray-600 uppercase font-bold">
+                        {collapsed ? '▲ Expand' : '▼ Collapse'}
+                    </span>
+                </div>
             </div>
 
-            {/* Cyberpunk Tooltip (Click-activated) */}
-            <AnimatePresence>
-                {isOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                        transition={{ duration: 0.2 }}
-                        className="absolute bottom-full right-0 mb-2 w-56 z-50"
-                        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
-                    >
-                        <div className="bg-black border border-spidy-primary text-white text-[10px] p-3 rounded shadow-2xl shadow-black/80 backdrop-blur-md">
-                            <div className="flex justify-between border-b border-gray-800 pb-2 mb-2">
-                                <span className="font-bold uppercase text-spidy-primary">{label}.DIAG</span>
-                                <span className="font-mono text-green-400">● LIVE</span>
-                            </div>
-                            <div className="space-y-2 font-mono text-gray-300">
-                                {details && Object.entries(details).map(([key, value]) => (
-                                    <div key={key} className="flex justify-between items-center bg-gray-900 px-2 py-1.5 rounded border border-gray-800">
-                                        <span className="uppercase opacity-70 text-[9px] min-w-[60px]">{key}:</span>
-                                        <span className="text-white font-bold ml-2 truncate">{value}</span>
-                                    </div>
-                                ))}
-                                <p className="text-[9px] italic text-gray-600 text-right mt-1 pt-1 border-t border-gray-800">System Verified</p>
-                            </div>
-                            {/* Close hint */}
-                            <div className="text-center mt-2">
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
-                                    className="text-[9px] text-gray-500 hover:text-white uppercase tracking-wider hover:bg-white/10 px-2 py-1 rounded transition-colors"
-                                >
-                                    [ Close ]
-                                </button>
-                            </div>
+            {/* Log Body */}
+            {!collapsed && (
+                <div className="h-[calc(100%-36px)] overflow-y-auto px-4 pb-2 font-mono text-[10px] space-y-0.5 scroll-smooth">
+                    {logs && logs.length > 0 ? (
+                        <>
+                            {logs.map((line, i) => (
+                                <div key={i} className={`leading-relaxed ${getLogColor(line)} flex gap-2 items-start`}>
+                                    <span className="text-gray-700 flex-shrink-0 tabular-nums">{String(i + 1).padStart(3, '0')}</span>
+                                    <span className="break-all">{line}</span>
+                                </div>
+                            ))}
+                            <div ref={logsEndRef} />
+                        </>
+                    ) : (
+                        <div className="flex items-center justify-center h-full">
+                            <p className="text-gray-600 text-[10px]">Waiting for bridge connection...</p>
                         </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </motion.div>
-    )
-}
-
-function StatCard({ label, value, icon, highlight, valueColor, borderColor, glow, active, delay }) {
-    return (
-        <motion.div
-            variants={animeAppear}
-            initial="hidden"
-            animate="visible"
-            whileHover={animeHover}
-            custom={delay}
-            className={`relative overflow-hidden bg-gradient-to-br from-white/10 to-white/5 p-6 rounded-2xl border ${borderColor || 'border-white/10'} shadow-lg ${glow || ''} cursor-default`}
-        >
-            <div className="absolute top-0 right-0 p-4 opacity-10 scale-150 transform translate-x-1/4 -translate-y-1/4">
-                {icon}
-            </div>
-
-            <div className="relative z-10 flex flex-col gap-2">
-                <div className="flex items-center gap-2 text-gray-400 text-sm font-medium uppercase tracking-wider">
-                    {icon && React.cloneElement(icon, { size: 16 })}
-                    {label}
+                    )}
                 </div>
-                <div className={`text-3xl font-bold font-mono tracking-tight ${active ? (valueColor || (highlight ? 'text-spidy-primary' : 'text-white')) : 'text-gray-600'}`}>
-                    {value}
-                </div>
-            </div>
-        </motion.div>
+            )}
+        </div>
     );
 }

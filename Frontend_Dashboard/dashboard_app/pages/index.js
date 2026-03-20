@@ -22,7 +22,7 @@ const animeTransition = {
 };
 
 export default function Home() {
-    const [activeTab, setActiveTab] = useState('ai');
+    const [activeTab, setActiveTab] = useState('trading');
     const [query, setQuery] = useState('');
 
     // Chat Session Management
@@ -356,7 +356,7 @@ export default function Home() {
             />
 
             {/* Sidebar Navigation */}
-            <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+            <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} mt5Status={mt5Status} />
 
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col min-w-0">

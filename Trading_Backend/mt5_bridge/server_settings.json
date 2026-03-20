@@ -6,7 +6,7 @@
     "mode": "CONSERVATIVE",
     "auto_secure": {
         "enabled": true,
-        "threshold": 0.1
+        "threshold": 1.0
     },
     "auto_trade_enabled": true,
     "max_daily_loss": 50.0

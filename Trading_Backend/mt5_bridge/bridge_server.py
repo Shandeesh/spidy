@@ -1098,17 +1098,21 @@ def validate_entry(symbol, signal, tick, strategy_tag="General"):
         if signal == "BUY" and dxy_status == "BEARISH": return False, "Shield Block (DXY Bearish)"
         if signal == "SELL" and dxy_status == "BULLISH": return False, "Shield Block (DXY Bullish)"
 
-    # 7. Economic Calendar Check (All Resources)
-    is_event, event_msg = calendar.is_event_nearby(symbol)
-    if is_event:
-        # We don't block, but we log heavily (or could block if user prefers)
-        # For "Maximum Profit", we might trade the volatility, but with caution.
-        # Let's just log it as a warning/info to show we are using the resource.
-        # If it's "HIGH" impact, maybe we skip HFT?
-        # For now, let's just Log and Proceed to satisfy "Use All Resources" without blocking profit.
-        # Actually, let's treat it as a "Shield" if it's too close (e.g. 1 min before)
-        pass # print(f"CALENDAR: {event_msg}") 
-    
+    # 7. Economic Calendar Check (Hard Block on HIGH-impact events within 5 min)
+    # Also checks the local economic_calendar module
+    is_event_local, event_msg_local = calendar.is_event_nearby(symbol)
+    if is_event_local and "Upcoming" in str(event_msg_local):
+        return False, f"Calendar Shield: {event_msg_local}"
+
+    # 7b. Market Intelligence Calendar (ForexFactory via internet)
+    if HAS_MARKET_INTEL:
+        try:
+            near_event, near_event_name = is_near_high_impact_event(symbol, buffer_minutes=5)
+            if near_event:
+                return False, f"HIGH-IMPACT EVENT in <5min: {near_event_name[:60]}"
+        except Exception:
+            pass  # Don't let calendar check break trading
+
     return True, "OK"
 
 
@@ -1899,16 +1903,12 @@ async def sanitize_old_trades():
 # FIX 2: Removed two duplicate definitions of calculate_bollinger_bands (was defined 3x total)
 # The single canonical definition is above at the first occurrence.
 
-# Import News Fetcher
+# Import News Fetcher + Market Intelligence
 import sys
 try:
     sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../AI_Engine/internet_gathering")))
     from news_fetcher import NewsFetcher
-    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../AI_Engine/strategy_optimizer")))
-    from pack_generator import StrategyOptimizer
-    
     news_engine = NewsFetcher()
-    strategy_engine = StrategyOptimizer()
     HAS_NEWS = True
 except ImportError as e:
     print(f"WARNING: NewsFetcher not found. AI General will be disabled. Error: {e}")
@@ -1916,6 +1916,27 @@ except ImportError as e:
 except Exception as e:
     print(f"WARNING: Unexpected error importing NewsFetcher: {e}")
     HAS_NEWS = False
+
+# Import Market Intelligence (Fear & Greed + Economic Calendar)
+try:
+    from market_intelligence import get_market_pulse, is_near_high_impact_event, get_upcoming_events
+    HAS_MARKET_INTEL = True
+    print("INFO: Market Intelligence module loaded.")
+except ImportError as e:
+    print(f"WARNING: market_intelligence not found: {e}")
+    HAS_MARKET_INTEL = False
+    def get_market_pulse(): return {}
+    def is_near_high_impact_event(symbol="", buffer_minutes=5): return False, ""
+    def get_upcoming_events(hours_ahead=4): return []
+
+# Import Strategy Optimizer (optional)
+try:
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../AI_Engine/strategy_optimizer")))
+    from pack_generator import StrategyOptimizer
+    strategy_engine = StrategyOptimizer()
+except ImportError:
+    strategy_engine = None
+    print("WARNING: StrategyOptimizer not found.")
 
 # Import Local Brain
 try:
@@ -3402,6 +3423,82 @@ def get_status():
     return mt5_state
 
 
+
+# ── NEW: Market Intelligence Endpoint ────────────────────────────────────────
+@app.get("/market_intelligence")
+async def get_market_intelligence_endpoint():
+    """
+    Returns Fear & Greed Index + upcoming economic events + macro trading bias.
+    Called by the Frontend MarketIntelligence panel every 30s.
+    """
+    if not HAS_MARKET_INTEL:
+        return {"error": "Market Intelligence module not available", "fear_greed": {"score": 50, "label": "Neutral"}, "next_high_impact_event": {}}
+
+    try:
+        pulse = await asyncio.to_thread(get_market_pulse)
+        # Also pull top headlines if news engine is active
+        headlines = []
+        if HAS_NEWS:
+            try:
+                raw = await asyncio.to_thread(news_engine.get_latest_headlines)
+                headlines = raw[:5]  # Top 5 for the UI panel
+            except Exception:
+                pass
+        pulse["top_headlines"] = headlines
+        return pulse
+    except Exception as e:
+        return {"error": str(e)}
+
+
+# ── NEW: Analytics Endpoint ───────────────────────────────────────────────────
+@app.get("/analytics")
+async def get_analytics_endpoint():
+    """
+    Returns today's trading performance statistics.
+    Win rate, average profit/loss, trade count, and daily PnL.
+    """
+    try:
+        history = financial_db.get_trade_history(limit=500)
+        today_str = datetime.now().strftime("%Y-%m-%d")
+
+        today_trades = [
+            t for t in history
+            if t.get("close_time", "").startswith(today_str) and t.get("profit") is not None
+        ]
+
+        total = len(today_trades)
+        wins = [t for t in today_trades if float(t.get("profit", 0)) > 0]
+        losses = [t for t in today_trades if float(t.get("profit", 0)) < 0]
+
+        win_rate = round((len(wins) / total * 100), 1) if total > 0 else 0.0
+        avg_profit = round(sum(float(t["profit"]) for t in wins) / len(wins), 2) if wins else 0.0
+        avg_loss = round(sum(float(t["profit"]) for t in losses) / len(losses), 2) if losses else 0.0
+        daily_pnl = round(sum(float(t.get("profit", 0)) for t in today_trades), 2)
+
+        # All-time stats
+        all_wins = [t for t in history if float(t.get("profit", 0)) > 0]
+        all_total = len(history)
+        all_win_rate = round((len(all_wins) / all_total * 100), 1) if all_total > 0 else 0.0
+
+        return {
+            "today": {
+                "total_trades": total,
+                "wins": len(wins),
+                "losses": len(losses),
+                "win_rate": win_rate,
+                "avg_profit": avg_profit,
+                "avg_loss": avg_loss,
+                "daily_pnl": daily_pnl,
+            },
+            "all_time": {
+                "total_trades": all_total,
+                "win_rate": all_win_rate,
+            },
+            "floating_pnl": round(mt5_state.get("profit", 0.0), 2),
+            "balance": round(mt5_state.get("balance", 0.0), 2),
+        }
+    except Exception as e:
+        return {"error": str(e)}
 
 
 if __name__ == "__main__":
