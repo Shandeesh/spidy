@@ -477,10 +477,8 @@ export default function TradingDashboard({ mt5Status, logs, logsEndRef }) {
                                     <AnimatePresence>
                                         {mt5Status?.positions?.length > 0 ? (
                                             getSortedPositions().map((pos) => {
-                                                // Estimate margin assuming $200 per 1.00 lot (1:500 leverage typical average)
-                                                // Prevent division by zero with fallback
-                                                const estimatedMargin = (parseFloat(pos.volume) || 0.01) * 200;
-                                                const roi = ((pos.profit / estimatedMargin) * 100);
+                                                // Use the synchronized ROI from the backend
+                                                const roi = pos.roi || 0;
                                                 const duration = getPositionDuration(pos.time);
                                                 return (
                                                     <motion.tr

@@ -896,6 +896,13 @@ async def connect_mt5(force=False):
                     # Ensure DB tracks this open position
                     # financial_db.save_trade(pos.ticket, pos.symbol, "BUY" if pos.type==0 else "SELL", pos.volume, pos.price_open, time_str)
 
+                    # Calculate standardized ROI for frontend
+                    comm = getattr(pos, 'commission', 0.0)
+                    swap = getattr(pos, 'swap', 0.0)
+                    net_profit_roi = pos.profit + comm + swap
+                    margin = (pos.volume if getattr(pos, 'volume', 0) > 0 else 0.01) * 200.0
+                    roi = (net_profit_roi / margin) * 100.0 if margin > 0 else 0.0
+                    
                     mt5_state["positions"].append({
                         "ticket": pos.ticket,
                         "symbol": pos.symbol,
@@ -903,6 +910,7 @@ async def connect_mt5(force=False):
                         "volume": pos.volume,
                         "price": pos.price_open,
                         "profit": pos.profit,
+                        "roi": roi,
                         "time": str(datetime.fromtimestamp(local_ts))
                     })
             
@@ -2458,15 +2466,14 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
         current_price = entry_price  # fallback
 
     # --- 0. ROI GUARD (30% Loss / 70% Profit) ---
-    # Logic: ROI = (Net Profit / Actual Reserved Margin) * 100
+    # Logic: ROI = (Net Profit / Estimated Margin) * 100
     try:
-        # FIX: Use mt5.order_calc_margin() for accurate broker-calculated margin
-        # The old formula (price * volume * contract / leverage) gave a huge margin
-        # making ROI near-zero and the guard never fired.
-        order_type = mt5.ORDER_TYPE_BUY if pos.type == 0 else mt5.ORDER_TYPE_SELL
-        margin = mt5.order_calc_margin(order_type, symbol, pos.volume, pos.price_open)
-        if not margin or margin <= 0:
-            margin = 1.0  # safe fallback to avoid div-by-zero
+        # Standardize margin to approximate $200 per 1.00 lot, matching UX expectations
+        # The broker's mt5.order_calc_margin often returns huge nominal margins (especially for indices),
+        # which suppressed the ROI guard. This standardized value fixes that.
+        margin = (pos.volume if getattr(pos, 'volume', 0) > 0 else 0.01) * 200.0
+        if margin <= 0:
+            margin = 2.0  # safe fallback for 0.01 lot
         
         if margin > 0:
             # Calculate Net Profit
@@ -3354,6 +3361,13 @@ def get_status():
                 # Use dynamic offset
                 time_offset = mt5_state.get("time_offset", 7200)
                 local_ts = pos.time - time_offset
+                # Calculate standardized ROI for frontend
+                comm = getattr(pos, 'commission', 0.0)
+                swap = getattr(pos, 'swap', 0.0)
+                net_profit_roi = pos.profit + comm + swap
+                margin = (pos.volume if getattr(pos, 'volume', 0) > 0 else 0.01) * 200.0
+                roi = (net_profit_roi / margin) * 100.0 if margin > 0 else 0.0
+
                 mt5_state["positions"].append({
                     "ticket": pos.ticket,
                     "symbol": pos.symbol,
@@ -3361,6 +3375,7 @@ def get_status():
                     "volume": pos.volume,
                     "price": pos.price_open,
                     "profit": pos.profit,
+                    "roi": roi,
                     "time": str(datetime.fromtimestamp(local_ts))
                 })
     # -------------------------------
