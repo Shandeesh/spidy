@@ -2469,38 +2469,47 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
     # Logic: ROI = (Net Profit / Estimated Margin) * 100
     try:
         # Standardize margin to approximate $200 per 1.00 lot, matching UX expectations
-        # The broker's mt5.order_calc_margin often returns huge nominal margins (especially for indices),
-        # which suppressed the ROI guard. This standardized value fixes that.
         margin = (pos.volume if getattr(pos, 'volume', 0) > 0 else 0.01) * 200.0
         if margin <= 0:
             margin = 2.0  # safe fallback for 0.01 lot
-        
-        if margin > 0:
-            # Calculate Net Profit
-            comm = getattr(pos, 'commission', 0.0)
-            swap = getattr(pos, 'swap', 0.0)
-            net_profit_roi = pos.profit + comm + swap
-            
-            roi = (net_profit_roi / margin) * 100.0
-            
-            # Check Limits
-            roi_close = False
-            roi_reason = ""
-            
-            if roi <= -30.0:
-                roi_close = True
-                roi_reason = f"Stop Loss (ROI {roi:.2f}% <= -30%)"
-            elif roi >= 70.0:
-                roi_close = True
-                roi_reason = f"Take Profit (ROI {roi:.2f}% >= 70%)"
-                
-            if roi_close:
-                if loop: asyncio.run_coroutine_threadsafe(broadcast_log(f"⚖️ ROI GUARD: Closing {symbol} ({roi_reason}) [Net: ${net_profit_roi:.2f}]"), loop)
-                res, msg, _, _ = _close_position_sync(pos.ticket, symbol, "ROI_Guard", require_profit=False)
-                if res: return # Exit immediately
-    
+
+        # Calculate Net Profit
+        comm = getattr(pos, 'commission', 0.0)
+        swap = getattr(pos, 'swap', 0.0)
+        net_profit_roi = pos.profit + comm + swap
+
+        roi = (net_profit_roi / margin) * 100.0
+
+        # Debug: print scan result so we can see ROI values in backend logs
+        print(f"ROI_SCAN: {symbol} #{pos.ticket} Vol:{pos.volume} Net:{net_profit_roi:.2f} ROI:{roi:.2f}%")
+
+        # Check Limits
+        roi_close = False
+        roi_reason = ""
+
+        if roi <= -30.0:
+            roi_close = True
+            roi_reason = f"Stop Loss (ROI {roi:.2f}% <= -30%)"
+        elif roi >= 70.0:
+            roi_close = True
+            roi_reason = f"Take Profit (ROI {roi:.2f}% >= 70%)"
+
+        if roi_close:
+            if loop: asyncio.run_coroutine_threadsafe(broadcast_log(f"⚖️ ROI GUARD TRIGGERED: Closing {symbol} ({roi_reason}) [Net: ${net_profit_roi:.2f}]"), loop)
+            print(f"ROI GUARD TRIGGERED: {symbol} {roi_reason} - Attempting close...")
+            res, msg, _, _ = _close_position_sync(pos.ticket, symbol, "ROI_Guard", require_profit=False)
+            if res:
+                print(f"ROI GUARD SUCCESS: {symbol} closed.")
+                if loop: asyncio.run_coroutine_threadsafe(broadcast_log(f"✅ ROI GUARD: {symbol} closed successfully."), loop)
+                return  # Exit immediately
+            else:
+                print(f"ROI GUARD FAILED: {symbol} close rejected - {msg}")
+                if loop: asyncio.run_coroutine_threadsafe(broadcast_log(f"❌ ROI GUARD FAILED: {symbol} - {msg}"), loop)
+
     except Exception as e:
         print(f"ROI Guard Error: {e}")
+        if loop:
+            asyncio.run_coroutine_threadsafe(broadcast_log(f"❌ ROI Guard Exception: {symbol} - {e}"), loop)
 
     # --- 0. Auto-Secure Profit Trigger (PRIORITY) ---
     secure_conf = risk_settings.get("auto_secure", {})
