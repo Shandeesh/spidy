@@ -73,9 +73,16 @@ if (-not $PythonExe) {
 # Start MT5 Bridge (Direct Python Launch)
 $BridgeScript = "C:\Users\Shandeesh R P\spidy\Trading_Backend\mt5_bridge\bridge_server.py"
 $BridgeDir = "C:\Users\Shandeesh R P\spidy\Trading_Backend\mt5_bridge"
+$VenvActivate = "C:\Users\Shandeesh R P\spidy\.venv\Scripts\activate.bat"
 
+# FIX #13: Activate venv before launching to ensure all pip packages are on PATH
 Write-Host "Launching Bridge Server via: $PythonExe" -ForegroundColor Cyan
-$BridgeProcess = Start-Process -FilePath "cmd.exe" -ArgumentList "/k `"title Spidy MT5 Bridge && cd /d `"$BridgeDir`" && `"$PythonExe`" `"$BridgeScript`"`"" -WorkingDirectory $BridgeDir -PassThru
+if ($PythonExe -eq $VenvPython -and (Test-Path $VenvActivate)) {
+    # Use venv activation to set PATH correctly
+    $BridgeProcess = Start-Process -FilePath "cmd.exe" -ArgumentList "/k `"title Spidy MT5 Bridge && cd /d `"$BridgeDir`" && `"$VenvActivate`" && python `"$BridgeScript`"`"" -WorkingDirectory $BridgeDir -PassThru
+} else {
+    $BridgeProcess = Start-Process -FilePath "cmd.exe" -ArgumentList "/k `"title Spidy MT5 Bridge && cd /d `"$BridgeDir`" && `"$PythonExe`" `"$BridgeScript`"`"" -WorkingDirectory $BridgeDir -PassThru
+}
 
 
 

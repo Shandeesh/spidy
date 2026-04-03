@@ -11,9 +11,19 @@ from spidy_brain import SpidyBrain
 
 app = FastAPI(title="Spidy AI Brain Server")
 
+# FIX #3: Restrict CORS to known local origins (was wildcard "*")
+ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5000",
+    "http://127.0.0.1:5000",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

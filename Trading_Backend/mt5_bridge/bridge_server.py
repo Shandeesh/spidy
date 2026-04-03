@@ -226,9 +226,21 @@ async def monitor_mt5_process():
 
 app = FastAPI(lifespan=lifespan)
 
+# FIX #3: Restrict CORS to known local origins (was wildcard "*")
+ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5000",
+    "http://127.0.0.1:5000",
+    "http://localhost:5001",
+    "http://127.0.0.1:5001",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -242,8 +254,8 @@ risk_settings = {"auto_secure": {"enabled": False, "threshold": 10.0}, "use_tech
 # PHASE 3: Performance Optimization - Bar Cache
 from collections import deque
 technical_bars_cache = {}  # {symbol: {'m1': deque(maxlen=500), 'h1': deque(maxlen=300), 'initialized': bool}}
-clients = []
-log_history = []  # FIX 1: Single declaration (was duplicated 4x)
+clients = set()  # FIX #10: Use set for O(1) add/discard (was list with O(n) remove)
+log_history = deque(maxlen=200)  # FIX #4: deque with maxlen for O(1) thread-safe append/eviction
 technical_cache = {}  # Cache for RSI/EMA: { symbol: { rsi, trend, ema, updated } }
 profit_peaks = {}  # Tracks High Water Mark for open positions { ticket_id: max_profit }
 strategy_manager = StrategyManager()
@@ -267,7 +279,7 @@ try:
     if os.path.exists(log_file_path):
         with open(log_file_path, "r", encoding="utf-8") as f:
             lines = f.readlines()
-            log_history = [line.strip() for line in lines[-50:]]
+            log_history.extend([line.strip() for line in lines[-50:]])
             print(f"INFO: Loaded {len(log_history)} logs from history.")
 except Exception as e:
     print(f"WARN: Could not load log history: {e}")
@@ -348,10 +360,10 @@ def get_daily_pnl_endpoint():
 @app.websocket("/ws/logs")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
-    clients.append(websocket)
+    clients.add(websocket)  # FIX #10: O(1) set add
     
     # Send history to new client
-    for msg in log_history:
+    for msg in list(log_history):  # snapshot deque for safe iteration
         try:
              await websocket.send_text(msg)
         except:
@@ -368,8 +380,7 @@ async def websocket_endpoint(websocket: WebSocket):
     except:
         pass
     finally:
-        if websocket in clients:
-            clients.remove(websocket)
+        clients.discard(websocket)  # FIX #10: O(1) set discard, no KeyError
 
 async def broadcast_log(message):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -394,10 +405,8 @@ async def broadcast_log(message):
     except Exception as e:
         print(f"Log Write Error: {e}")
 
-    # Add to in-memory history (keep last 200)
+    # FIX #4: deque with maxlen auto-evicts oldest — no manual pop needed
     log_history.append(formatted_msg)
-    if len(log_history) > 200:
-        log_history.pop(0)
     
     # Broadcast to all connected clients
     if not clients:
@@ -405,12 +414,15 @@ async def broadcast_log(message):
     else:
          print(f"DEBUG: Broadcasting to {len(clients)} clients: {message[:30]}...")
 
-    for client in clients:
+    # FIX #10: Snapshot set, collect dead clients, remove after iteration
+    dead_clients = []
+    for client in list(clients):  # snapshot for safe iteration
         try:
             await client.send_text(formatted_msg)
         except:
-            if client in clients:
-                clients.remove(client)
+            dead_clients.append(client)
+    for dc in dead_clients:
+        clients.discard(dc)
 
 
 
@@ -621,9 +633,13 @@ async def process_symbol_technical(symbol, do_h1_update):
                   
                   await broadcast_log(f"🧠 AI STRATEGY SIGNAL: {signal_type} on {symbol} | {reason} (Conf: {confidence})")
                   
-                  # Calculate Volume (Kelly or Standard)
-                  # For now, safe standard 0.01 or use settings
-                  volume = 0.01 
+                  # FIX #7: Dynamic Volume Calculation based on account balance and risk %
+                  risk_pct = risk_settings.get("risk_per_trade_pct", 1.0)  # Default 1% risk
+                  account_balance = mt5_state.get("balance", 10000.0)
+                  risk_amount = account_balance * (risk_pct / 100.0)
+                  # Approximate: risk_amount / (contract_size * SL_distance)
+                  # Simplified: use balance-proportional sizing with floor/ceiling
+                  volume = round(max(0.01, min(risk_amount / 500.0, 0.50)), 2)
                   
                   # Execute
                   await place_market_order(symbol, signal_type, volume, strategy_tag=strategy_signal['strategy'])
@@ -845,13 +861,15 @@ async def connect_mt5(force=False):
         
     mt5_state["connected"] = True
     await broadcast_log(f"SUCCESS: MT5 Connected ({res.get('status', 'OK')})")
-    return res # Return success dict
+    
+    # FIX #2: All code below was DEAD (unreachable after return). Now executes on successful connect.
     
     # CALCULATE TIME OFFSET (Dynamic)
     try:
          # Use EURUSD as proxy for server time
-         if mt5.symbol_select("EURUSD", True):
-             tick = mt5.symbol_info_tick("EURUSD")
+         eurusd_selected = await safe_mt5_call(mt5.symbol_select, "EURUSD", True)
+         if eurusd_selected:
+             tick = await safe_mt5_call(mt5.symbol_info_tick, "EURUSD")
              if tick:
                   server_ts = tick.time
                   local_ts = datetime.now().timestamp()
@@ -867,35 +885,26 @@ async def connect_mt5(force=False):
          mt5_state["time_offset"] = 7200
 
     # Trigger state update immediately
-    if mt5.initialize(): # Quick check allowed here since executed by thread above mostly
-        account_info = mt5.account_info()
+    try:
+        account_info = await safe_mt5_call(mt5.account_info)
         if account_info:
             mt5_state["equity"] = account_info.equity
             mt5_state["balance"] = round(account_info.balance, 2)
             mt5_state["profit"] = round(account_info.profit, 2)
             
             # Fetch Open Positions
-            positions = mt5.positions_get()
+            positions = await safe_mt5_call(mt5.positions_get)
             mt5_state["positions"] = []
 
             # FIRE OFF DEEP SYNC (Background)
-            loop.call_later(2.0, lambda: asyncio.create_task(run_deep_history_sync(days=3)))
+            asyncio.get_running_loop().call_later(2.0, lambda: asyncio.create_task(run_deep_history_sync(days=3)))
             
-            # Auto-calculate offset if possible, or use fixed
-            # We observed Server is ~2h (7200s) ahead of Local. 
-            # To show Local Time, we subtract 7200s.
             time_offset = mt5_state.get("time_offset", 7200)
             
             if positions:
                 for pos in positions:
-                    # Adjust time to be Local-relative
-                    # Note: pos.time is usually timestamp INT. 
                     local_ts = pos.time - time_offset
-                    time_str = str(datetime.fromtimestamp(local_ts))
                     
-                    # Ensure DB tracks this open position
-                    # financial_db.save_trade(pos.ticket, pos.symbol, "BUY" if pos.type==0 else "SELL", pos.volume, pos.price_open, time_str)
-
                     # Calculate standardized ROI for frontend
                     comm = getattr(pos, 'commission', 0.0)
                     swap = getattr(pos, 'swap', 0.0)
@@ -915,24 +924,19 @@ async def connect_mt5(force=False):
                     })
             
             # 4. Check Margin Mode (Netting vs Hedging)
-            account = mt5.account_info()
             mode = "UNKNOWN"
-            if account:
-                if account.margin_mode == mt5.ACCOUNT_MARGIN_MODE_RETAIL_NETTING: mode = "NETTING"
-                elif account.margin_mode == mt5.ACCOUNT_MARGIN_MODE_EXCHANGE: mode = "EXCHANGE"
-                elif account.margin_mode == mt5.ACCOUNT_MARGIN_MODE_RETAIL_HEDGING: mode = "HEDGING"
+            if account_info.margin_mode == mt5.ACCOUNT_MARGIN_MODE_RETAIL_NETTING: mode = "NETTING"
+            elif account_info.margin_mode == mt5.ACCOUNT_MARGIN_MODE_EXCHANGE: mode = "EXCHANGE"
+            elif account_info.margin_mode == mt5.ACCOUNT_MARGIN_MODE_RETAIL_HEDGING: mode = "HEDGING"
                 
-            print(f"INFO: MT5 Connected. Account: {account.login} ({mode}, {account.currency}) Balance: {account.balance}")
-            await broadcast_log(f"INFO: MT5 Connected. Account: {account.login} ({mode})")
+            print(f"INFO: MT5 Connected. Account: {account_info.login} ({mode}, {account_info.currency}) Balance: {account_info.balance}")
+            await broadcast_log(f"INFO: MT5 Connected. Account: {account_info.login} ({mode})")
         else:
             await broadcast_log("INFO: MT5 Connected (No account info)")
-        
-        return {"msg": "Connected to Real MT5"}
-    else:
-        # No Mock Fallback - Strict Real Data Only
-        mt5_state["connected"] = False
-        await broadcast_log("ERROR: MT5 Library missing or Connection Failed. Cannot trade.")
-        return {"error": "MT5 Not Connected"}
+    except Exception as e:
+        print(f"Post-connect state update error: {e}")
+    
+    return res
 
 
 
@@ -940,10 +944,10 @@ async def connect_mt5(force=False):
 # Helper: Check Market Status
 def is_market_open():
     """Checks if market is open and trading is allowed."""
+    # FIX #12: Use UTC to avoid local timezone issues on non-UTC systems
     # 1. Check Weekend (Saturday=5, Sunday=6)
     # Note: Market usually closes Friday 5PM EST and opens Sunday 5PM EST.
-    # Simple check: If Saturday or Sunday (UTC/Local depending on sys), block.
-    now = datetime.now()
+    now = datetime.utcnow()
     if now.weekday() >= 5: 
         mt5_state["market_status"] = "CLOSED_WEEKEND"
         return False
@@ -999,12 +1003,14 @@ def validate_entry(symbol, signal, tick, strategy_tag="General"):
         return False, "MT5 Disconnected"
 
     # 3. Data Freshness (< 5s)
-    # Note: tick.time_msc is int epoch ms. datetime.now().timestamp() is float seconds.
-    # We compare in seconds.
-    server_time = tick.time # timestamp in seconds
+    # FIX #8: Account for time_offset between server and local clock.
+    # tick.time is in server epoch seconds; we convert to local epoch for comparison.
+    time_offset = mt5_state.get("time_offset", 0)
+    server_time_as_local = tick.time - time_offset  # Convert server time to local epoch
     local_time = datetime.now().timestamp()
-    if (local_time - server_time) > 5.0:
-        return False, f"Stale Data (Lag: {local_time - server_time:.2f}s)"
+    data_age = abs(local_time - server_time_as_local)
+    if data_age > 5.0:
+        return False, f"Stale Data (Lag: {data_age:.2f}s)"
 
     # 3.5. SYMBOL PERMISSIONS (Fix for 10017)
     # We need to fetch symbol info to check trade mode
@@ -1068,6 +1074,14 @@ def validate_entry(symbol, signal, tick, strategy_tag="General"):
                     return False, f"RSI Oversold ({tech['rsi']:.1f})"
                 if tech["trend"] == "BULLISH":
                      return False, f"Trend is BULLISH (Price > EMA50)"
+    elif not risk_settings.get("use_technical_filters", True):
+        # FIX #9: Even with filters disabled, enforce minimum safety checks
+        # Global sentiment still applies as a baseline guardrail
+        global_sent = mt5_state.get("sentiment", "NEUTRAL")
+        if signal == "BUY" and global_sent == "BEARISH":
+            return False, f"Against Global Sentiment ({global_sent}) [Filters OFF]"
+        if signal == "SELL" and global_sent == "BULLISH":
+            return False, f"Against Global Sentiment ({global_sent}) [Filters OFF]"
     
     # 5. Spread Check
     if tick.ask > 0:
@@ -1185,36 +1199,35 @@ async def place_market_order(symbol: str, action: str, volume: float = 0.01, str
     # 3. Request
     point = symbol_info.point
     
-    # --- DYNAMIC RISK MANAGEMENT ---
-    # USER REQUEST: DISABLE INITIAL STOP LOSS (Hold until Profit)
-    # Strategy: "Only close in profit or zero".
-    # We intentionally disable the initial SL calculation to prevent realize losses from market noise.
+    # --- FIX #1: EMERGENCY BACKSTOP STOP LOSS ---
+    # Guardian handles normal exits, but we add a wide emergency SL
+    # as a safety net in case Guardian/Watchdog crashes or restarts.
+    # This prevents infinite drawdown from a single network hiccup.
+    emergency_sl_points = 500  # Default: 500 points for forex (~50 pips)
+    if "XAU" in symbol or "XAG" in symbol:
+        emergency_sl_points = 5000  # Metals: wider due to volatility
+    elif any(idx in symbol for idx in ["US30", "SP500", "NAS100", "GER30", "UK100"]):
+        emergency_sl_points = 5000  # Indices: wider
+    elif "BTC" in symbol or "ETH" in symbol or "LTC" in symbol or "XRP" in symbol:
+        emergency_sl_points = 10000  # Crypto: very wide
     
-    # max_risk = risk_settings.get("max_risk_usd", 3.00)
-    # calculated_sl_dist = calculate_max_sl_risk(symbol_info, volume, max_risk)
+    emergency_sl_dist = emergency_sl_points * point
     
-    # Force No SL (Infinite Hold)
-    sl_dist = 0.0 
+    if action == "BUY":
+        initial_sl = round(price - emergency_sl_dist, symbol_info.digits)
+    else:
+        initial_sl = round(price + emergency_sl_dist, symbol_info.digits)
     
-    # DEBUG LOG
-    await broadcast_log(f"DEBUG RISK: {symbol} Vol:{volume} | Initial SL DISABLED (Strategy: Hold Until Profit)")
-    
-    # Spread Check omitted as we have no SL to be squeezed.
+    await broadcast_log(f"DEBUG RISK: {symbol} Vol:{volume} | Emergency SL: {initial_sl} ({emergency_sl_points}pts from entry)")
          
     # TP can be standard or Risk based (1:1 minimum)
     tp_dist = 500 * point # Standard Target
-    
-    # If SL is very tight (Scalp), TP should align?
-    # Let's keep TP wide to allow "Let Winners Run" logic to work, 
-    # OR set TP to at least 1:2 R:R if possible? 
-    # For now, keep fixed TP to avoid capping upside.
 
-    initial_sl = 0.0  # FORCE ZERO (No Stop Loss — Guardian handles exits)
-    # FIX 6: Actually use the tp_dist that was calculated above (was being overridden to 0.0)
+    # FIX 6: Actually use the tp_dist that was calculated above
     if action == "BUY":
-        initial_tp = round(price + tp_dist, 5)
+        initial_tp = round(price + tp_dist, symbol_info.digits)
     else:
-        initial_tp = round(price - tp_dist, 5)
+        initial_tp = round(price - tp_dist, symbol_info.digits)
 
     request = {
         "action": mt5.TRADE_ACTION_DEAL,
@@ -1258,22 +1271,37 @@ async def place_market_order(symbol: str, action: str, volume: float = 0.01, str
 
 @app.post("/trade")
 async def execute_trade(signal: dict = Body(...)):
+    # FIX #6: Input validation on trade API
     if not mt5_state["connected"]:
         await broadcast_log("ERROR: Trade failed. MT5 not connected.")
         return {"error": "MT5 not connected"}
     
-    # Use the refactored logic via the same internal path? 
-    # Actually, let's keep the API endpoint wrapper simple and use the internal function if possible,
-    # Or just keep separate to avoid breaking changes if I missed something above.
-    # For now, I will REUSE the new function to ensure consistency.
+    action = signal.get('action', '').upper()
+    symbol = signal.get('symbol', '').upper()
+    volume = 0.01
+    try:
+        volume = float(signal.get('volume', 0.01))
+    except (ValueError, TypeError):
+        return {"error": "Invalid volume value"}
     
-    action = signal.get('action', 'ORDER').upper()
-    symbol = signal.get('symbol', 'EURUSD').upper()
-    volume = float(signal.get('volume', 0.01))
+    # Validate action is BUY or SELL only
+    if action not in ("BUY", "SELL"):
+        await broadcast_log(f"ERROR: Invalid trade action '{action}'. Must be BUY or SELL.")
+        return {"error": f"Invalid action: {action}. Must be BUY or SELL."}
+    
+    # Validate symbol format (alphanumeric, 3-10 chars)
+    import re
+    if not re.match(r'^[A-Z0-9._]{2,15}$', symbol):
+        return {"error": f"Invalid symbol format: {symbol}"}
+    
+    # Validate volume bounds (reasonable limits)
+    if volume < 0.01 or volume > 5.0:
+        await broadcast_log(f"ERROR: Volume {volume} out of bounds (0.01 - 5.0)")
+        return {"error": f"Volume {volume} out of safe range (0.01 - 5.0)"}
     
     log_msg = f"TRADE: Received Manual {action} on {symbol} (Vol: {volume})"
     print(log_msg)
-    await broadcast_log(log_msg)  # FIX 5: removed duplicate broadcast
+    await broadcast_log(log_msg)
     
     success = await place_market_order(symbol, action, volume, strategy_tag="Manual_API")
     if success:
@@ -1510,7 +1538,8 @@ async def enforce_sentiment_bias(sentiment):
 
     await broadcast_log(f"🛡️ DEFENSE: Enforcing Sentiment Bias: {sentiment}")
     
-    positions = mt5.positions_get()
+    # FIX #5: Use safe_mt5_call instead of blocking mt5.positions_get() in async context
+    positions = await safe_mt5_call(mt5.positions_get)
     if not positions: return
     
     closed_count = 0
@@ -1880,8 +1909,8 @@ def calculate_stochastic(highs, lows, closes, period=14, smooth_k=3, smooth_d=3)
 async def sanitize_old_trades():
     """
     On Startup, iterate all open trades.
-    If they have a Stop Loss enabled (SL > 0), REMOVE IT.
-    This retroactively applies the 'Hold Until Profit' strategy to old trades.
+    FIX #1 UPDATE: Only remove TIGHT stop losses that were set by old pre-update logic.
+    Preserve WIDE emergency backstop SLs (>= 200 points from entry).
     """
     # Wait for MT5 connection
     await asyncio.sleep(5) 
@@ -1889,23 +1918,31 @@ async def sanitize_old_trades():
         print("Sanitize Skipped: No Connection")
         return
 
-    print("INFO: Sanitizing Old Trades (Removing Stop Losses)...")
+    print("INFO: Sanitizing Old Trades (Checking Stop Losses)...")
     positions = await safe_mt5_call(mt5.positions_get)
     if positions:
         for pos in positions:
             if pos.sl > 0.0:
-                 print(f"Sanitizing Ticket {pos.ticket} (Removing SL {pos.sl})...")
-                 # Modify Order to set SL = 0.0
-                 request = {
-                    "action": mt5.TRADE_ACTION_SLTP,
-                    "position": pos.ticket,
-                    "symbol": pos.symbol,
-                    "sl": 0.0, # FORCE REMOVE
-                    "tp": pos.tp,
-                    "magic": 234000
-                 }
-                 await safe_mt5_call(mt5.order_send, request)
-                 await asyncio.sleep(0.1) # Throttle
+                # Calculate distance from entry to SL in points
+                sym_info = await safe_mt5_call(mt5.symbol_info, pos.symbol)
+                if sym_info:
+                    sl_distance = abs(pos.price_open - pos.sl) / sym_info.point
+                    # Only remove TIGHT SLs (< 200 points) that were from old logic
+                    # Preserve Emergency Backstop SLs (>= 200 points)
+                    if sl_distance < 200:
+                        print(f"Sanitizing Ticket {pos.ticket} (Removing tight SL {pos.sl}, dist={sl_distance:.0f}pts)...")
+                        request = {
+                            "action": mt5.TRADE_ACTION_SLTP,
+                            "position": pos.ticket,
+                            "symbol": pos.symbol,
+                            "sl": 0.0,
+                            "tp": pos.tp,
+                            "magic": 234000
+                        }
+                        await safe_mt5_call(mt5.order_send, request)
+                        await asyncio.sleep(0.1)
+                    else:
+                        print(f"Keeping emergency SL for Ticket {pos.ticket} (dist={sl_distance:.0f}pts)")
     print("INFO: Sanitize Complete.")
 
 # FIX 2: Removed two duplicate definitions of calculate_bollinger_bands (was defined 3x total)
@@ -3030,16 +3067,8 @@ async def trailing_stop_manager():
             await asyncio.sleep(1)
 
 
-@app.post("/tighten_stops")
-async def tighten_stops():
-    """AI Trigger to enter "Risk-Free" mode (Tighter Stops)."""
-    risk_settings["atr_multiplier"] = 1.2 # Tighten from 2.0 to 1.2
-    risk_settings["mode"] = "TIGHT"
-    msg = "WARNING: Market volatility detected. Profit Guardian set to TIGHT mode (Multiplier 1.2)."
-    await broadcast_log(msg)
-    save_settings() # Persist
-    return {"status": "TIGHTENED", "multiplier": 1.2}
 
+# REMOVED: Duplicate /tighten_stops endpoint (canonical version is at /tighten_stops below, line ~3228)
 
 async def run_deep_history_sync(days=30):
     """
@@ -3228,12 +3257,8 @@ async def update_auto_secure(payload: dict = Body(...)):
     return {"status": "UPDATED", "config": risk_settings["auto_secure"]}
 
 
-@app.post("/set_sentiment")
-async def set_sentiment(payload: dict = Body(...)):
-    """
-    Update Global Sentiment (BULLISH/BEARISH/NEUTRAL) from AI.
-    """
-    return {"status": "UPDATED", "sentiment": new_sentiment}
+# REMOVED: Duplicate /set_sentiment (broken — referenced undefined 'new_sentiment')
+# Canonical version is at line ~1575
 
 @app.post("/debug/force_sync")
 async def debug_force_sync():
@@ -3291,56 +3316,8 @@ async def toggle_auto(payload: dict = Body(...)):
     await broadcast_log(f"INFO: Auto-Trading {status_str}")
     return {"status": status_str, "running": enable}
 
-@app.post("/close_trade")
-async def close_single_trade_endpoint(payload: dict = Body(...)):
-    """Dashboard endpoint to close a specific trade."""
-    ticket = payload.get("ticket")
-    symbol = payload.get("symbol")
-    
-    if not ticket or not symbol:
-        return {"error": "Ticket and Symbol required"}
-        
-    await broadcast_log(f"COMMAND: Manual Close Request for {ticket}")
-    await close_position(ticket, symbol, reason="Manual Dashboard")
-    return {"status": "Processing Close"}
-
-@app.post("/close_all_trades")
-async def close_all_trades(payload: dict = Body(...)):
-    """
-    Closes ALL open positions.
-    Optionally filter by 'profitable_only' (bool).
-    """
-    profitable_only = payload.get("profitable_only", False)
-    
-    if not HAS_MT5 or not mt5_state["connected"]:
-        return {"error": "MT5 Not Connected"}
-        
-    await broadcast_log(f"COMMAND: Starting Close All (Profitable Only: {profitable_only})...")
-    
-    positions = mt5.positions_get()
-    if not positions:
-        await broadcast_log("COMMAND: Close All Completed. Total Closed: 0")
-        return {"status": "No positions to close", "closed_count": 0}
-        
-    count = 0
-    for pos in positions:
-        # Check profitability if requested
-        # Note: profit is raw profit, doesn't always include swap/commissions in 'profit' field depending on broker
-        # We'll trust pos.profit for now.
-        if profitable_only and pos.profit <= 0:
-            continue
-            
-        await broadcast_log(f"CLOSING: Ticket {pos.ticket} (Profit: {pos.profit})")
-        
-        # Call the Close Helper
-        # We await it to act sequentially (safer) or spawn tasks?
-        # Sequential is safer for "Close All" to avoid flooding broker.
-        await close_position(pos.ticket, pos.symbol, reason="Close All Command")
-        count += 1
-        await asyncio.sleep(0.05) # Tiny throttling
-        
-    await broadcast_log(f"COMMAND: Close All Completed. Total Closed: {count}")
-    return {"status": "Completed", "closed_count": count}
+# REMOVED: Duplicate /close_trade endpoint (canonical version with better validation is at line ~1422)
+# REMOVED: Duplicate /close_all_trades endpoint (canonical version with background task is at line ~1513)
 
 
 @app.get("/status")

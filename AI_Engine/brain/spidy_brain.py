@@ -11,15 +11,8 @@ from dotenv import load_dotenv
 # from langchain_core.prompts import PromptTemplate
 # from langchain_core.output_parsers import StrOutputParser
 
-# Local Brain Import
-try:
-    from local_brain import LocalBrain
-    from local_sd import local_sd_engine
-except ImportError:
-    # Handle case where file might be moved or not found relative to execution
-    sys.path.append(os.path.dirname(__file__))
-    from local_brain import LocalBrain
-    from local_sd import local_sd_engine
+# Ollama/LocalBrain removed — system uses Gemini AI only
+# local_brain.py kept as stub for backward compatibility
 
 # Import News Fetcher (Always)
 try:
@@ -67,13 +60,11 @@ class SpidyBrain:
             except Exception as e:
                  sys.stderr.write(f"[WARN] Failed to initialize Gemini: {e}\n")
         
-        # Local Backup
-        self.local_brain = LocalBrain() # Will self-check availability
         self.news_fetcher = NewsFetcher()
 
-        # Fallback if no keys and no local
-        if not self.llm_gpt and not self.gemini_models and not self.local_brain.is_available:
-            sys.stderr.write("Warning: No API Keys found and Local Brain offline. Running in MOCK mode.\\n")
+        # Warn if no AI backend at all
+        if not self.llm_gpt and not self.gemini_models:
+            sys.stderr.write("[WARN] No API Keys found. Set GOOGLE_API_KEY or OPENAI_API_KEY in .env\n")
 
     def _generate_with_retry(self, prompt_text, image=None, model_mode="turbo"):
         """
@@ -100,34 +91,22 @@ class SpidyBrain:
                     else:
                         sys.stderr.write(f"[WARN] Gemini {model_key} Error: {e}\n")
 
-        # 3. Try Local Brain (Does not support image yet, fallback to text only query)
-        if self.local_brain.is_available:
-            sys.stderr.write("[INFO] Switching to Local Brain (Ollama)...\n")
-            try:
-                if image:
-                    prompt_text += "\n[Note: User attached an image but Local Brain cannot see it. Do your best based on text.]"
-                response = self.local_brain.generate_content(prompt_text)
-                return response.text
-            except Exception as e:
-                sys.stderr.write(f"[WARN] Local Brain Error: {e}\n")
-        
-        # 4. Last Resort: GPT if available
+        # 2. Last Resort: GPT if available
         if self.llm_gpt:
              try:
                 from langchain_core.prompts import PromptTemplate
                 from langchain_core.output_parsers import StrOutputParser
-                import base64
                 
-                # Simple text fallback for now unless we implement GPT Vision here
                 if image:
-                     prompt_text += "\\n[Image attached]"
+                     prompt_text += "\n[Image attached — GPT Vision not configured]"
                 
                 prompt = PromptTemplate.from_template(prompt_text)
                 chain = prompt | self.llm_gpt | StrOutputParser()
-                return chain.invoke({}) 
+                return chain.invoke({})
              except Exception as e:
                  sys.stderr.write(f"[WARN] GPT Error: {e}\n")
 
+        sys.stderr.write("[ERROR] All AI backends exhausted. Set GOOGLE_API_KEY in .env\n")
         return None
 
     def _get_system_prompt(self, persona="cyberpunk", user_query=""):
