@@ -338,6 +338,7 @@ class SpidyBrain:
         try:
             import requests
             mt5_url = os.getenv("MT5_SERVER_URL", "http://localhost:8000")
+            bridge_headers = {"X-API-KEY": os.getenv("SPIDY_API_KEY", "spidy_secure_123")}
             
             details_str = str(details).lower()
             
@@ -347,7 +348,7 @@ class SpidyBrain:
                 
                 payload = {"profitable_only": profitable_only}
                 try:
-                    response = requests.post(f"{mt5_url}/close_all_trades", json=payload)
+                    response = requests.post(f"{mt5_url}/close_all_trades", json=payload, headers=bridge_headers)
                     if response.status_code == 200:
                         data = response.json()
                         return f"Executed Close All. Closed {data.get('closed', 0)} trades."
@@ -359,7 +360,7 @@ class SpidyBrain:
             # Check for "TIGHTEN STOPS" or "REDUCE RISK"
             if "tighten" in details_str or "reduce risk" in details_str or "guard profit" in details_str:
                 try:
-                    response = requests.post(f"{mt5_url}/tighten_stops")
+                    response = requests.post(f"{mt5_url}/tighten_stops", headers=bridge_headers)
                     if response.status_code == 200:
                         return "Profit Guardian Activated: Stops Tightened to 1.2x ATR."
                     else:
@@ -370,7 +371,7 @@ class SpidyBrain:
             # Check for "RESET RISK"
             if "reset risk" in details_str or "normal stops" in details_str:
                 try:
-                    requests.post(f"{mt5_url}/reset_stops")
+                    requests.post(f"{mt5_url}/reset_stops", headers=bridge_headers)
                     return "Risk settings reset to Standard (2.0x ATR)."
                 except:
                     return "Failed to reset risk."
@@ -383,7 +384,7 @@ class SpidyBrain:
                 
                 try:
                     payload = {"sentiment": new_sentiment}
-                    response = requests.post(f"{mt5_url}/set_sentiment", json=payload)
+                    response = requests.post(f"{mt5_url}/set_sentiment", json=payload, headers=bridge_headers)
                     if response.status_code == 200:
                         return f"Sentiment Updated to {new_sentiment}."
                     else:
@@ -424,7 +425,7 @@ class SpidyBrain:
             payload = {"action": action, "symbol": symbol, "volume": volume, "details": details}
             
             try:
-                response = requests.post(f"{mt5_url}/trade", json=payload)
+                response = requests.post(f"{mt5_url}/trade", json=payload, headers=bridge_headers)
                 if response.status_code == 200:
                     return f"Trade Signal Sent: {response.json()}"
                 else:

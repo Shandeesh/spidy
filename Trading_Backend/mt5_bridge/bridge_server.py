@@ -1,4 +1,6 @@
-from fastapi import FastAPI, Body, WebSocket, BackgroundTasks
+from fastapi import FastAPI, Body, WebSocket, BackgroundTasks, Depends, HTTPException, status, Security
+from fastapi.staticfiles import StaticFiles
+from fastapi.security import APIKeyHeader
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
@@ -226,6 +228,19 @@ async def monitor_mt5_process():
 
 app = FastAPI(lifespan=lifespan)
 
+# API Auth Setup
+from dotenv import load_dotenv
+load_dotenv(dotenv_path=os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../Shared_Data/configs/.env")))
+API_KEY = os.getenv("SPIDY_API_KEY", "spidy_secure_123")
+api_key_header = APIKeyHeader(name="X-API-KEY", auto_error=False)
+
+async def verify_api_key(api_key: str = Security(api_key_header)):
+    if api_key != API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, 
+            detail="Forbidden: Invalid or missing X-API-KEY header."
+        )
+
 # FIX #3: Restrict CORS to known local origins (was wildcard "*")
 ALLOWED_ORIGINS = [
     "http://localhost:3000",
@@ -303,7 +318,7 @@ def get_symbols():
     symbols = ["EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "USDCAD", "XAUUSD", "BTCUSD", "ETHUSD", "SP500", "US30", "NAS100"]
     return {"symbols": symbols}
 
-@app.get("/")
+@app.get("/api")
 def home():
     return {"status": "MT5 Bridge Running", "has_mt5_lib": HAS_MT5}
 
@@ -929,8 +944,15 @@ async def connect_mt5(force=False):
             elif account_info.margin_mode == mt5.ACCOUNT_MARGIN_MODE_EXCHANGE: mode = "EXCHANGE"
             elif account_info.margin_mode == mt5.ACCOUNT_MARGIN_MODE_RETAIL_HEDGING: mode = "HEDGING"
                 
-            print(f"INFO: MT5 Connected. Account: {account_info.login} ({mode}, {account_info.currency}) Balance: {account_info.balance}")
-            await broadcast_log(f"INFO: MT5 Connected. Account: {account_info.login} ({mode})")
+            # Log Sanitization: Mask Account Number
+            safe_login = str(account_info.login)
+            if len(safe_login) > 4:
+                safe_login = "*" * (len(safe_login) - 4) + safe_login[-4:]
+            else:
+                safe_login = "****"
+                
+            print(f"INFO: MT5 Connected. Account: {safe_login} ({mode}, {account_info.currency}) Balance: {account_info.balance}")
+            await broadcast_log(f"INFO: MT5 Connected. Account: {safe_login} ({mode})")
         else:
             await broadcast_log("INFO: MT5 Connected (No account info)")
     except Exception as e:
@@ -1270,7 +1292,7 @@ async def place_market_order(symbol: str, action: str, volume: float = 0.01, str
     return True
 
 @app.post("/trade")
-async def execute_trade(signal: dict = Body(...)):
+async def execute_trade(signal: dict = Body(...), api_key: str = Depends(verify_api_key)):
     # FIX #6: Input validation on trade API
     if not mt5_state["connected"]:
         await broadcast_log("ERROR: Trade failed. MT5 not connected.")
@@ -1434,7 +1456,7 @@ async def close_position(ticket: int, symbol: str, reason: str = "Manual", requi
 
 
 @app.post("/close_trade")
-async def api_close_trade(payload: dict = Body(...)):
+async def close_single_trade(payload: dict = Body(...), api_key: str = Depends(verify_api_key)):
     """API Endpoint to close a trade."""
     ticket = int(payload.get("ticket"))
     symbol = payload.get("symbol")
@@ -1511,7 +1533,7 @@ async def _process_close_all_background(profitable_only: bool, threshold: float 
     await broadcast_log(f"COMMAND: Close All Completed. Total Closed: {closed_count}")
 
 @app.post("/close_all_trades")
-async def api_close_all_trades(background_tasks: BackgroundTasks, payload: dict = Body(...)):
+async def close_all_trades_api(payload: dict = Body(...), background_tasks: BackgroundTasks = BackgroundTasks(), api_key: str = Depends(verify_api_key)):
     """
     Closes all trades match criteria (Background Task).
     payload: { "profitable_only": bool, "threshold": float }
@@ -1591,7 +1613,7 @@ async def enforce_sentiment_bias(sentiment):
 
 
 @app.post("/set_sentiment")
-async def set_sentiment(payload: dict = Body(...)):
+async def api_set_sentiment(payload: dict = Body(...), api_key: str = Depends(verify_api_key)):
     """Updates the global market sentiment (driven by AI)."""
     s = payload.get("sentiment", "NEUTRAL").upper()
     auto_trade_state["sentiment"] = s
@@ -1638,7 +1660,15 @@ def save_settings():
         with open(SETTINGS_FILE, "w") as f:
             json.dump(risk_settings, f, indent=4)
     except Exception as e:
-        print(f"Error saving settings: {e}")
+        return f"Error executing {basename}: {e}"
+
+# NEW Mount Static Files
+FRONTEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../Frontend_Dashboard/dashboard_app/out"))
+if os.path.exists(FRONTEND_DIR):
+    print(f"INFO: Mounting Static Frontend from {FRONTEND_DIR}")
+    app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+else:
+    print(f"WARN: Frontend build not found at {FRONTEND_DIR}. Run 'npm run build' in Frontend_Dashboard.")
 
 # Initialize Settings
 risk_settings = load_settings()
@@ -3217,7 +3247,7 @@ async def history_sync_manager():
             await asyncio.sleep(5)
 
 @app.post("/reset_stops")
-async def reset_stops():
+async def reset_stops(api_key: str = Depends(verify_api_key)):
     """Reset to standard risk."""
     risk_settings["atr_multiplier"] = 4.0
     risk_settings["mode"] = "STANDARD"
@@ -3226,7 +3256,7 @@ async def reset_stops():
     return {"status": "RESET", "multiplier": 2.0}
 
 @app.post("/tighten_stops")
-async def tighten_stops():
+async def tighten_stops(api_key: str = Depends(verify_api_key)):
     """Tighten risk settings (Profit Guardian TIGHT mode)."""
     risk_settings["atr_multiplier"] = 1.5 # Stricter trailing
     risk_settings["mode"] = "TIGHT"
@@ -3235,7 +3265,7 @@ async def tighten_stops():
     return {"status": "TIGHTENED", "multiplier": 1.5}
 
 @app.post("/settings/auto_secure")
-async def update_auto_secure(payload: dict = Body(...)):
+async def update_auto_secure(payload: dict = Body(...), api_key: str = Depends(verify_api_key)):
     """
     Update Auto-Secure settings.
     Payload: { "enabled": bool, "threshold": float }
@@ -3295,7 +3325,7 @@ async def debug_force_sync():
 # --- MISSING DASHBOARD ENDPOINTS ---
 
 @app.post("/toggle_auto")
-async def toggle_auto(payload: dict = Body(...)):
+async def toggle_auto(payload: dict = Body(...), api_key: str = Depends(verify_api_key)):
     """Toggles Auto-Trading On/Off."""
     enable = payload.get("enable", True)
     auto_trade_state["technical"] = technical_cache

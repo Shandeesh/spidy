@@ -26,3 +26,10 @@ brain.err
 bridge.log
 bridge.err
 *.mq5.log
+
+# Build Artifacts
+dist/
+temp_routes.txt
+build_log.txt
+
+
