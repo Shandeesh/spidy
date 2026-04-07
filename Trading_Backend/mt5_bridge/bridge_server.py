@@ -355,9 +355,181 @@ def get_history():
 def get_test():
     return {"status": "ok"}
 
-# UPGRADE 4: Daily P&L endpoint — exposes financial_db.get_daily_pnl() which had no API route
+# ══════════════════════════════════════════════════════════════════════════════
+# API INTELLIGENCE HUB ENDPOINTS
+# Powered by 10 financial & news APIs
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Lazy-load the API hub (avoids blocking server startup)
+_api_hub = None
+
+def _get_api_hub():
+    global _api_hub
+    if _api_hub is None:
+        try:
+            hub_path = os.path.abspath(os.path.join(
+                os.path.dirname(__file__), "../../AI_Engine/internet_gathering"
+            ))
+            if hub_path not in sys.path:
+                sys.path.append(hub_path)
+            from api_intelligence import get_hub
+            _api_hub = get_hub()
+        except Exception as e:
+            print(f"[Bridge] API Hub load failed: {e}")
+    return _api_hub
+
+
+@app.get("/market_news")
+async def get_market_news(limit: int = 20):
+    """
+    Returns aggregated financial & trading news from all 10 API sources.
+    Sources: Finnhub, NewsAPI, GNews, NewsData.io, WorldNewsAPI, FMP, Massive + 5 RSS feeds.
+    Returns list sorted by sentiment impact, with deduplication.
+    """
+    try:
+        hub = _get_api_hub()
+        if hub:
+            articles = hub.get_all_news(max_per_source=6)
+            agg_sentiment = hub.get_aggregate_news_sentiment()
+            return {
+                "articles": articles[:limit],
+                "aggregate_sentiment": agg_sentiment,
+                "total_sources": agg_sentiment.get("source_count", 0),
+                "total_articles": len(articles),
+                "powered_by": "10-API Intelligence Hub",
+                "timestamp": datetime.now().isoformat(),
+            }
+        else:
+            return {"error": "API Hub not available", "articles": [], "aggregate_sentiment": {}}
+    except Exception as e:
+        return {"error": str(e), "articles": []}
+
+
+@app.get("/financial_data/{symbol}")
+async def get_financial_data(symbol: str):
+    """
+    Returns real-time quote + technical indicators for a symbol.
+    Quote sources: Finnhub → TwelveData → FMP (fallback chain).
+    Technicals: RSI + MACD from TwelveData / Alpha Vantage.
+    """
+    try:
+        hub = _get_api_hub()
+        if hub:
+            # Get best available quote + technicals in one call
+            snapshot = hub.get_technical_snapshot(symbol)
+            # Also get multi-source comparison
+            multi_quotes = hub.get_multi_source_quotes(symbol)
+            return {
+                "symbol": symbol,
+                "best_quote": snapshot.get("quote"),
+                "multi_source_quotes": multi_quotes,
+                "rsi": snapshot.get("rsi"),
+                "rsi_signal": snapshot.get("rsi_signal", "NEUTRAL"),
+                "macd": snapshot.get("macd"),
+                "macd_signal": snapshot.get("macd_signal", "NEUTRAL"),
+                "updated": snapshot.get("updated"),
+                "timestamp": datetime.now().isoformat(),
+            }
+        else:
+            return {"error": "API Hub not available", "symbol": symbol}
+    except Exception as e:
+        return {"error": str(e), "symbol": symbol}
+
+
+@app.get("/economic_calendar_api")
+async def get_economic_calendar_api(hours_ahead: int = 24):
+    """
+    Returns upcoming economic events from FMP API (primary) or ForexFactory RSS (fallback).
+    More detailed than the MT5-only calendar — includes actual/estimate/previous values.
+    """
+    try:
+        hub = _get_api_hub()
+        if hub:
+            events = hub.get_economic_calendar()
+            # Filter by hours_ahead
+            now = datetime.utcnow()
+            filtered = []
+            for ev in events:
+                try:
+                    ev_dt = datetime.strptime(ev.get("date", "")[:19], "%Y-%m-%d %H:%M:%S")
+                    if (ev_dt - now).total_seconds() / 3600 <= hours_ahead:
+                        filtered.append(ev)
+                except Exception:
+                    filtered.append(ev)  # Include if date parse fails
+            return {
+                "events": filtered,
+                "total": len(filtered),
+                "hours_ahead": hours_ahead,
+                "source": "Financial Modeling Prep",
+                "timestamp": datetime.now().isoformat(),
+            }
+        else:
+            return {"error": "API Hub not available", "events": []}
+    except Exception as e:
+        return {"error": str(e), "events": []}
+
+
+@app.get("/api_status")
+async def get_api_status():
+    """
+    Returns the configuration status of all 10 integrated APIs.
+    Use this to verify which APIs are active ond which need keys.
+    """
+    try:
+        hub = _get_api_hub()
+        if hub:
+            health = hub.get_api_health()
+            # Add count of configured vs missing
+            total = 0
+            configured = 0
+            for category, apis in health.items():
+                if isinstance(apis, dict):
+                    for api, status in apis.items():
+                        total += 1
+                        if status == "configured":
+                            configured += 1
+            health["summary"] = {
+                "total_apis": total,
+                "configured": configured,
+                "missing": total - configured,
+                "coverage_pct": round((configured / total) * 100) if total > 0 else 0,
+            }
+            return health
+        else:
+            return {"error": "API Hub not available"}
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.get("/market_intelligence")
+async def get_market_intelligence():
+    """
+    Returns combined market intelligence: Fear & Greed + News Sentiment + Economic Events.
+    Now powered by the full 10-API hub for maximum accuracy.
+    """
+    try:
+        # Try API-powered intelligence first
+        hub = _get_api_hub()
+        if hub:
+            # Lazy import market_intelligence module
+            mi_path = os.path.abspath(os.path.join(
+                os.path.dirname(__file__), "../../AI_Engine/internet_gathering"
+            ))
+            if mi_path not in sys.path:
+                sys.path.append(mi_path)
+            from market_intelligence import get_market_pulse
+            pulse = get_market_pulse()
+            return pulse
+        else:
+            return {"error": "Market Intelligence unavailable", "macro_bias": "NEUTRAL"}
+    except Exception as e:
+        return {"error": str(e), "macro_bias": "NEUTRAL"}
+
+
+# UPGRADE 4: Daily P&L endpoint
 @app.get("/pnl")
 def get_daily_pnl_endpoint():
+
     """Returns the total realized P&L for the current trading day."""
     try:
         pnl = financial_db.get_daily_pnl()
@@ -1660,7 +1832,8 @@ def save_settings():
         with open(SETTINGS_FILE, "w") as f:
             json.dump(risk_settings, f, indent=4)
     except Exception as e:
-        return f"Error executing {basename}: {e}"
+        print(f"[Settings] Error saving to {SETTINGS_FILE}: {e}")
+
 
 # NEW Mount Static Files
 FRONTEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../Frontend_Dashboard/dashboard_app/out"))

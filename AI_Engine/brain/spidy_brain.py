@@ -14,14 +14,21 @@ from dotenv import load_dotenv
 # Ollama/LocalBrain removed — system uses Gemini AI only
 # local_brain.py kept as stub for backward compatibility
 
-# Import News Fetcher (Always)
+# Import News Fetcher and API Intelligence Hub
 try:
     sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../internet_gathering")))
     from news_fetcher import NewsFetcher
 except ImportError:
     print("Warning: Could not import NewsFetcher.")
-    class NewsFetcher: # Mock fallback to prevent crash
+    class NewsFetcher:
         def get_latest_headlines(self): return []
+
+_api_hub = None
+try:
+    from api_intelligence import get_hub as _get_api_hub
+    _api_hub = _get_api_hub()
+except Exception as _e:
+    print(f"[SpidyBrain] API Hub unavailable: {_e}")
 
 # Load environment variables
 load_dotenv(dotenv_path=os.path.abspath(os.path.join(os.path.dirname(__file__), "../../Shared_Data/configs/.env")))
@@ -220,15 +227,24 @@ class SpidyBrain:
             
             # --- CONTEXT INJECTION START ---
             market_context = ""
-            if "market" in user_query.lower() or "price" in user_query.lower() or "eurusd" in user_query.lower() or "trend" in user_query.lower():
-                 market_context = self._fetch_market_context()
-                 if market_context:
-                     market_context = f"\n\n[REAL-TIME MARKET DATA]:\n{market_context}\n\n"
+            trading_keywords = ["market", "price", "eurusd", "gbpusd", "xauusd", "trend",
+                                "trade", "buy", "sell", "forex", "crypto", "stock", "rsi",
+                                "signal", "sentiment", "news", "analysis"]
+            if any(kw in user_query.lower() for kw in trading_keywords):
+                 # Try rich API context first (10-source)
+                 api_context = self._fetch_api_market_context()
+                 if api_context:
+                     market_context = f"\n\n[REAL-TIME MARKET INTELLIGENCE (10 APIs)]:\n{api_context}\n\n"
+                 else:
+                     # Fallback: MT5 bridge status
+                     market_context = self._fetch_market_context()
+                     if market_context:
+                         market_context = f"\n\n[REAL-TIME MARKET DATA]:\n{market_context}\n\n"
                  
                  news_context = self._fetch_news_context()
                  if news_context:
                       if not market_context: market_context = ""
-                      market_context += f"\n[GLOBAL NEWS SENTIMENT]:\n{news_context}\n\n"
+                      market_context += f"\n[GLOBAL NEWS SENTIMENT (10 sources)]:\n{news_context}\n\n"
                       
                       # --- AUTO-SYNC SENTIMENT TO BRIDGE ---
                       try:
@@ -562,17 +578,30 @@ class SpidyBrain:
         return None
 
     def _fetch_news_context(self):
-        """Fetches news headlines."""
+        """Fetches news headlines — enriched with API sources when available."""
         try:
-             headlines = self.news_fetcher.get_latest_headlines()
-             if headlines:
-                 summary = ""
-                 for h in headlines[:3]: # Top 3
-                     summary += f"- {h['title']} ({h['sentiment']})\n"
-                 return summary
-        except Exception as e:
-            return None
+            headlines = self.news_fetcher.get_latest_headlines()
+            if headlines:
+                summary = ""
+                for h in headlines[:5]:  # Top 5 (was 3)
+                    src = h.get('source_key', h.get('source', '?'))[:12]
+                    summary += f"- [{src.upper()}] {h['title']} ({h['sentiment']})\n"
+                return summary
+        except Exception:
+            pass
         return None
+
+    def _fetch_api_market_context(self, symbol: str = "EURUSD") -> str:
+        """
+        Fetches rich market context from the 10-API intelligence hub.
+        Returns a natural-language string ready for LLM injection.
+        """
+        if _api_hub is None:
+            return ""
+        try:
+            return _api_hub.get_market_context_for_ai(symbol)
+        except Exception as e:
+            return ""
 
 if __name__ == "__main__":
     # Test execution
