@@ -39,13 +39,14 @@ except ImportError:
     HAS_MT5 = False
     print("CRITICAL: MetaTrader5 module not found. Please install it.")
 
-# DEBUG: Startup Logging
-with open("bridge_startup.log", "w") as f:
-    f.write(f"Startup Time: {datetime.now()}\n")
-    f.write(f"Python Executable: {sys.executable}\n")
-    f.write(f"HAS_MT5: {HAS_MT5}\n")
-    f.write(f"CWD: {os.getcwd()}\n")
-
+# P4 FIX: Gate debug startup log behind DEBUG_MODE env var to stop log file leaking on every launch.
+# Set DEBUG_MODE=1 in .env to re-enable for troubleshooting.
+if os.getenv("DEBUG_MODE", "0") == "1":
+    with open("bridge_startup.log", "w") as f:
+        f.write(f"Startup Time: {datetime.now()}\n")
+        f.write(f"Python Executable: {sys.executable}\n")
+        f.write(f"HAS_MT5: {HAS_MT5}\n")
+        f.write(f"CWD: {os.getcwd()}\n")
 
 
 from contextlib import asynccontextmanager
@@ -231,13 +232,35 @@ app = FastAPI(lifespan=lifespan)
 # API Auth Setup
 from dotenv import load_dotenv
 load_dotenv(dotenv_path=os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../Shared_Data/configs/.env")))
-API_KEY = os.getenv("SPIDY_API_KEY", "spidy_secure_123")
+
+# P8 FIX: Attempt to load API key from encrypted store (cipher_suite.py).
+# Falls back transparently to plaintext .env value if encryption not configured.
+_API_KEY_RAW = os.getenv("SPIDY_API_KEY", "spidy_secure_123")
+try:
+    import sys as _sys
+    _sec_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../Security_Module/encryption_utils"))
+    if _sec_path not in _sys.path:
+        _sys.path.insert(0, _sec_path)
+    from cipher_suite import SpidyCipher
+    _key_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../Shared_Data/configs/secret.key"))
+    _cipher = SpidyCipher(key_path=_key_file)
+    # Only attempt decrypt if value looks encrypted (Fernet tokens are ~176+ chars)
+    if len(_API_KEY_RAW) > 100:
+        API_KEY = _cipher.decrypt_data(_API_KEY_RAW)
+        print("INFO: API key loaded from encrypted store.")
+    else:
+        API_KEY = _API_KEY_RAW  # Plaintext — use as-is
+except Exception as _e:
+    # cipher_suite unavailable or key file missing — safe fallback
+    API_KEY = _API_KEY_RAW
+    print(f"INFO: Using plaintext API key (cipher unavailable: {_e})")
+
 api_key_header = APIKeyHeader(name="X-API-KEY", auto_error=False)
 
 async def verify_api_key(api_key: str = Security(api_key_header)):
     if api_key != API_KEY:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, 
+            status_code=status.HTTP_403_FORBIDDEN,
             detail="Forbidden: Invalid or missing X-API-KEY header."
         )
 
@@ -286,18 +309,11 @@ async def safe_mt5_call(func, *args, **kwargs):
     loop = asyncio.get_running_loop()
     return await loop.run_in_executor(None, lambda: func(*args, **kwargs))
 
-# Load history from file on startup
+# P6 FIX: Removed system_logs.txt disk-read on startup.
+# system_logs.txt contains sensitive account/trade data and was read into memory on every boot.
+# log_history is a deque(maxlen=200) — it accumulates logs purely in-memory during the session.
+# The /logs/download endpoint will serve from the in-memory buffer directly (no disk file needed).
 
-try:
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    log_file_path = os.path.join(current_dir, "system_logs.txt")
-    if os.path.exists(log_file_path):
-        with open(log_file_path, "r", encoding="utf-8") as f:
-            lines = f.readlines()
-            log_history.extend([line.strip() for line in lines[-50:]])
-            print(f"INFO: Loaded {len(log_history)} logs from history.")
-except Exception as e:
-    print(f"WARN: Could not load log history: {e}")
 
 
 # Concurrency Control
@@ -318,36 +334,81 @@ def get_symbols():
     symbols = ["EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "USDCAD", "XAUUSD", "BTCUSD", "ETHUSD", "SP500", "US30", "NAS100"]
     return {"symbols": symbols}
 
+
+# P2 FIX: /candles endpoint — was listed as missing in the audit; frontend uses this for chart data.
+@app.get("/candles")
+async def get_candles(symbol: str = "EURUSD", timeframe: str = "M15", count: int = 100):
+    """
+    Returns OHLCV candlestick data for a given symbol and timeframe.
+    Used by the frontend TradingDashboard chart component.
+
+    Query params:
+      symbol    — MT5 symbol name, e.g. EURUSD (default: EURUSD)
+      timeframe — M1 | M5 | M15 | M30 | H1 | H4 | D1 (default: M15)
+      count     — number of candles to return, max 500 (default: 100)
+    """
+    if not HAS_MT5 or not mt5_state.get("connected"):
+        return {"error": "MT5 not connected", "candles": []}
+
+    # Map string → MT5 timeframe constant
+    TF_MAP = {
+        "M1":  mt5.TIMEFRAME_M1,  "M5":  mt5.TIMEFRAME_M5,
+        "M15": mt5.TIMEFRAME_M15, "M30": mt5.TIMEFRAME_M30,
+        "H1":  mt5.TIMEFRAME_H1,  "H4":  mt5.TIMEFRAME_H4,
+        "D1":  mt5.TIMEFRAME_D1,
+    } if HAS_MT5 else {}
+
+    tf = TF_MAP.get(timeframe.upper())
+    if tf is None:
+        return {"error": f"Unknown timeframe '{timeframe}'. Use M1/M5/M15/M30/H1/H4/D1.", "candles": []}
+
+    count = max(1, min(count, 500))  # Clamp to [1, 500]
+
+    try:
+        rates = await safe_mt5_call(mt5.copy_rates_from_pos, symbol.upper(), tf, 0, count)
+        if rates is None or len(rates) == 0:
+            return {"error": f"No data returned for {symbol}/{timeframe}", "candles": []}
+
+        candles = [
+            {
+                "time":   int(r["time"]),
+                "open":   float(r["open"]),
+                "high":   float(r["high"]),
+                "low":    float(r["low"]),
+                "close":  float(r["close"]),
+                "volume": int(r["tick_volume"]),
+            }
+            for r in rates
+        ]
+        return {
+            "symbol":    symbol.upper(),
+            "timeframe": timeframe.upper(),
+            "count":     len(candles),
+            "candles":   candles,
+        }
+    except Exception as e:
+        return {"error": str(e), "candles": []}
+
+
 @app.get("/api")
 def home():
     return {"status": "MT5 Bridge Running", "has_mt5_lib": HAS_MT5}
 
 @app.get("/logs/download")
-def download_logs():
-    """Download the system logs file."""
-    # Use absolute path relative to this script
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    file_path = os.path.join(current_dir, "system_logs.txt")
-    
-    # If file doesn't exist but we have memory logs, dump them first
-    if not os.path.exists(file_path) and log_history:
-        try:
-            with open(file_path, "w", encoding="utf-8") as f:
-                for line in log_history:
-                    f.write(line + "\n")
-        except Exception as e:
-            print(f"Failed to dump buffer to file: {e}")
+async def download_logs(api_key: str = Depends(verify_api_key)):
+    """P1 FIX: Download session logs — now requires API key auth (logs contain account data).
+    P6 FIX: Serves from in-memory ring buffer only — no disk file with sensitive data."""
+    if not log_history:
+        return {"error": "No logs captured this session yet."}
+    text = "\n".join(log_history)
+    from fastapi.responses import PlainTextResponse
+    return PlainTextResponse(content=text, media_type="text/plain",
+                             headers={"Content-Disposition": 'attachment; filename="session_logs.txt"'})
 
-    if os.path.exists(file_path):
-        return FileResponse(file_path, media_type='text/plain', filename="system_logs.txt")
-    else:
-        return {"error": "No logs available yet."}
-
-print("DEBUG: Registering /history endpoint...")
+print("INFO: Registering /history endpoint...")
 @app.get("/history")
-def get_history():
-    """Returns trade history from the database."""
-    # INCREASED LIMIT TO 1000
+async def get_history(api_key: str = Depends(verify_api_key)):
+    """P1 FIX: Returns trade history — now requires API key auth (contains sensitive PnL data)."""
     history = financial_db.get_trade_history(limit=1000)
     return {"history": history}
 
@@ -1024,8 +1085,8 @@ def _connect_mt5_logic(force=False, loop=None):
     return {"status": "CONNECTED"}
 
 @app.post("/connect")
-async def connect_mt5_endpoint():
-    """Manual Reconnect Trigger - Forces Restart."""
+async def connect_mt5_endpoint(api_key: str = Depends(verify_api_key)):
+    """P1 FIX: Manual Reconnect — now requires API key auth (was open, allowing unauthenticated reconnects)."""
     return await connect_mt5(force=True)
 
 async def connect_mt5(force=False):
@@ -1928,8 +1989,10 @@ async def update_spider_web(symbols, shared_ticks=None):
                 "type_time": mt5.ORDER_TIME_DAY,
                 "type_filling": get_filling_mode(symbol),  # FIX 8: use broker-correct filling mode
             }
-            mt5.order_send(request)
-            
+            # P3 FIX: Pending order placement via executor — keeps event loop free.
+            _req_buy = request
+            await asyncio.get_event_loop().run_in_executor(None, lambda: mt5.order_send(_req_buy))
+
         # B. Place SELL LIMIT if missing (Web Ceiling)
         if not sell_limits and allow_sell:
             request = {
@@ -1945,7 +2008,9 @@ async def update_spider_web(symbols, shared_ticks=None):
                 "type_time": mt5.ORDER_TIME_DAY,
                 "type_filling": get_filling_mode(symbol),  # FIX 8: use broker-correct filling mode
             }
-            mt5.order_send(request)
+            # P3 FIX: Wrap in executor so the spider-web sell-limit order doesn't block the event loop.
+            _req_sell = request
+            await asyncio.get_event_loop().run_in_executor(None, lambda: mt5.order_send(_req_sell))
 
 
 def calculate_atr(rates, period=14):
@@ -3464,8 +3529,8 @@ async def update_auto_secure(payload: dict = Body(...), api_key: str = Depends(v
 # Canonical version is at line ~1575
 
 @app.post("/debug/force_sync")
-async def debug_force_sync():
-    """Manually trigger history sync."""
+async def debug_force_sync(api_key: str = Depends(verify_api_key)):
+    """P1 FIX: Force history sync — now requires API key auth."""
     if not HAS_MT5 or not mt5_state["connected"]:
         return {"error": "MT5 Not Connected"}
         
@@ -3628,30 +3693,9 @@ def get_status():
 
 
 
-# ── NEW: Market Intelligence Endpoint ────────────────────────────────────────
-@app.get("/market_intelligence")
-async def get_market_intelligence_endpoint():
-    """
-    Returns Fear & Greed Index + upcoming economic events + macro trading bias.
-    Called by the Frontend MarketIntelligence panel every 30s.
-    """
-    if not HAS_MARKET_INTEL:
-        return {"error": "Market Intelligence module not available", "fear_greed": {"score": 50, "label": "Neutral"}, "next_high_impact_event": {}}
 
-    try:
-        pulse = await asyncio.to_thread(get_market_pulse)
-        # Also pull top headlines if news engine is active
-        headlines = []
-        if HAS_NEWS:
-            try:
-                raw = await asyncio.to_thread(news_engine.get_latest_headlines)
-                headlines = raw[:5]  # Top 5 for the UI panel
-            except Exception:
-                pass
-        pulse["top_headlines"] = headlines
-        return pulse
-    except Exception as e:
-        return {"error": str(e)}
+# P5 FIX: Duplicate /market_intelligence removed here.
+# The canonical version (API-hub powered) is registered at line ~504.
 
 
 # ── NEW: Analytics Endpoint ───────────────────────────────────────────────────
@@ -3703,6 +3747,24 @@ async def get_analytics_endpoint():
         }
     except Exception as e:
         return {"error": str(e)}
+
+
+# P7 FIX: Strategy hot-reload endpoint.
+@app.post("/reload_strategy")
+async def reload_strategy(api_key: str = Depends(verify_api_key)):
+    """
+    Hot-reloads the StrategyManager configuration from disk without restarting the server.
+    Call this after editing strategy_config.json to apply new parameters immediately.
+    """
+    try:
+        global strategy_manager
+        strategy_manager = StrategyManager()  # Re-instantiate to pick up any config changes
+        loaded = len(strategy_manager.strategies) if hasattr(strategy_manager, 'strategies') else 'N/A'
+        msg = f"StrategyManager reloaded successfully. Strategies loaded: {loaded}"
+        await broadcast_log(f"INFO: {msg}")
+        return {"status": "reloaded", "detail": msg}
+    except Exception as e:
+        return {"status": "error", "detail": str(e)}
 
 
 if __name__ == "__main__":
