@@ -20,16 +20,60 @@ build/
 .vscode/
 .idea/
 
-# Spidy Specific
+# Spidy Core Logs (contain sensitive account data - never commit)
 brain.log
 brain.err
 bridge.log
 bridge.err
 *.mq5.log
+system_logs.txt
 
 # Build Artifacts
 dist/
 temp_routes.txt
 build_log.txt
 
+# Debug & Diagnostic Artifacts (root)
+bridge_debug.log
+bridge_debug.err
+bridge_launch_debug.txt
+bridge_startup.log
+launcher_debug.log
+launch_debug.txt
+debug_results_utf8.txt
+debug_run.txt
+mt5_launch_test.log
+strategy_verification_log.txt
+strategy_verification_results.txt
+verification_output.txt
+verification_result.txt
+tmp_test_roi.log
+startup_crash.txt
+crash.log
 
+# MT5 Bridge Debug Artifacts
+Trading_Backend/mt5_bridge/crash.log
+Trading_Backend/mt5_bridge/debug_log.txt
+Trading_Backend/mt5_bridge/debug_logs.txt
+Trading_Backend/mt5_bridge/debug_output.txt
+Trading_Backend/mt5_bridge/debug_run.txt
+Trading_Backend/mt5_bridge/debug_results_utf8.txt
+Trading_Backend/mt5_bridge/diagnosis_report.txt
+Trading_Backend/mt5_bridge/error_log.txt
+Trading_Backend/mt5_bridge/event_log_dump.txt
+Trading_Backend/mt5_bridge/history_dump.json
+Trading_Backend/mt5_bridge/launch_debug.txt
+Trading_Backend/mt5_bridge/startup_crash.txt
+Trading_Backend/mt5_bridge/startup_error.log
+Trading_Backend/mt5_bridge/strategy_report.txt
+Trading_Backend/mt5_bridge/sxs_detailed.csv
+Trading_Backend/mt5_bridge/sxs_errors.txt
+Trading_Backend/mt5_bridge/system_logs.txt
+Trading_Backend/mt5_bridge/tail_logs.txt
+Trading_Backend/mt5_bridge/verify_output.txt
+Trading_Backend/mt5_bridge/bridge_startup.log
+Trading_Backend/mt5_bridge/bridge_startup.log
+
+# Wildcard patterns for any log/err/txt debug output
+*.err
+*.log

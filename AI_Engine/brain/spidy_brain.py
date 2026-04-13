@@ -73,6 +73,21 @@ class SpidyBrain:
         if not self.llm_gpt and not self.gemini_models:
             sys.stderr.write("[WARN] No API Keys found. Set GOOGLE_API_KEY or OPENAI_API_KEY in .env\n")
 
+    def _get_mt5_url(self) -> str:
+        """
+        FIX: Returns a validated MT5 bridge URL.
+        Logs a warning and falls back to localhost if the env var is malformed.
+        """
+        import re as _re
+        raw = os.getenv("MT5_SERVER_URL", "http://localhost:8000").strip()
+        if not _re.match(r'^https?://', raw):
+            sys.stderr.write(
+                f"[WARN] MT5_SERVER_URL is invalid ('{raw}'). "
+                "Falling back to http://localhost:8000\n"
+            )
+            return "http://localhost:8000"
+        return raw
+
     def _generate_with_retry(self, prompt_text, image=None, model_mode="turbo"):
         """
         Attempts to generate content with fallback logic.
@@ -255,9 +270,9 @@ class SpidyBrain:
                           if "(positive)" in news_context: agg_sentiment = "BULLISH"
                           elif "(negative)" in news_context: agg_sentiment = "BEARISH"
                           
-                          # Push to Bridge
+                          # FIX: Use validated URL via helper (see _get_mt5_url)
                           import requests
-                          mt5_url = os.getenv("MT5_SERVER_URL", "http://localhost:8000")
+                          mt5_url = self._get_mt5_url()
                           requests.post(f"{mt5_url}/set_sentiment", json={"sentiment": agg_sentiment}, timeout=1)
                       except:
                           pass
@@ -353,7 +368,17 @@ class SpidyBrain:
         """Sends a trade signal to the MT5 Bridge."""
         try:
             import requests
-            mt5_url = os.getenv("MT5_SERVER_URL", "http://localhost:8000")
+            import re as _re
+
+            # FIX: Validate MT5_SERVER_URL before use.
+            # A malformed env var would silently send requests to a garbage URL.
+            _raw_url = os.getenv("MT5_SERVER_URL", "http://localhost:8000").strip()
+            if not _re.match(r'^https?://', _raw_url):
+                sys.stderr.write(f"[WARN] MT5_SERVER_URL is invalid ('{_raw_url}'). Falling back to http://localhost:8000\n")
+                mt5_url = "http://localhost:8000"
+            else:
+                mt5_url = _raw_url
+
             bridge_headers = {"X-API-KEY": os.getenv("SPIDY_API_KEY", "spidy_secure_123")}
             
             details_str = str(details).lower()
@@ -395,8 +420,8 @@ class SpidyBrain:
             # Check for SENTIMENT / BIAS
             if "sentiment" in details_str or "market mood" in details_str or "bias" in details_str:
                 new_sentiment = "NEUTRAL"
-                if "bull" in details_str or "long" in details_str: new_sentiment = "BULLISH"
-                elif "bear" in details_str or "short" in details_str: new_sentiment = "BEARISH"
+                if _re.search(r'\bbull\b', details_str) or _re.search(r'\blong\b', details_str): new_sentiment = "BULLISH"
+                elif _re.search(r'\bbear\b', details_str) or _re.search(r'\bshort\b', details_str): new_sentiment = "BEARISH"
                 
                 try:
                     payload = {"sentiment": new_sentiment}
@@ -416,9 +441,10 @@ class SpidyBrain:
             symbol = "EURUSD"
             volume = 0.01
 
-            # Detect Action
-            if "buy" in details_str: action = "BUY"
-            elif "sell" in details_str: action = "SELL"
+            # FIX: Use word-boundary regex to avoid false matches:
+            # "buy" would previously match "buyout", "buy-back", "buyback" etc.
+            if re.search(r'\bbuy\b', details_str): action = "BUY"
+            elif re.search(r'\bsell\b', details_str): action = "SELL"
             
             # Detect Symbol (Looking for patterns like EURUSD, XAUUSD of 6 chars)
             # Simple heuristic: Look for common pairs or 6-letter uppercase words in the original details (not lower)

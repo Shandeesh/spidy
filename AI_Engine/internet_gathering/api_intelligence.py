@@ -132,6 +132,46 @@ _cache = _Cache()
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+#  DAILY RATE LIMITER
+#  Prevents burst cold-cache calls from exhausting free-tier quotas.
+#  Alpha Vantage: 25 req/day.  MarketStack: ~100 req/month (~3 safe/day).
+# ══════════════════════════════════════════════════════════════════════════════
+class _DailyRateLimiter:
+    """
+    Thread-safe per-provider daily call counter backed by _cache (24-hour TTL).
+    If the live-call count reaches `limit`, subsequent calls return False
+    immediately so callers can skip the network request and return None.
+    Already-cached responses are always served — this only gates *cold* calls.
+    """
+    def __init__(self, provider_key: str, limit: int):
+        self._key = f"__ratelimit_{provider_key}__"
+        self._limit = limit
+        self._lock = threading.Lock()
+
+    def allow(self) -> bool:
+        """Returns True if a live call is permitted, False if quota is exhausted."""
+        with self._lock:
+            current = _cache.get(self._key) or 0
+            if current >= self._limit:
+                print(
+                    f"[APIHub] Rate-limit BLOCKED: {self._key} reached {current}/{self._limit} calls today."
+                )
+                return False
+            # Increment counter, 24-hour TTL resets at midnight (approx)
+            _cache.set(self._key, current + 1, ttl=86400)
+            return True
+
+    def current_count(self) -> int:
+        return _cache.get(self._key) or 0
+
+
+# Singletons — shared across all provider instances
+_alpha_vantage_limiter = _DailyRateLimiter("alpha_vantage", limit=24)   # 24 < 25 cap (safety margin)
+_marketstack_limiter  = _DailyRateLimiter("marketstack",   limit=3)    # 3/day keeps monthly use safe
+
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 #  HTTP HELPER
 # ══════════════════════════════════════════════════════════════════════════════
 def _get(url: str, params: dict = None, headers: dict = None, timeout: int = 8):
@@ -394,7 +434,7 @@ class _AlphaVantageProvider:
     """
     Alpha Vantage: Forex, Stocks, Crypto, Technical Indicators.
     Free: 25 req/day — used sparingly for RSI/MACD only.
-    TTL: 300s.
+    TTL: 300s.  Rate-limited via _alpha_vantage_limiter (max 24/day).
     """
     BASE = "https://www.alphavantage.co/query"
 
@@ -408,6 +448,9 @@ class _AlphaVantageProvider:
         cached = _cache.get(ck)
         if cached is not None:
             return cached
+        # RATE-LIMIT GUARD: Skip live call if daily quota is exhausted
+        if not _alpha_vantage_limiter.allow():
+            return None
         # Convert from MT5 format: EURUSD → EUR / USD
         from_sym = symbol[:3] if len(symbol) == 6 else symbol
         to_sym = symbol[3:] if len(symbol) == 6 else "USD"
@@ -435,6 +478,9 @@ class _AlphaVantageProvider:
         cached = _cache.get(ck)
         if cached is not None:
             return cached
+        # RATE-LIMIT GUARD
+        if not _alpha_vantage_limiter.allow():
+            return None
         data = _get(self.BASE, params={
             "function": "CURRENCY_EXCHANGE_RATE",
             "from_currency": from_sym,
@@ -463,6 +509,9 @@ class _AlphaVantageProvider:
         cached = _cache.get(ck)
         if cached is not None:
             return cached
+        # RATE-LIMIT GUARD
+        if not _alpha_vantage_limiter.allow():
+            return []
         data = _get(self.BASE, params={
             "function": "NEWS_SENTIMENT",
             "tickers": tickers,
@@ -633,7 +682,7 @@ class _MarketStackProvider:
     """
     MarketStack: EOD price data + limited intraday.
     Free: 100 req/month — last-resort only.
-    TTL: 3600s.
+    TTL: 3600s.  Rate-limited via _marketstack_limiter (max 3 live calls/day).
     """
     BASE = "http://api.marketstack.com/v1"
 
@@ -647,6 +696,9 @@ class _MarketStackProvider:
         cached = _cache.get(ck)
         if cached is not None:
             return cached
+        # RATE-LIMIT GUARD: MarketStack has only 100 req/month free tier
+        if not _marketstack_limiter.allow():
+            return None
         data = _get(f"{self.BASE}/eod/latest",
                     params={"access_key": self.key, "symbols": symbol, "limit": 1})
         if data and "data" in data and data["data"]:
