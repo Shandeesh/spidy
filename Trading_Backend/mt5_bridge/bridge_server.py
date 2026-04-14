@@ -21,7 +21,39 @@ import watchdog_service # START WATCHDOG MODULE
 import sys
 # Add AI_Engine to path for SentimentAnalyzer
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "AI_Engine"))
-from sentiment_analyzer import SentimentAnalyzer # SENTIMENT BRAIN
+from sentiment_analyzer import SentimentAnalyzer  # SENTIMENT BRAIN
+
+# ── F6: Security audit log ───────────────────────────────────────────────────
+try:
+    _sec_mon = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../Security_Module/security_monitor"))
+    if _sec_mon not in sys.path: sys.path.insert(0, _sec_mon)
+    from audit_log import audit_log as _audit_log
+    HAS_AUDIT = True
+except Exception as _ae:
+    HAS_AUDIT = False
+    print(f"[Bridge] Audit log unavailable: {_ae}")
+
+# ── F8: Extension Plugin Loader ──────────────────────────────────────────────
+try:
+    _ext_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../Extension_Module"))
+    if _ext_path not in sys.path: sys.path.insert(0, _ext_path)
+    from plugin_base import PluginLoader
+    HAS_PLUGINS = True
+except Exception as _pe:
+    HAS_PLUGINS = False
+    print(f"[Bridge] Plugin loader unavailable: {_pe}")
+
+# ── F5: ML Signal Classifier ─────────────────────────────────────────────────
+try:
+    _ml_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../AI_Engine/spidy_ai"))
+    if _ml_path not in sys.path: sys.path.insert(0, _ml_path)
+    from ml_bridge import get_ml_signal as _get_ml_signal
+    from signal_classifier import get_classifier as _get_classifier
+    HAS_ML = True
+except Exception as _mle:
+    HAS_ML = False
+    print(f"[Bridge] ML classifier unavailable: {_mle}")
+
 
 # Add Trading_Backend to path for InfluxDB Manager
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
@@ -106,9 +138,18 @@ async def lifespan(app: FastAPI):
             print("⚠️ InfluxDB: Running without metrics DB (optional feature)")
     except Exception as e:
         print(f"⚠️ InfluxDB: Initialization failed ({e}), continuing without metrics DB")
-    # --------------------------------
-    # --------------------------------
-    # ----------------------
+
+    # ── F8: Load Extension Plugins ────────────────────────────────────────────
+    global plugin_loader
+    plugin_loader = None
+    if HAS_PLUGINS:
+        try:
+            plugin_loader = PluginLoader()
+            print(f"[Bridge] Plugins loaded: {plugin_loader.loaded}")
+            plugin_loader.fire("on_bridge_start")
+        except Exception as _ple:
+            print(f"[Bridge] Plugin init error: {_ple}")
+    # ─────────────────────────────────────────────────────────────────────────
     
     yield
     # Shutdown logic (optional)
@@ -259,10 +300,16 @@ api_key_header = APIKeyHeader(name="X-API-KEY", auto_error=False)
 
 async def verify_api_key(api_key: str = Security(api_key_header)):
     if api_key != API_KEY:
+        # F6: record auth failure in audit log
+        if HAS_AUDIT:
+            _audit_log.record("/auth", "ANY", api_key, success=False)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Forbidden: Invalid or missing X-API-KEY header."
         )
+    # F6: record successful auth
+    if HAS_AUDIT:
+        _audit_log.record("/auth", "ANY", api_key, success=True)
 
 # FIX #3: Restrict CORS to known local origins (was wildcard "*")
 ALLOWED_ORIGINS = [
@@ -316,7 +363,9 @@ async def safe_mt5_call(func, *args, **kwargs):
 
 
 
-# Concurrency Control
+# Global plugin loader (initialized in lifespan)
+plugin_loader = None
+
 ticket_lock = threading.Lock()
 processing_tickets = set()
 
@@ -1515,14 +1564,32 @@ async def place_market_order(symbol: str, action: str, volume: float = 0.01, str
         return False
     
     await broadcast_log(f"SUCCESS: Auto-Trade {action} Filled @ {price}")
-    
+
     # Save to DB
     trade_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    # DB Save is synchronous but fast (sqlite). Can wrap if needed, but usually OK.
     current_sentiment = auto_trade_state.get("sentiment", "NEUTRAL")
     financial_db.save_trade(result.order, symbol, action, volume, price, trade_time, strategy=strategy_tag, sentiment=current_sentiment)
-    
+
+    # F4: Write trade to InfluxDB metrics
+    if influx_db and influx_db.connected:
+        try:
+            influx_db.write_trade(
+                ticket=result.order, symbol=symbol, trade_type=action,
+                volume=volume, entry_price=price, strategy=strategy_tag,
+                sentiment=current_sentiment,
+            )
+        except Exception: pass
+
+    # F8: Fire plugin event
+    if plugin_loader:
+        plugin_loader.fire(
+            "on_trade_open", symbol=symbol, action=action,
+            volume=volume, price=price, ticket=int(result.order),
+            strategy=strategy_tag,
+        )
+
     return True
+
 
 @app.post("/trade")
 async def execute_trade(signal: dict = Body(...), api_key: str = Depends(verify_api_key)):
@@ -3689,6 +3756,9 @@ def get_status():
         "sell_count": sum(1 for p in positions if p.get("type") == "SELL"),
     }
         
+    # F4: Write account performance metrics to InfluxDB (throttled, max 1/30s)
+    _maybe_write_influx_performance()
+
     return mt5_state
 
 
@@ -3765,6 +3835,215 @@ async def reload_strategy(api_key: str = Depends(verify_api_key)):
         return {"status": "reloaded", "detail": msg}
     except Exception as e:
         return {"status": "error", "detail": str(e)}
+
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# F5 — ML SIGNAL ENDPOINTS
+# ══════════════════════════════════════════════════════════════════════════════
+
+@app.get("/ml_signal")
+async def get_ml_signal_endpoint(symbol: str = "EURUSD", action: str = "BUY"):
+    """
+    F5: Returns an ML-augmented signal prediction for a proposed trade.
+    Uses a RandomForest classifier trained on historical trade outcomes.
+
+    Query params:
+      symbol — trading symbol (default: EURUSD)
+      action — intended direction: BUY or SELL (default: BUY)
+
+    Returns:
+      signal, win_probability, confidence, trained (bool)
+    """
+    if not HAS_ML:
+        return {
+            "symbol":          symbol,
+            "action":          action,
+            "signal":          action,
+            "win_probability": 0.5,
+            "confidence":      0.5,
+            "trained":         False,
+            "note":            "ML module not available (scikit-learn not installed)",
+        }
+    try:
+        result = await asyncio.get_event_loop().run_in_executor(
+            None,
+            lambda: _get_ml_signal(
+                symbol=symbol.upper(),
+                action=action.upper(),
+                technical_cache=technical_cache,
+                mt5_state=mt5_state,
+            ),
+        )
+        return result
+    except Exception as e:
+        return {"error": str(e), "signal": action, "win_probability": 0.5, "trained": False}
+
+
+@app.post("/ml_train")
+async def train_ml_model(api_key: str = Depends(verify_api_key)):
+    """
+    F5: Re-trains the ML signal classifier from scratch using all trade history
+    in financial_db. Requires verify_api_key. Training runs in a thread executor
+    to avoid blocking the event loop.
+
+    Returns a training report: accuracy, sample count, win percentage.
+    """
+    if not HAS_ML:
+        return {"error": "ML module not available (scikit-learn not installed)"}
+    try:
+        clf = _get_classifier()
+        report = await asyncio.get_event_loop().run_in_executor(None, clf.train)
+        await broadcast_log(f"INFO: ML model retrained — {report}")
+        return report
+    except Exception as e:
+        return {"error": str(e)}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# F7 — BACKTESTING ENDPOINT
+# ══════════════════════════════════════════════════════════════════════════════
+
+@app.post("/backtest")
+async def run_backtest_endpoint(
+    params: dict = Body(...),
+    api_key: str = Depends(verify_api_key),
+):
+    """
+    F7: Runs a strategy backtest on MT5 historical data.
+
+    Body params:
+      symbol          — e.g. "EURUSD"          (default: EURUSD)
+      timeframe       — M1|M5|M15|M30|H1|H4|D1 (default: H1)
+      bars            — number of candles       (default: 500, max 5000)
+      initial_balance — starting capital        (default: 10000.0)
+
+    Returns:
+      performance report: win_rate, return_pct, max_drawdown, profit_factor,
+      total_trades, winning_trades, losing_trades + full closed_trades list.
+    """
+    symbol          = str(params.get("symbol",          "EURUSD")).upper()
+    timeframe_str   = str(params.get("timeframe",       "H1")).upper()
+    bars            = int(params.get("bars",            500))
+    initial_balance = float(params.get("initial_balance", 10000.0))
+
+    bars = max(50, min(bars, 5000))
+
+    # Import BacktestEngine from existing module
+    try:
+        import sys as _sys
+        _bt_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+        if _bt_path not in _sys.path:
+            _sys.path.insert(0, _bt_path)
+        from backtesting_engine import BacktestEngine
+    except ImportError as e:
+        return {"error": f"BacktestEngine not available: {e}"}
+
+    if not HAS_MT5 or not mt5_state.get("connected"):
+        return {"error": "MT5 not connected — cannot fetch historical data for backtest"}
+
+    TF_MAP = {
+        "M1": mt5.TIMEFRAME_M1,  "M5": mt5.TIMEFRAME_M5,
+        "M15": mt5.TIMEFRAME_M15, "M30": mt5.TIMEFRAME_M30,
+        "H1": mt5.TIMEFRAME_H1,  "H4": mt5.TIMEFRAME_H4,
+        "D1": mt5.TIMEFRAME_D1,
+    }
+    tf = TF_MAP.get(timeframe_str)
+    if tf is None:
+        return {"error": f"Unknown timeframe '{timeframe_str}'"}
+
+    # Fetch OHLCV from MT5
+    rates = await safe_mt5_call(mt5.copy_rates_from_pos, symbol, tf, 0, bars)
+    if rates is None or len(rates) == 0:
+        return {"error": f"No historical data returned for {symbol}/{timeframe_str}"}
+
+    # Build DataFrame
+    try:
+        import pandas as pd
+        df = pd.DataFrame(rates)
+        df["time"] = pd.to_datetime(df["time"], unit="s")
+        df = df.rename(columns={"tick_volume": "volume"})
+    except ImportError:
+        return {"error": "pandas not installed — required for backtesting"}
+
+    # Simple RSI-based built-in strategy for demonstration
+    def _rsi_strategy(orderbook, bar, sym, ts):
+        """Built-in: Buy when close > open (bullish bar), Sell when close < open, hold 1 bar."""
+        if bar.name < 2:
+            return
+        if bar["close"] > bar["open"]:
+            # Close any open sell, open a buy
+            for t in list(orderbook.positions.keys()):
+                if orderbook.positions[t]["type"] == "SELL":
+                    orderbook.close_position(t, bar["close"], ts)
+            if not any(p["type"] == "BUY" for p in orderbook.positions.values()):
+                sl = bar["close"] - (bar["high"] - bar["low"]) * 1.5
+                tp = bar["close"] + (bar["high"] - bar["low"]) * 2.0
+                orderbook.execute_order(sym, "BUY", 0.01, bar["close"], sl=sl, tp=tp, timestamp=ts)
+        elif bar["close"] < bar["open"]:
+            # Close any open buy, open a sell
+            for t in list(orderbook.positions.keys()):
+                if orderbook.positions[t]["type"] == "BUY":
+                    orderbook.close_position(t, bar["close"], ts)
+            if not any(p["type"] == "SELL" for p in orderbook.positions.values()):
+                sl = bar["close"] + (bar["high"] - bar["low"]) * 1.5
+                tp = bar["close"] - (bar["high"] - bar["low"]) * 2.0
+                orderbook.execute_order(sym, "SELL", 0.01, bar["close"], sl=sl, tp=tp, timestamp=ts)
+
+    # Run backtest in executor (CPU-bound)
+    def _run():
+        engine = BacktestEngine(df, _rsi_strategy, initial_balance=initial_balance)
+        return engine.run(symbol=symbol), engine.orderbook.closed_trades
+
+    try:
+        report, trades = await asyncio.get_event_loop().run_in_executor(None, _run)
+    except Exception as e:
+        return {"error": f"Backtest failed: {e}"}
+
+    # Serialize trades (datetime objects need str conversion)
+    serialized_trades = [
+        {**t,
+         "open_time":  t["open_time"].isoformat()  if hasattr(t.get("open_time"),  "isoformat") else str(t.get("open_time")),
+         "close_time": t["close_time"].isoformat() if hasattr(t.get("close_time"), "isoformat") else str(t.get("close_time")),
+        }
+        for t in trades
+    ]
+
+    return {
+        "symbol":          symbol,
+        "timeframe":       timeframe_str,
+        "bars_used":       len(df),
+        "initial_balance": initial_balance,
+        "performance":     report,
+        "trades":          serialized_trades[:200],  # Cap at 200 for payload size
+    }
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# F4 — INFLUXDB PERFORMANCE METRIC (written on each /status poll)
+# This is a lightweight hook on the existing status endpoint.
+# ══════════════════════════════════════════════════════════════════════════════
+_last_influx_perf_write = 0.0
+
+def _maybe_write_influx_performance():
+    """Write account performance to InfluxDB at most once every 30 seconds."""
+    global _last_influx_perf_write
+    if influx_db is None or not influx_db.connected:
+        return
+    now = time.time()
+    if now - _last_influx_perf_write < 30:
+        return
+    _last_influx_perf_write = now
+    try:
+        influx_db.write_performance(
+            equity=mt5_state.get("equity", 0.0),
+            balance=mt5_state.get("balance", 0.0),
+            profit=mt5_state.get("profit", 0.0),
+            daily_pnl=mt5_state.get("daily_pnl", 0.0),
+            positions_count=len(mt5_state.get("positions", [])),
+        )
+    except Exception:
+        pass
 
 
 if __name__ == "__main__":

@@ -6,4 +6,9 @@ pydantic
 requests
 feedparser
 textblob
-
+# F5: ML Signal Classifier
+scikit-learn>=1.3.0
+joblib>=1.3.0
+pandas>=2.0.0
+# F8: Telegram notifications plugin
+python-telegram-bot>=20.0

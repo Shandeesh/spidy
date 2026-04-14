@@ -1,0 +1,92 @@
+version: "3.9"
+
+# ── Spidy AI Trading Platform — Docker Compose ────────────────────────────────
+# Services:
+#   bridge      — MT5 Bridge API     (port 8000, Windows-native recommended)
+#   brain       — AI Brain Server    (port 5001)
+#   influxdb    — Time-series DB     (port 8086)
+#   nginx       — Reverse proxy      (ports 80 / 443)
+#
+# Usage:
+#   docker-compose up -d            # Start all services
+#   docker-compose logs -f brain    # Stream brain server logs
+#   docker-compose down             # Stop all
+
+services:
+
+  # ── Brain Server (AI / NLP / ML) ───────────────────────────────────────────
+  brain:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spidy_brain
+    command: >
+      uvicorn AI_Engine.brain.brain_server:app
+      --host 0.0.0.0 --port 5001 --workers 1
+    ports:
+      - "5001:5001"
+    env_file:
+      - ./Shared_Data/configs/.env
+    volumes:
+      - ./Shared_Data:/app/Shared_Data
+      - ./AI_Engine/spidy_ai:/app/AI_Engine/spidy_ai  # ML model persistence
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - spidy_net
+
+  # ── InfluxDB (Time-series metrics) ─────────────────────────────────────────
+  influxdb:
+    image: influxdb:2.7
+    container_name: spidy_influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE:        setup
+      DOCKER_INFLUXDB_INIT_USERNAME:    spidy_admin
+      DOCKER_INFLUXDB_INIT_PASSWORD:    spidy_influx_pass  # Change in production
+      DOCKER_INFLUXDB_INIT_ORG:         spidy
+      DOCKER_INFLUXDB_INIT_BUCKET:      trading_metrics
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: spidy_influx_token_change_me
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+    networks:
+      - spidy_net
+
+  # ── Nginx Reverse Proxy ────────────────────────────────────────────────────
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: spidy_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro   # Mount your TLS certs here
+    depends_on:
+      - brain
+    restart: unless-stopped
+    networks:
+      - spidy_net
+
+  # ── MT5 Bridge NOTE ────────────────────────────────────────────────────────
+  # bridge_server.py requires MetaTrader5 which is Windows-only.
+  # Run it natively: python Trading_Backend/mt5_bridge/bridge_server.py
+  # It will be accessible to the brain container via host.docker.internal:8000
+
+volumes:
+  influxdb_data:
+
+networks:
+  spidy_net:
+    driver: bridge
