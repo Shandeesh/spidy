@@ -99,10 +99,18 @@ Write-Host "AI Brain Server started (PID: $($BrainProcess.Id))." -ForegroundColo
 # Start Node.js API Server
 $NodePath = "C:\Users\Shandeesh R P\spidy\Trading_Backend\backend_api\server.js"
 $NodeProcess = Start-Process -FilePath "cmd.exe" -ArgumentList "/k `"title Spidy Backend Node && node `"$NodePath`"`"" -WorkingDirectory (Split-Path $NodePath) -PassThru
-
-
-
 Write-Host "Node.js Backend started (PID: $($NodeProcess.Id))." -ForegroundColor Green
+
+# Wait for MT5 Bridge + Brain to initialise before agents try to connect
+Write-Host "Waiting 5s for Bridge and Brain to initialise..." -ForegroundColor Yellow
+Start-Sleep -Seconds 5
+
+# Start Multi-Agent Orchestrator
+$SpidyRoot      = "C:\Users\Shandeesh R P\spidy"
+$AgentsConfig   = "spidy_ai/config/settings.yaml"
+$AgentsArgs     = "/k `"title Spidy Agents && `"$PythonExe`" -m agents.orchestrator --config $AgentsConfig`""
+$AgentsProcess  = Start-Process -FilePath "cmd.exe" -ArgumentList $AgentsArgs -WorkingDirectory $SpidyRoot -PassThru
+Write-Host "Multi-Agent Orchestrator started (PID: $($AgentsProcess.Id))." -ForegroundColor Green
 
 # 2. Start Frontend Server
 Write-Host "Starting Frontend Server (Next.js)..." -ForegroundColor Yellow
@@ -165,12 +173,17 @@ try {
     $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 }
 finally {
-    Write-Host "`nStopping servers..." -ForegroundColor Red
-    Stop-Process -Id $BridgeProcess.Id -ErrorAction SilentlyContinue
-    Stop-Process -Id $BrainProcess.Id -ErrorAction SilentlyContinue
-    Stop-Process -Id $NodeProcess.Id -ErrorAction SilentlyContinue
-    Stop-Process -Id $FrontendProcess.Id -ErrorAction SilentlyContinue 
-    # Also kill any node processes started by cmd
-    Get-Process node -ErrorAction SilentlyContinue | Stop-Process -ErrorAction SilentlyContinue
-    Write-Host "Servers stopped. Goodbye!" -ForegroundColor Cyan
+    Write-Host "`nStopping all Spidy services..." -ForegroundColor Red
+    Stop-Process -Id $BridgeProcess.Id    -ErrorAction SilentlyContinue
+    Stop-Process -Id $BrainProcess.Id     -ErrorAction SilentlyContinue
+    Stop-Process -Id $NodeProcess.Id      -ErrorAction SilentlyContinue
+    Stop-Process -Id $FrontendProcess.Id  -ErrorAction SilentlyContinue
+    Stop-Process -Id $AgentsProcess.Id    -ErrorAction SilentlyContinue
+    # Kill any orphaned node processes launched by cmd windows
+    Get-Process node    -ErrorAction SilentlyContinue | Stop-Process -ErrorAction SilentlyContinue
+    # Kill any orphaned python processes with 'agents.orchestrator' in their cmd line
+    Get-WmiObject Win32_Process -Filter "Name='python.exe'" -ErrorAction SilentlyContinue |
+        Where-Object { $_.CommandLine -like '*agents.orchestrator*' } |
+        ForEach-Object { Stop-Process -Id $_.ProcessId -ErrorAction SilentlyContinue }
+    Write-Host "All servers stopped. Goodbye!" -ForegroundColor Cyan
 }

@@ -61,8 +61,63 @@ app.get('/', (req, res) => {
     res.send('Spidy Backend Relay Server 🕷️ (AI Chat Proxy + Socket.IO)');
 });
 
+// ── Agent Event Bridge ────────────────────────────────────────────────────────
+// Receives events from BusBridgeAgent (Python agents/bus_bridge.py) and
+// broadcasts them to every connected frontend client via Socket.IO.
+//
+// Each message has the shape:
+//   { topic: string, sender: string, age_ms: number, data: object }
+//
+// The frontend can listen to individual topics:
+//   socket.on('market_snapshot', handler)
+//   socket.on('sentiment', handler)
+//   socket.on('risk_state', handler)
+//   socket.on('trade_signal', handler)
+//   socket.on('execution_report', handler)
+//
+// AND a catch-all:
+//   socket.on('agent_event', handler)   ← receives every topic
+// ─────────────────────────────────────────────────────────────────────────────
+
+const VALID_TOPICS = new Set([
+    'market_snapshot', 'sentiment', 'risk_state',
+    'trade_signal', 'execution_report'
+]);
+
+// Rolling in-memory cache — one latest message per topic (for new joiners)
+const latestByTopic = {};
+
+app.post('/agent-event', (req, res) => {
+    const event = req.body;
+
+    if (!event || !event.topic || !event.data) {
+        return res.status(400).json({ error: 'Missing topic or data' });
+    }
+
+    if (!VALID_TOPICS.has(event.topic)) {
+        return res.status(400).json({ error: `Unknown topic: ${event.topic}` });
+    }
+
+    // Cache for late-joining clients
+    latestByTopic[event.topic] = event;
+
+    // Emit topic-specific channel + universal channel
+    io.emit(event.topic, event);
+    io.emit('agent_event', event);
+
+    res.status(204).end();
+});
+
+// Send cached latest state to a newly connected client
 io.on('connection', (socket) => {
     console.log('Frontend Client Connected:', socket.id);
+
+    // Immediately replay latest known state per topic
+    for (const cached of Object.values(latestByTopic)) {
+        socket.emit(cached.topic, cached);
+        socket.emit('agent_event', cached);
+    }
+
     socket.on('disconnect', () => {
         console.log('Frontend Client Disconnected:', socket.id);
     });
@@ -70,46 +125,42 @@ io.on('connection', (socket) => {
 
 const axios = require('axios');
 
-// Main User Interaction Endpoint (Proxies to AI Brain Server)
+// ── AI Chat Proxy ─────────────────────────────────────────────────────────────
+// Forwards /api/ask queries from the frontend to the Python Brain Server (5001)
 app.post('/api/ask', async (req, res) => {
     const userQuery = req.body.query;
 
     if (!userQuery) {
-        return res.status(400).json({ error: "Query is required" });
+        return res.status(400).json({ error: 'Query is required' });
     }
 
     try {
-        // Forward to Python Brain Server (port 5001)
         const brainUrl = 'http://127.0.0.1:5001/api/ask';
         const response = await axios.post(brainUrl, req.body);
-        const decision = response.data;
-
-        console.log("AI Decision:", decision);
-
-        res.json({ success: true, ai_response: decision });
-
+        console.log('AI Decision:', response.data);
+        res.json({ success: true, ai_response: response.data });
     } catch (error) {
-        console.error("AI Request Failed:", error.message);
+        console.error('AI Request Failed:', error.message);
         if (error.response) {
-            console.error("Brain Response:", error.response.data);
-            res.status(500).json({ error: "AI Server Error", details: error.response.data });
+            res.status(500).json({ error: 'AI Server Error', details: error.response.data });
         } else {
-            res.status(500).json({ error: "AI Server Unreachable", details: error.message });
+            res.status(500).json({ error: 'AI Server Unreachable', details: error.message });
         }
     }
 });
 
-// Health check endpoint
+// ── Health check ──────────────────────────────────────────────────────────────
 app.get('/health', (req, res) => {
     res.json({
-        status: 'ok',
-        role: 'AI Chat Relay + Socket.IO',
-        uptime: process.uptime(),
-        connected_clients: io.sockets.sockets.size
+        status:              'ok',
+        role:                'AI Chat Proxy + Socket.IO + Agent Event Bridge',
+        uptime:              process.uptime(),
+        connected_clients:   io.sockets.sockets.size,
+        agent_topics_seen:   Object.keys(latestByTopic),
     });
 });
 
 server.listen(PORT, () => {
     console.log(`Spidy Relay Server running on http://localhost:${PORT}`);
-    console.log(`Role: AI Chat Proxy (→ Brain:5001) + Socket.IO Hub`);
+    console.log(`Role: AI Chat Proxy (→ Brain:5001) + Socket.IO + Agent Bridge`);
 });
