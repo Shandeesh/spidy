@@ -27,6 +27,9 @@ bridge.log
 bridge.err
 *.mq5.log
 system_logs.txt
+AI_Engine/sentiment.json
+Trading_Backend/market_pulse.json
+
 
 # Build Artifacts
 dist/
