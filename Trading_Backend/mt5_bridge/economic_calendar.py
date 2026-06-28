@@ -34,9 +34,13 @@ class EconomicCalendar:
         current_time_str = now.strftime("%H:%M")
         
         # Parse Symbol (e.g., EURUSD -> EUR, USD)
-        # Crypto: BTCUSD -> BTC, USD
-        base = symbol[:3]
-        quote = symbol[3:]
+        # Crypto: BTCUSD -> BTC, USD or BTC -> BTC
+        if len(symbol) >= 6:
+            base = symbol[:3]
+            quote = symbol[3:]
+        else:
+            base = symbol
+            quote = ""
         
         for event in self.events:
             if event["impact"] != "HIGH":

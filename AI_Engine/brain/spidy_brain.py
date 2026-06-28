@@ -4,6 +4,14 @@ import time # Added for sleep
 import sys
 from dotenv import load_dotenv
 
+# Force console output to use UTF-8 to prevent cp1252 UnicodeEncodeErrors on Windows
+if sys.platform.startswith('win'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
 # Load dependencies
 # Imports moved to inside class for lazy loading
 # import google.generativeai as genai
@@ -59,9 +67,9 @@ class SpidyBrain:
                 import google.generativeai as genai
                 genai.configure(api_key=self.google_api_key)
                 # Primary: Fastest
-                self.gemini_models["flash"] = genai.GenerativeModel('gemini-1.5-flash-latest')
+                self.gemini_models["flash"] = genai.GenerativeModel('gemini-2.5-flash')
                 # Backup: More Capable / Different Quota
-                self.gemini_models["pro"] = genai.GenerativeModel('gemini-1.5-pro-latest')
+                self.gemini_models["pro"] = genai.GenerativeModel('gemini-2.5-pro')
             except ImportError:
                  sys.stderr.write("[WARN] Google GenAI Library not found. Install `google-generativeai`.\n")
             except Exception as e:

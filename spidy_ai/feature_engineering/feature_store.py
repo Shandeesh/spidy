@@ -6,7 +6,22 @@ from .volume_features import VolumeFeatures
 
 class FeatureStore:
     def __init__(self):
-        pass
+        self.df = None
+
+    def load_data(self, df: pd.DataFrame):
+        """
+        Stores the enriched DataFrame locally.
+        """
+        self.df = df
+
+    def get_latest(self) -> dict:
+        """
+        Returns the last row of the loaded DataFrame as a dictionary.
+        """
+        if self.df is None or self.df.empty:
+            return {}
+        return self.df.iloc[-1].to_dict()
+
 
     def generate_features(self, df: pd.DataFrame) -> pd.DataFrame:
         """

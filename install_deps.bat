@@ -1,25 +1,42 @@
 @echo off
-echo ==========================================
-echo [1/4] Installing AI Core Dependencies...
-echo ==========================================
-pip install -r "c:\Users\Shandeesh R P\spidy\AI_Engine\requirements.txt"
-pip install -r "c:\Users\Shandeesh R P\spidy\Security_Module\requirements.txt"
+set "PIP_EXE=%~dp0.venv\Scripts\pip.exe"
+if not exist "%PIP_EXE%" (
+    echo [WARN] Virtual environment pip not found at %PIP_EXE%.
+    echo Falling back to global system pip...
+    set "PIP_EXE=pip"
+)
 
 echo ==========================================
-echo [2/4] Installing MT5 Bridge Dependencies...
+echo [1/6] Installing AI Core Dependencies...
 echo ==========================================
-pip install -r "c:\Users\Shandeesh R P\spidy\Trading_Backend\mt5_bridge\requirements.txt"
+"%PIP_EXE%" install -r "%~dp0AI_Engine\requirements.txt"
+"%PIP_EXE%" install -r "%~dp0Security_Module\requirements.txt"
 
 echo ==========================================
-echo [3/4] Installing Backend API Dependencies...
+echo [2/6] Installing MT5 Bridge Dependencies...
 echo ==========================================
-cd "c:\Users\Shandeesh R P\spidy\Trading_Backend\backend_api"
+"%PIP_EXE%" install -r "%~dp0Trading_Backend\mt5_bridge\requirements.txt"
+
+echo ==========================================
+echo [3/6] Installing Shoonya Bridge Dependencies...
+echo ==========================================
+"%PIP_EXE%" install -r "%~dp0Trading_Backend\shoonya_bridge\requirements.txt"
+
+echo ==========================================
+echo [4/6] Installing Automation Engine Dependencies...
+echo ==========================================
+"%PIP_EXE%" install -r "%~dp0Trading_Backend\automation_engine\requirements.txt"
+
+echo ==========================================
+echo [5/6] Installing Backend API Dependencies...
+echo ==========================================
+cd /d "%~dp0Trading_Backend\backend_api"
 call npm install
 
 echo ==========================================
-echo [4/4] Installing Frontend Dashboard Dependencies...
+echo [6/6] Installing Frontend Dashboard Dependencies...
 echo ==========================================
-cd "c:\Users\Shandeesh R P\spidy\Frontend_Dashboard\dashboard_app"
+cd /d "%~dp0Frontend_Dashboard\dashboard_app"
 call npm install
 
 echo ==========================================

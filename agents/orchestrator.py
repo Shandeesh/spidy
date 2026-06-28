@@ -30,10 +30,20 @@ import asyncio
 import logging
 import signal
 import sys
+
+# Force console output to use UTF-8 to prevent cp1252 UnicodeEncodeErrors on Windows
+if sys.platform.startswith('win'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
 from pathlib import Path
 from typing import Any
 
 import yaml
+from dotenv import load_dotenv
 
 from .message_bus    import MessageBus
 from .data_engineer  import DataEngineerAgent
@@ -75,7 +85,13 @@ class Orchestrator:
     def __init__(
         self, config_path: str = "spidy_ai/config/settings.yaml"
     ) -> None:
+        # Load environment variables relative to this file
+        parent_dir = Path(__file__).parent.parent
+        load_dotenv(dotenv_path=parent_dir / "Shared_Data" / "configs" / ".env")
+        load_dotenv(dotenv_path=parent_dir / ".env")
+
         self.config = self._load_config(config_path)
+
         _configure_logging(
             Path(self.config.get("logging", {}).get("dir", "logs"))
         )

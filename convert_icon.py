@@ -29,7 +29,7 @@ if __name__ == "__main__":
     convert_to_ico(logo_path, app_icon_path)
     
     # 2. Web Favicon
-    web_favicon_path = os.path.join(base_dir, "Member3_Frontend_UI", "dashboard_app", "public", "favicon.ico")
+    web_favicon_path = os.path.join(base_dir, "Frontend_Dashboard", "dashboard_app", "public", "favicon.ico")
     # Ensure dir exists
     os.makedirs(os.path.dirname(web_favicon_path), exist_ok=True)
     convert_to_ico(logo_path, web_favicon_path)

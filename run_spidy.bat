@@ -12,13 +12,20 @@ timeout /t 3 /nobreak >nul
 echo 2. Starting Frontend Dashboard...
 start "Spidy Dashboard" cmd /k "cd /d "%~dp0Frontend_Dashboard\dashboard_app" && npm run dev"
 
+set "PYTHON_EXE=%~dp0.venv\Scripts\python.exe"
+if not exist "%PYTHON_EXE%" (
+    echo [WARN] Virtual environment Python not found. Falling back to system python...
+    set "PYTHON_EXE=python"
+)
+
 echo 3. Starting MT5 Bridge...
-start "Spidy MT5 Bridge" cmd /k "call run_mt5_bridge.bat"
+start "Spidy MT5 Bridge" cmd /k "call "%~dp0run_mt5_bridge.bat" "%PYTHON_EXE%""
 
 echo 4. Starting AI Brain Server (Process Isolation)...
-start "Spidy AI Brain" cmd /k "cd /d "%~dp0AI_Engine\brain" && python brain_server.py"
+start "Spidy AI Brain" cmd /k "cd /d "%~dp0AI_Engine\brain" && "%PYTHON_EXE%" brain_server.py"
 
 echo Waiting for Bridge and Brain to initialise...
+
 timeout /t 5 /nobreak >nul
 
 echo 5. Starting Multi-Agent Orchestrator...

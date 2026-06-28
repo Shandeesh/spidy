@@ -18,7 +18,7 @@ export default function handler(req, res) {
     // to .../Member1_AI_Core/brain/spidy_brain.py
     // Simplest is to use the absolute path we know.
     const scriptPath = String.raw`c:\Users\Shandeesh R P\spidy\AI_Engine\brain\spidy_brain.py`;
-    const pythonPath = "python"; // Assumes python is in PATH
+    const pythonPath = String.raw`c:\Users\Shandeesh R P\spidy\.venv\Scripts\python.exe`;
 
     const pythonProcess = spawn(pythonPath, [scriptPath, query]);
 

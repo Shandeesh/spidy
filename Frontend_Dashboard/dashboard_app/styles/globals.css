@@ -83,6 +83,87 @@
   --background-end-rgb: 4, 13, 20;
 }
 
+/* Liquid Glass Maoism Theme */
+.theme-liquid-glass-maoism {
+  --bg-primary: #100202;
+  --bg-card: rgba(30, 4, 4, 0.4);
+  --color-primary: #da251d;  /* Revolutionary Red */
+  --color-accent: #ffde00;   /* Revolutionary Gold */
+  --text-primary: #fffae0;
+  --text-secondary: #d4af37;
+  --foreground-rgb: 255, 250, 224;
+  --background-start-rgb: 16, 2, 2;
+  --background-end-rgb: 25, 4, 4;
+}
+
+/* Custom glossy gloss/liquid borders for this theme */
+.theme-liquid-glass-maoism .bg-white\/5,
+.theme-liquid-glass-maoism .backdrop-blur-md,
+.theme-liquid-glass-maoism .backdrop-blur-xl {
+  background: linear-gradient(135deg, rgba(218, 37, 29, 0.16) 0%, rgba(255, 222, 0, 0.04) 100%) !important;
+  backdrop-filter: blur(20px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(200%) !important;
+  border: 1px solid rgba(255, 222, 0, 0.22) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 8px 32px 0 rgba(218, 37, 29, 0.15) !important;
+}
+
+/* Liquid Glass Cards */
+.theme-liquid-glass-maoism .rounded-2xl,
+.theme-liquid-glass-maoism .rounded-xl {
+  background: linear-gradient(135deg, rgba(218, 37, 29, 0.16) 0%, rgba(255, 222, 0, 0.04) 100%) !important;
+  border: 1px solid rgba(255, 222, 0, 0.22) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 8px 32px 0 rgba(218, 37, 29, 0.15) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Liquid glossy shine overlay */
+.theme-liquid-glass-maoism .rounded-2xl::after,
+.theme-liquid-glass-maoism .rounded-xl::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+}
+
+/* Custom buttons for Maoist theme */
+.theme-liquid-glass-maoism button.bg-spidy-primary,
+.theme-liquid-glass-maoism .bg-spidy-primary,
+.theme-liquid-glass-maoism .bg-gradient-to-r.from-green-600,
+.theme-liquid-glass-maoism .bg-gradient-to-r.from-red-700 {
+  background: linear-gradient(135deg, #da251d 0%, #a3140e 100%) !important;
+  border: 1.5px solid #ffde00 !important;
+  box-shadow: 0 0 15px rgba(218, 37, 29, 0.6) !important;
+  color: #ffde00 !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+.theme-liquid-glass-maoism button.bg-spidy-primary:hover,
+.theme-liquid-glass-maoism .bg-spidy-primary:hover,
+.theme-liquid-glass-maoism .bg-gradient-to-r.from-green-600:hover,
+.theme-liquid-glass-maoism .bg-gradient-to-r.from-red-700:hover {
+  background: linear-gradient(135deg, #ffde00 0%, #d4af37 100%) !important;
+  color: #da251d !important;
+  border-color: #da251d !important;
+  box-shadow: 0 0 22px rgba(255, 222, 0, 0.8) !important;
+}
+
+/* Red Star Decoration for headings */
+.theme-liquid-glass-maoism h2::before,
+.theme-liquid-glass-maoism h3::before {
+  content: '★ ';
+  color: #ffde00;
+  font-size: 1.1em;
+  text-shadow: 0 0 5px rgba(255, 222, 0, 0.5);
+}
+
 body {
   /* UPGRADE 13: Use Inter font */
   font-family: 'Inter', system-ui, -apple-system, sans-serif;

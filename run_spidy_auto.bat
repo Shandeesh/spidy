@@ -22,7 +22,7 @@ echo Opening Dashboard in Browser...
 start http://localhost:3000
 
 echo 3. Starting MT5 Bridge...
-start "Spidy MT5 Bridge" cmd /k "cd /d "c:\Users\Shandeesh R P\spidy\Trading_Backend\mt5_bridge" && python bridge_server.py"
+start "Spidy MT5 Bridge" cmd /k "cd /d "c:\Users\Shandeesh R P\spidy\Trading_Backend\mt5_bridge" && "c:\Users\Shandeesh R P\spidy\.venv\Scripts\python.exe" bridge_server.py"
 
 echo ===================================================
 echo   All Services Started! 

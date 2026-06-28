@@ -23,6 +23,7 @@ mt5.TRADE_ACTION_DEAL = 1
 mt5.ORDER_TIME_GTC = 0
 mt5.ORDER_FILLING_FOK = 0
 mt5.TRADE_RETCODE_DONE = 10009
+mt5.order_calc_profit.return_value = 50.0
 
 # Mock Symbol Info
 mock_symbol = MagicMock()
@@ -163,7 +164,7 @@ class TestIntegration(unittest.IsolatedAsyncioTestCase):
         
         self.assertIsNotNone(signal)
         self.assertEqual(signal["signal"], "BUY")
-        self.assertEqual(signal["strategy"], "MockStrategy")
+        self.assertEqual(signal["strategy"], "MetaVote")
         print(f"[PASS] StrategyManager generated valid signal packet: {signal}")
 
 

@@ -87,3 +87,9 @@ class TrendFeatures:
             traceback.print_exc()
             # Return original df to avoid crash, but signals will fail safely
             return df
+
+    @staticmethod
+    def add_features(df: pd.DataFrame) -> pd.DataFrame:
+        """Wrapper method forwarding to add_all_trend_features"""
+        return TrendFeatures.add_all_trend_features(df)
+

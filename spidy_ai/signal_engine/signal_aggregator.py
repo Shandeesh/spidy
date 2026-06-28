@@ -2,30 +2,43 @@ from .confidence_engine import ConfidenceEngine
 from .correlation_filter import CorrelationFilter
 
 class SignalAggregator:
-    def __init__(self):
+    def __init__(self, threshold=1.0):
+        self.threshold = threshold
         self.confidence_engine = ConfidenceEngine()
         self.correlation_filter = CorrelationFilter()
 
+    def aggregate(self, filtered_signals: list) -> tuple:
+        """
+        Aggregates list of (strategy_name, score) into a decision and net score.
+        Used by main.py and test_integration.py.
+        """
+        if not filtered_signals:
+            return "HOLD", 0.0
+
+        total_score = sum(score for name, score in filtered_signals)
+        
+        if total_score >= self.threshold:
+            return "BUY", total_score
+        elif total_score <= -self.threshold:
+            return "SELL", total_score
+        else:
+            return "HOLD", total_score
+
     def aggregate_signals(self, strategy_signals: list, regime_data: dict) -> str:
         """
-        Aggregates multiple strategy signals into a final decision.
+        Aggregates multiple strategy signal dicts into a final decision string.
         """
-        # 1. Collect Valid Signals
         valid_signals = []
         for s in strategy_signals:
-            if s['signal'] != "NEUTRAL":
-                # 2. Adjust Confidence
+            if s.get('signal') != "NEUTRAL":
                 s['final_confidence'] = self.confidence_engine.calculate_confidence(s, regime_data)
                 valid_signals.append(s)
         
         if not valid_signals:
-            return "NO_TRADE"
+            return "HOLD"
             
-        # 3. Simple Voting or Highest Confidence
-        # Let's pick the one with highest confidence for now
         best_signal = max(valid_signals, key=lambda x: x['final_confidence'])
-        
-        if best_signal['final_confidence'] > 0.6: # Threshold
+        if best_signal['final_confidence'] > 0.6: 
             return best_signal['signal']
             
-        return "NO_TRADE"
+        return "HOLD"

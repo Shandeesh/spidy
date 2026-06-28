@@ -13,4 +13,11 @@ Write-Host "Installing Security Module requirements..."
 Write-Host "Installing MT5 Bridge requirements..."
 & $VenvPython -m pip install -r "Trading_Backend\mt5_bridge\requirements.txt"
 
+Write-Host "Installing Shoonya Bridge requirements..."
+& $VenvPython -m pip install -r "Trading_Backend\shoonya_bridge\requirements.txt"
+
+Write-Host "Installing Automation Engine requirements..."
+& $VenvPython -m pip install -r "Trading_Backend\automation_engine\requirements.txt"
+
 Write-Host "Repaired Successfully."
+

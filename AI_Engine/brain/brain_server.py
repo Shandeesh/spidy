@@ -5,9 +5,18 @@ from pydantic import BaseModel
 import sys
 import os
 
+# Force console output to use UTF-8 to prevent cp1252 UnicodeEncodeErrors on Windows
+if sys.platform.startswith('win'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
 # Ensure we can import SpidyBrain
 sys.path.append(os.path.dirname(__file__))
 from spidy_brain import SpidyBrain
+from antigravity_pipeline import AntigravityPipeline
 
 app = FastAPI(title="Spidy AI Brain Server")
 
@@ -64,6 +73,88 @@ async def listen_brain():
 @app.get("/status")
 async def status():
     return {"status": "online", "model": "Gemini/GPT"}
+
+class ConfigUpdateRequest(BaseModel):
+    floor: str
+    auto_update: bool
+    plan_mode: bool
+    strict_testing: bool
+    max_retries: int
+
+class FeedbackRequest(BaseModel):
+    floor: str
+    message: str
+    level: str = "info"
+    source: str = "user"
+
+class UpdateActionRequest(BaseModel):
+    floor: str
+
+@app.get("/api/update-center/status")
+async def get_update_center_status():
+    try:
+        pipeline = AntigravityPipeline()
+        return pipeline.db
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/update-center/config")
+async def update_update_center_config(req: ConfigUpdateRequest):
+    try:
+        pipeline = AntigravityPipeline()
+        if "config" not in pipeline.db:
+            pipeline.db["config"] = {}
+        pipeline.db["config"][req.floor] = {
+            "auto_update": req.auto_update,
+            "plan_mode": req.plan_mode,
+            "strict_testing": req.strict_testing,
+            "max_retries": req.max_retries
+        }
+        pipeline._save_db()
+        return {"success": True, "config": pipeline.db["config"][req.floor]}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/update-center/feedback")
+async def add_update_center_feedback(req: FeedbackRequest):
+    try:
+        pipeline = AntigravityPipeline()
+        entry = pipeline.add_feedback(
+            floor=req.floor,
+            message=req.message,
+            source=req.source,
+            level=req.level
+        )
+        return {"success": True, "entry": entry}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/update-center/trigger")
+async def trigger_update(req: UpdateActionRequest):
+    try:
+        pipeline = AntigravityPipeline()
+        res = pipeline.run_audit(req.floor)
+        return res
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/update-center/approve")
+async def approve_update(req: UpdateActionRequest):
+    try:
+        pipeline = AntigravityPipeline()
+        res = pipeline.approve_plan(req.floor)
+        return res
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/update-center/reject")
+async def reject_update(req: UpdateActionRequest):
+    try:
+        pipeline = AntigravityPipeline()
+        res = pipeline.reject_plan(req.floor)
+        return res
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     # Run on port 5001 to avoid conflict with Node (5000) and MT5 Bridge (8000)

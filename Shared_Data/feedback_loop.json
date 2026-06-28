@@ -1,0 +1,117 @@
+{
+  "config": {
+    "spidy": {
+      "auto_update": true,
+      "plan_mode": true,
+      "strict_testing": true,
+      "max_retries": 3
+    },
+    "trade_ai": {
+      "auto_update": false,
+      "plan_mode": true,
+      "strict_testing": true,
+      "max_retries": 3
+    },
+    "shooya": {
+      "auto_update": true,
+      "plan_mode": false,
+      "strict_testing": true,
+      "max_retries": 5
+    }
+  },
+  "feedback_loop": [
+    {
+      "id": "fb_001",
+      "timestamp": "2026-06-19T02:15:00Z",
+      "source": "user",
+      "level": "info",
+      "message": "Can we optimize the MT5 trailing stop-loss to trigger slightly faster during high volatility?",
+      "status": "resolved",
+      "floor": "spidy"
+    },
+    {
+      "id": "fb_002",
+      "timestamp": "2026-06-19T04:30:12Z",
+      "source": "shoonya_bridge",
+      "level": "warning",
+      "message": "Shooya bridge websocket encountered a transient ping-pong timeout. Auto-reconnected in 2.1s.",
+      "status": "resolved",
+      "floor": "shooya"
+    },
+    {
+      "id": "fb_003",
+      "timestamp": "2026-06-19T08:45:22Z",
+      "source": "system",
+      "level": "error",
+      "message": "Trade AI: Strategy verification failed due to missing sentiment index weighting.",
+      "status": "resolved",
+      "floor": "trade_ai"
+    },
+    {
+      "id": "fb_004",
+      "timestamp": "2026-06-19T09:05:10Z",
+      "source": "user",
+      "level": "info",
+      "message": "Spidy strategy parameter optimization needed for EURUSD trend shift.",
+      "status": "resolved",
+      "floor": "spidy"
+    },
+    {
+      "id": "fb_1781843869",
+      "timestamp": "2026-06-19T04:37:49.996187Z",
+      "source": "user",
+      "level": "info",
+      "message": "Optimize trailing stop-loss to trigger faster during spike",
+      "status": "pending",
+      "floor": "spidy",
+      "retries": 0
+    }
+  ],
+  "update_history": [
+    {
+      "id": "up_001",
+      "timestamp": "2026-06-18T02:00:00Z",
+      "floor": "spidy",
+      "version_before": "v1.4.1",
+      "version_after": "v1.4.2",
+      "status": "success",
+      "type": "minor_bugfix",
+      "details": "Fixed memory leak in MT5 socket event listener. All unit tests passed.",
+      "pipeline_logs": "[AUDIT] Reading feedback_loop.json...\n[AUDIT] Found bug: Memory leak on socket disconnect.\n[PLAN] Created file patch for mt5_bridge/bridge_server.py\n[TEST] Running bridge verification suite...\n[TEST] 4/4 verification tests passed.\n[DEPLOY] Applied patch successfully. Version bumped to v1.4.2."
+    },
+    {
+      "id": "up_002",
+      "timestamp": "2026-06-18T02:05:00Z",
+      "floor": "shooya",
+      "version_before": "v2.0.3",
+      "version_after": "v2.0.4",
+      "status": "success",
+      "type": "performance_tuning",
+      "details": "Optimized websocket parsing buffer for Shoonya order book stream.",
+      "pipeline_logs": "[AUDIT] Reading feedback_loop.json...\n[AUDIT] Found performance item: JSON parsing bottleneck on order book stream.\n[PLAN] Refactored shoonya_server.py to use fast-JSON parsing libraries.\n[TEST] Executed throughput benchmarks. CPU utilization reduced by 14%.\n[DEPLOY] Codebase updated. Deployed to production cluster."
+    },
+    {
+      "id": "up_1781843870",
+      "timestamp": "2026-06-19T04:37:50.340828Z",
+      "floor": "spidy",
+      "version_before": "v1.4.2",
+      "version_after": "v1.4.3",
+      "status": "success",
+      "type": "performance_tuning",
+      "details": "Automatically resolved feedback item 'fb_004': \"Spidy strategy parameter optimization needed for EURUSD trend shift.\"",
+      "pipeline_logs": "[10:07:50] [DEPLOY] Plan approved by administrator. Executing update pipeline...\n[10:07:50] [CODE] Applying patch file changes...\n[10:07:50] [CODE] MODIFY: Shared_Data/configs/trading_strategy.json\n[10:07:50] [CODE] Updated strategy params to stop-loss=15, volatility=1.8, version=v1.4.3.\n[10:07:50] [TEST] Strict Testing Boundary is ENABLED. Running automated validation suite...\n[10:07:50] [TEST] Automated verification logic check passed.\n[10:07:50] [DEPLOY] Deploying patch to live environment...\n[10:07:50] [DEPLOY] Live configuration updated from v1.4.2 to v1.4.3.\n[10:07:50] [DEPLOY] Production cluster sync complete. Update successful! \u2705"
+    },
+    {
+      "id": "up_1781875200",
+      "timestamp": "2026-06-19T13:20:00.965604Z",
+      "floor": "trade_ai",
+      "version_before": "v3.1.0",
+      "version_after": "v3.1.1",
+      "status": "success",
+      "type": "performance_tuning",
+      "details": "Automatically resolved feedback item 'fb_003': \"Trade AI: Strategy verification failed due to missing sentiment index weighting.\"",
+      "pipeline_logs": "[18:50:00] [DEPLOY] Plan approved by administrator. Executing update pipeline...\n[18:50:00] [CODE] Applying patch file changes...\n[18:50:00] [CODE] NEW: AI_Engine/strategy_optimizer/sentiment_weight.json\n[18:50:00] [TEST] Strict Testing Boundary is ENABLED. Running automated validation suite...\n[18:50:00] [TEST] Running mock strategy tests for TRADE_AI...\n[18:50:00] [TEST] Integration tests passed.\n[18:50:00] [DEPLOY] Deploying patch to live environment...\n[18:50:00] [DEPLOY] Live configuration updated from v3.1.0 to v3.1.1.\n[18:50:00] [DEPLOY] Production cluster sync complete. Update successful! \u2705"
+    }
+  ],
+  "pending_plans": {}
+}

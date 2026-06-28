@@ -4,6 +4,14 @@ import sys
 import os
 import yaml
 
+# Force console output to use UTF-8 to prevent cp1252 UnicodeEncodeErrors on Windows
+if sys.platform.startswith('win'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -115,9 +123,11 @@ def run_spidy_ai():
             active_strategies = strategy_registry.get_active_strategies(regime)
             raw_signals = []
             for strategy in active_strategies:
-                signal, conf = strategy.generate_signal(df)
-                if signal != 0:
-                    score = confidence_engine.calculate_score(strategy, signal, conf, regime)
+                res = strategy.generate_signal(df)
+                sig = res.get('signal', 'NEUTRAL')
+                conf = res.get('confidence', 0.0)
+                if sig != 'NEUTRAL':
+                    score = confidence_engine.calculate_score(strategy, sig, conf, regime)
                     raw_signals.append((strategy.name, score))
 
             filtered_signals = correlation_filter.filter_signals(raw_signals)

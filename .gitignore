@@ -80,3 +80,9 @@ Trading_Backend/mt5_bridge/bridge_startup.log
 # Wildcard patterns for any log/err/txt debug output
 *.err
 *.log
+
+# Sensitive secret files
+secret.key
+
+# Integration test results
+integration_results.txt

@@ -19,7 +19,7 @@ async def test_logic(pos, current_peak_in_db):
     profit_peaks[pos.ticket] = current_peak_in_db
     
     # Logic extracted from bridge_server.py
-    net_profit = pos.profit + pos.swap + pos.commission
+    net_profit = pos.profit + getattr(pos, 'swap', 0.0) + getattr(pos, 'commission', 0.0)
     
     current_peak = profit_peaks.get(pos.ticket, 0.0)
     if net_profit > current_peak:

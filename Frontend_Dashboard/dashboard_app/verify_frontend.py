@@ -1,7 +1,7 @@
 import requests
 import json
 
-url = "http://localhost:3000/api/ask"
+url = "http://localhost:5000/api/ask"
 payload = {"query": "Hello"}
 
 try:

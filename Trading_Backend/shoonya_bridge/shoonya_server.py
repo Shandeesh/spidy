@@ -70,13 +70,14 @@ base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fi
 env_path = os.path.join(base_path, ".env")
 load_dotenv(env_path)
 
-SHOONYA_USER = os.getenv("SHOONYA_USER")
-SHOONYA_PWD = os.getenv("SHOONYA_PWD")
-SHOONYA_TOTP_SECRET = os.getenv("SHOONYA_TOTP_SECRET", "") 
-SHOONYA_FACTOR2 = os.getenv("SHOONYA_FACTOR2")
-SHOONYA_VC = os.getenv("SHOONYA_VC")
-SHOONYA_API_KEY = os.getenv("SHOONYA_API_KEY")
-SHOONYA_IMEI = os.getenv("SHOONYA_IMEI")
+SHOONYA_USER = os.getenv("SHOONYA_USER", "").strip() or None
+SHOONYA_PWD = os.getenv("SHOONYA_PWD", "").strip() or None
+SHOONYA_TOTP_SECRET = os.getenv("SHOONYA_TOTP_SECRET", "").strip()
+SHOONYA_FACTOR2 = os.getenv("SHOONYA_FACTOR2", "").strip() or None
+SHOONYA_VC = os.getenv("SHOONYA_VC", "").strip() or None
+SHOONYA_API_KEY = os.getenv("SHOONYA_API_KEY", "").strip() or None
+SHOONYA_IMEI = os.getenv("SHOONYA_IMEI", "").strip() or None
+
 
 if not SHOONYA_USER or not SHOONYA_PWD:
     logger.error("CRITICAL: Missing Credentials in .env file! Please configure it.")

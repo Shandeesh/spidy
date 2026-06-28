@@ -12,17 +12,35 @@ class Watchdog:
     """
     def __init__(self, bridge_server_ref, max_daily_loss=100.0):
         self.bridge = bridge_server_ref # Reference to main bridge for state updates
-        self.max_daily_loss = abs(float(max_daily_loss)) # Ensure positive value
+        self._max_daily_loss_init = abs(float(max_daily_loss)) # Initial value fallback
         self.check_interval = 2.0 # Check every 2 seconds
         self._stop_event = threading.Event()
         self._kill_event = threading.Event()
         self._thread = None
         self.running = False
         self.current_daily_pnl = 0.0
+
+    @property
+    def max_daily_loss(self):
+        try:
+            if hasattr(self, 'bridge') and self.bridge is not None:
+                if hasattr(self.bridge, 'risk_settings') and self.bridge.risk_settings is not None:
+                    return abs(float(self.bridge.risk_settings.get("max_daily_loss", self._max_daily_loss_init)))
+                elif hasattr(self.bridge, 'mt5_state') and self.bridge.mt5_state is not None:
+                    risk_set = self.bridge.mt5_state.get("risk_settings")
+                    if risk_set and "max_daily_loss" in risk_set:
+                        return abs(float(risk_set["max_daily_loss"]))
+        except Exception:
+            pass
+        return self._max_daily_loss_init
+
+    @max_daily_loss.setter
+    def max_daily_loss(self, value):
+        self._max_daily_loss_init = abs(float(value))
         
     def start(self):
         if self.running: return
-        print(f"🛡️ WATCHDOG: Initializing... (Limit: -${self.max_daily_loss:.2f})")
+        print(f"[WATCHDOG] Initializing... (Limit: -${self.max_daily_loss:.2f})")
         self.running = True
         self._thread = threading.Thread(target=self._monitor_loop, daemon=True)
         self._thread.start()
@@ -32,7 +50,7 @@ class Watchdog:
         self._stop_event.set()
 
     def _monitor_loop(self):
-        print("🛡️ WATCHDOG: Active and Monitoring.")
+        print("[WATCHDOG] Active and Monitoring.")
         while self.running and not self._stop_event.is_set():
             try:
                 # 1. Calculate P&L
@@ -47,8 +65,16 @@ class Watchdog:
                 # If PnL is negative and deeper than max_loss (e.g. -150 < -100)
                 if pnl < (-1 * self.max_daily_loss):
                     if not self._kill_event.is_set(): # Only trigger once
-                        print(f"🚨 WATCHDOG TRIGGERED: Daily Loss ${pnl:.2f} exceeds Limit -${self.max_daily_loss:.2f}")
+                        print(f"[WATCHDOG TRIGGERED] Daily Loss ${pnl:.2f} exceeds Limit -${self.max_daily_loss:.2f}")
                         self._activate_kill_switch()
+                else:
+                    # Auto-recover / Reset kill event if loss is within bounds (e.g. if limit was increased)
+                    if self._kill_event.is_set():
+                        print(f"[WATCHDOG RESET] Daily P&L ${pnl:.2f} is within limit -${self.max_daily_loss:.2f}. Monitoring restored.")
+                        self._kill_event.clear()
+                        if hasattr(self.bridge, 'auto_trade_state') and self.bridge.auto_trade_state is not None:
+                            if self.bridge.auto_trade_state.get("sentiment") == "HALTED_BY_WATCHDOG":
+                                self.bridge.auto_trade_state["sentiment"] = "NEUTRAL"
                         
             except Exception as e:
                 print(f"Watchdog Error: {e}")
@@ -95,7 +121,7 @@ class Watchdog:
         self._kill_event.set()
         
         # 1. Disable Auto-Trading Logic immediately
-        print("💀 WATCHDOG: Disabling Auto-Trade...")
+        print("[WATCHDOG] Disabling Auto-Trade...")
         self.bridge.auto_trade_state["running"] = False
         self.bridge.auto_trade_state["sentiment"] = "HALTED_BY_WATCHDOG"
         
@@ -104,8 +130,8 @@ class Watchdog:
         try:
             loop = self.bridge.loop # Ensure bridge has loop reference
             if loop and loop.is_running():
-                print("💀 WATCHDOG: Requesting Emergency Close All... [DISABLED by User Request]")
-                asyncio.run_coroutine_threadsafe(self.bridge.broadcast_log("🚨 KILL SWITCH ACTIVATED! Auto-Trade HALTED. (Positions HELD for Recovery)"), loop)
+                print("[WATCHDOG] Requesting Emergency Close All... [DISABLED by User Request]")
+                asyncio.run_coroutine_threadsafe(self.bridge.broadcast_log("[KILL SWITCH ACTIVATED] Auto-Trade HALTED. (Positions HELD for Recovery)"), loop)
                 # FIX: Do NOT Close positions. Just Stop Buying.
                 # asyncio.run_coroutine_threadsafe(self.bridge._process_close_all_background(profitable_only=False), loop) 
         except Exception as e:

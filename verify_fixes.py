@@ -14,8 +14,12 @@ def test_db():
         
         # Save a test trade
         test_ticket = 999999
-        financial_db.save_trade(test_ticket, "TEST", "BUY", 1.0, 100.0, "2025-01-01 12:00:00")
+        now_str = time.strftime("%Y-%m-%d %H:%M:%S")
+        financial_db.save_trade(test_ticket, "TEST", "BUY", 1.0, 100.0, now_str)
         print("Warning: Trade Saved.")
+        
+        # Close the trade so it shows up in history (which queries CLOSED trades only)
+        financial_db.update_trade_close(test_ticket, 101.0, 10.0, now_str, "TEST_CLOSE")
         
         # Read it back
         history = financial_db.get_trade_history()

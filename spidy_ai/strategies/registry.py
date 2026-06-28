@@ -24,8 +24,12 @@ class StrategyRegistry:
     def get_strategy(self, name: str) -> BaseStrategy:
         return self.strategies.get(name)
 
-    def get_active_strategies(self):
-        return [s for s in self.strategies.values() if s.is_enabled()]
+    def get_active_strategies(self, regime=None):
+        active = [s for s in self.strategies.values() if s.is_enabled()]
+        if regime:
+            active = [s for s in active if not hasattr(s, "is_applicable") or s.is_applicable(regime)]
+        return active
+
 
     def enable_strategy(self, name: str):
         if name in self.strategies:

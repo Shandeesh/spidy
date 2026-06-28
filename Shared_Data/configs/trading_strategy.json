@@ -1,0 +1,7 @@
+{
+  "volatility_threshold": 1.8,
+  "trailing_stop_loss_pips": 15,
+  "max_daily_loss_usd": 150.0,
+  "trade_volume": 0.01,
+  "version": "v1.4.3"
+}

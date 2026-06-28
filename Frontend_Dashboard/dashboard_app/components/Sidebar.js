@@ -1,12 +1,25 @@
-import { MessageSquare, TrendingUp, PieChart, Zap } from 'lucide-react';
+import { MessageSquare, TrendingUp, PieChart, Zap, Settings, Paintbrush } from 'lucide-react';
+import React, { useState } from 'react';
 
-export default function Sidebar({ activeTab, setActiveTab, mt5Status }) {
+export default function Sidebar({ activeTab, setActiveTab, mt5Status, currentTheme, onThemeChange }) {
     const hasPositions = mt5Status?.positions?.length > 0;
     const isConnected = mt5Status?.connected;
     const dotColor = hasPositions ? 'bg-green-400' : isConnected ? 'bg-blue-400' : 'bg-red-400';
+    const [showThemes, setShowThemes] = useState(false);
+
+    const themes = [
+        { name: 'Cyberpunk', class: 'theme-cyberpunk', emoji: '⚡' },
+        { name: 'Corporate', class: 'theme-corporate', emoji: '💼' },
+        { name: 'Nature', class: 'theme-nature', emoji: '🍃' },
+        { name: 'Retro', class: 'theme-retro', emoji: '👾' },
+        { name: 'Ocean', class: 'theme-ocean', emoji: '🌊' },
+        { name: 'Maoism Glass', class: 'theme-liquid-glass-maoism', emoji: '★' },
+    ];
+
+    const activeThemeObj = themes.find(t => t.class === currentTheme) || themes[0];
 
     return (
-        <div className="w-20 lg:w-64 bg-black/40 backdrop-blur-xl border-r border-white/10 flex flex-col p-4 gap-2">
+        <div className="w-20 lg:w-64 bg-black/40 backdrop-blur-xl border-r border-white/10 flex flex-col p-4 gap-2 relative">
             <div className="flex items-center gap-3 px-2 py-4 mb-4">
                 <div className="w-8 h-8 bg-gradient-to-br from-spidy-primary to-orange-600 rounded-lg flex items-center justify-center shadow-lg shadow-spidy-primary/20">
                     <span className="text-xl">🕷️</span>
@@ -45,6 +58,53 @@ export default function Sidebar({ activeTab, setActiveTab, mt5Status }) {
                 icon={<Zap size={20} />}
                 label="Shoonga"
             />
+
+            <NavButton
+                active={activeTab === 'control_center'}
+                onClick={() => setActiveTab('control_center')}
+                icon={<Settings size={20} />}
+                label="Control Center"
+            />
+
+            {/* Spacer */}
+            <div className="flex-1" />
+
+            {/* Theme Switcher */}
+            {onThemeChange && (
+                <div className="border-t border-white/10 pt-4 flex flex-col gap-2 relative">
+                    <button
+                        onClick={() => setShowThemes(!showThemes)}
+                        className="flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-gray-400 hover:bg-white/5 hover:text-white w-full text-left"
+                    >
+                        <div className="p-2 rounded-lg bg-white/5 text-spidy-accent">
+                            <Paintbrush size={20} />
+                        </div>
+                        <div className="hidden lg:flex flex-col flex-1">
+                            <span className="text-[10px] uppercase font-bold text-gray-500">Theme</span>
+                            <span className="text-xs text-white font-medium">{activeThemeObj.name}</span>
+                        </div>
+                    </button>
+
+                    {showThemes && (
+                        <div className="absolute bottom-16 left-4 right-4 lg:left-0 lg:right-0 bg-gray-900/95 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-2xl flex flex-col gap-1 z-50">
+                            <p className="text-[9px] uppercase font-bold text-gray-500 px-3 py-1">Select Theme</p>
+                            {themes.map(t => (
+                                <button
+                                    key={t.class}
+                                    onClick={() => {
+                                        onThemeChange(t.class);
+                                        setShowThemes(false);
+                                    }}
+                                    className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs transition-all w-full text-left ${currentTheme === t.class ? 'bg-spidy-primary/20 text-white font-bold' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
+                                >
+                                    <span>{t.emoji}</span>
+                                    <span>{t.name}</span>
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 }

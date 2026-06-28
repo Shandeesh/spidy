@@ -1,3 +1,12 @@
+import sys
+# Force console output to use UTF-8 to prevent cp1252 UnicodeEncodeErrors on Windows
+if sys.platform.startswith('win'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
 from fastapi import FastAPI, Body, WebSocket, BackgroundTasks, Depends, HTTPException, status, Security
 from fastapi.staticfiles import StaticFiles
 from fastapi.security import APIKeyHeader
@@ -16,6 +25,7 @@ from datetime import datetime, timedelta
 import financial_db # Import the new DB module
 from economic_calendar import calendar # Import Economic Calendar
 import pandas as pd
+import numpy as np
 from strategy_manager import StrategyManager
 import watchdog_service # START WATCHDOG MODULE
 import sys
@@ -25,7 +35,7 @@ from sentiment_analyzer import SentimentAnalyzer  # SENTIMENT BRAIN
 
 # ── F6: Security audit log ───────────────────────────────────────────────────
 try:
-    _sec_mon = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../Security_Module/security_monitor"))
+    _sec_mon = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../Security_Module/security_monitor"))
     if _sec_mon not in sys.path: sys.path.insert(0, _sec_mon)
     from audit_log import audit_log as _audit_log
     HAS_AUDIT = True
@@ -35,7 +45,7 @@ except Exception as _ae:
 
 # ── F8: Extension Plugin Loader ──────────────────────────────────────────────
 try:
-    _ext_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../Extension_Module"))
+    _ext_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../Extension_Module"))
     if _ext_path not in sys.path: sys.path.insert(0, _ext_path)
     from plugin_base import PluginLoader
     HAS_PLUGINS = True
@@ -45,7 +55,7 @@ except Exception as _pe:
 
 # ── F5: ML Signal Classifier ─────────────────────────────────────────────────
 try:
-    _ml_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../AI_Engine/spidy_ai"))
+    _ml_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../AI_Engine/spidy_ai"))
     if _ml_path not in sys.path: sys.path.insert(0, _ml_path)
     from ml_bridge import get_ml_signal as _get_ml_signal
     from signal_classifier import get_classifier as _get_classifier
@@ -93,7 +103,7 @@ async def lifespan(app: FastAPI):
         print(f"CRITICAL: Financial DB Init Failed: {e}")
         
     # Run MT5 connection in background so API server starts immediately
-    asyncio.create_task(connect_mt5(force=True))
+    asyncio.create_task(connect_mt5(force=False))
     asyncio.create_task(auto_trader_loop())
     asyncio.create_task(update_technical_indicators()) # Add Analysis Loop
     asyncio.create_task(trailing_stop_manager())
@@ -113,6 +123,7 @@ async def lifespan(app: FastAPI):
             self.loop = loop
             self.mt5_state = mt5_state
             self.auto_trade_state = auto_trade_state
+            self.risk_settings = risk_settings
             self.broadcast_log = broadcast_log
             self._process_close_all_background = _process_close_all_background
             
@@ -272,18 +283,18 @@ app = FastAPI(lifespan=lifespan)
 
 # API Auth Setup
 from dotenv import load_dotenv
-load_dotenv(dotenv_path=os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../Shared_Data/configs/.env")))
+load_dotenv(dotenv_path=os.path.abspath(os.path.join(os.path.dirname(__file__), "../../Shared_Data/configs/.env")))
 
 # P8 FIX: Attempt to load API key from encrypted store (cipher_suite.py).
 # Falls back transparently to plaintext .env value if encryption not configured.
 _API_KEY_RAW = os.getenv("SPIDY_API_KEY", "spidy_secure_123")
 try:
     import sys as _sys
-    _sec_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../Security_Module/encryption_utils"))
+    _sec_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../Security_Module/encryption_utils"))
     if _sec_path not in _sys.path:
         _sys.path.insert(0, _sec_path)
     from cipher_suite import SpidyCipher
-    _key_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../Shared_Data/configs/secret.key"))
+    _key_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../Shared_Data/configs/secret.key"))
     _cipher = SpidyCipher(key_path=_key_file)
     # Only attempt decrypt if value looks encrypted (Fernet tokens are ~176+ chars)
     if len(_API_KEY_RAW) > 100:
@@ -380,7 +391,7 @@ def get_symbols():
              return {"symbols": [s.name for s in symbols if s.select]}
     
     # Fallback default list
-    symbols = ["EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "USDCAD", "XAUUSD", "BTCUSD", "ETHUSD", "SP500", "US30", "NAS100"]
+    symbols = ["EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "USDCAD", "XAUUSD", "BTC", "ETHUSD", "SP500", "US30", "NAS100"]
     return {"symbols": symbols}
 
 
@@ -866,7 +877,7 @@ async def process_symbol_technical(symbol, do_h1_update):
         
         # Convert to DataFrame for Strategy Manager
         try:
-            df = pd.DataFrame(list(bars))
+            df = pd.DataFrame(np.array(bars))
             df['time'] = pd.to_datetime(df['time'], unit='s')
             strategy_manager.update_technical_state(symbol, df, current_price)
         except Exception as e:
@@ -877,7 +888,7 @@ async def process_symbol_technical(symbol, do_h1_update):
             h1_bars = list(technical_bars_cache[symbol]['h1'])
             if len(h1_bars) > 200:
                 try:
-                    df_h1 = pd.DataFrame(list(h1_bars))
+                    df_h1 = pd.DataFrame(np.array(h1_bars))
                     df_h1['time'] = pd.to_datetime(df_h1['time'], unit='s')
                     strategy_manager.update_h1_trend(symbol, df_h1)
                 except Exception as e:
@@ -899,10 +910,14 @@ async def process_symbol_technical(symbol, do_h1_update):
         elif current_price < ema_50:
             trend = "BEARISH"
         
+        # Get ADX from strategy manager
+        adx_val = strategy_manager.market_state.get(symbol, {}).get("adx", 25)
+        
         technical_cache[symbol] = {
             "rsi": rsi,
             "ema": ema_50,
             "trend": trend,
+            "adx": adx_val,
             "updated": datetime.now()
         }
 
@@ -966,7 +981,7 @@ async def update_technical_indicators():
         try:
             # Get list of symbols we care about
             symbols = list(set([p['symbol'] for p in mt5_state.get('positions', [])] + 
-                             ["EURUSD", "GBPUSD", "USDJPY", "XAUUSD", "US30", "BTCUSD"]))
+                             ["EURUSD", "GBPUSD", "USDJPY", "XAUUSD", "US30", "BTC"]))
             
             # PARALLEL PROCESSING (Phase 3 Optimization)
             tasks = [process_symbol_technical(symbol, do_h1_update) for symbol in symbols]
@@ -1004,11 +1019,44 @@ def kill_mt5_process():
     except Exception as e:
         print(f"Error killing MT5: {e}")
 
+def load_global_mt5_settings():
+    """Loads MT5 credentials and path from the global settings.yaml."""
+    try:
+        import yaml
+        yaml_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "spidy_ai", "config", "settings.yaml"))
+        if os.path.exists(yaml_path):
+            with open(yaml_path, "r", encoding="utf-8") as f:
+                config = yaml.safe_load(f) or {}
+                return config.get("mt5", {})
+    except Exception as e:
+        print(f"Error loading global settings.yaml: {e}")
+    return {}
+
+def load_global_risk_settings():
+    """Loads risk parameters from the global settings.yaml."""
+    try:
+        import yaml
+        yaml_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "spidy_ai", "config", "settings.yaml"))
+        if os.path.exists(yaml_path):
+            with open(yaml_path, "r", encoding="utf-8") as f:
+                config = yaml.safe_load(f) or {}
+                return config.get("risk", {})
+    except Exception as e:
+        print(f"Error loading global risk settings from settings.yaml: {e}")
+    return {}
+
 def discover_mt5_path():
     """Scans Registry and common locations for terminal64.exe."""
     
-    # 0. Check User Settings Override
-    # (Future: Load from settings.json if exists)
+    # 0. Check settings.yaml custom path
+    try:
+        global_mt5 = load_global_mt5_settings()
+        custom_path = global_mt5.get("path")
+        if custom_path and os.path.exists(custom_path):
+            print(f"INFO: Found MT5 custom path in settings.yaml: {custom_path}")
+            return custom_path
+    except Exception as e:
+        print(f"Error reading custom path from settings.yaml: {e}")
 
     # 1. Check Windows Registry (Most Reliable)
     print("INFO: Checking Registry for MT5...")
@@ -1066,9 +1114,21 @@ def _connect_mt5_logic(force=False, loop=None):
     """Synchronous blocking logic for MT5 connection."""
     if not HAS_MT5: return {"error": "MT5 Module Missing"}
     
+    # Load global settings.yaml credentials
+    global_mt5 = load_global_mt5_settings()
+    login = int(global_mt5.get("login", 0))
+    password = global_mt5.get("password", "")
+    server = global_mt5.get("server", "")
+
     # Smart Connect: Check if already fine (ONLY if not forcing)
     if not force:
-        if mt5.initialize():
+        init_success = False
+        if login > 0:
+            init_success = mt5.initialize(login=login, password=password, server=server)
+        else:
+            init_success = mt5.initialize()
+            
+        if init_success:
             term_info = mt5.terminal_info()
             if term_info and term_info.connected:
                  if loop: asyncio.run_coroutine_threadsafe(broadcast_log("INFO: Smart Connect: Already connected to MT5."), loop)
@@ -1100,7 +1160,13 @@ def _connect_mt5_logic(force=False, loop=None):
          return {"error": "MT5 executable not found"}
 
     # FORCE LAUNCH SEQUENCE (NATIVE)
-    if force or not mt5.initialize(path=exe_path):
+    init_success = False
+    if login > 0:
+        init_success = mt5.initialize(path=exe_path, login=login, password=password, server=server)
+    else:
+        init_success = mt5.initialize(path=exe_path)
+
+    if force or not init_success:
         if loop: asyncio.run_coroutine_threadsafe(broadcast_log(f"INFO: Launching MT5 Native: {exe_path}"), loop)
         
         try:
@@ -1112,7 +1178,13 @@ def _connect_mt5_logic(force=False, loop=None):
             time.sleep(15) 
             
             # Connect explicitly to this path
-            if mt5.initialize(path=exe_path):
+            init_success = False
+            if login > 0:
+                init_success = mt5.initialize(path=exe_path, login=login, password=password, server=server)
+            else:
+                init_success = mt5.initialize(path=exe_path)
+
+            if init_success:
                  if loop: asyncio.run_coroutine_threadsafe(broadcast_log("SUCCESS: Connected after Native Launch."), loop)
                  return {"status": "CONNECTED_FORCE"}
             else:
@@ -1256,9 +1328,9 @@ def is_market_open():
         mt5_state["market_status"] = "CLOSED_WEEKEND"
         return False
 
-    # Rollover Check (Daily 17:00 - 18:00)
+    # Rollover Check (Daily 17:00 EST is 22:00 UTC or 21:00 UTC depending on DST)
     # Standard NY Rollover time where spreads are high and market is effectively closed.
-    if now.hour == 17:
+    if now.hour in [21, 22]:
          mt5_state["market_status"] = "CLOSED_ROLLOVER"
          return False
         
@@ -1358,6 +1430,13 @@ def validate_entry(symbol, signal, tick, strategy_tag="General"):
                 return False, f"Against Global Sentiment ({global_sent})"
             if signal == "SELL" and global_sent == "BULLISH":
                 return False, f"Against Global Sentiment ({global_sent})"
+                
+            # A.2 H1 MACRO TREND FILTER (Triple Screen)
+            h1_trend = strategy_manager.market_state.get(symbol, {}).get("h1_trend", "UNCERTAIN")
+            if signal == "BUY" and h1_trend == "BEARISH":
+                return False, f"Against H1 Macro Trend ({h1_trend})"
+            if signal == "SELL" and h1_trend == "BULLISH":
+                return False, f"Against H1 Macro Trend ({h1_trend})"
                 
             # B. MOMENTUM CHECK (ADX)
             # Avoid Choppy Markets (running into spread)
@@ -1893,7 +1972,7 @@ async def enforce_sentiment_bias(sentiment):
             # Let's be conservative: Only close if Profit is STRICTLY POSITIVE (covers some swap/comm)
             # User complained about "Closing in loss".
             
-            net_profit = pos.profit + pos.swap + pos.commission
+            net_profit = pos.profit + getattr(pos, 'swap', 0.0) + getattr(pos, 'commission', 0.0)
             if net_profit > 0.05: # Ensure we actually make money (Buffer 0.05)
                  await broadcast_log(f"⚠️ CLOSING {pos.symbol} (Ticket {pos.ticket}) due to {reason} (Profit: {pos.profit})")
                  await close_position(pos.ticket, pos.symbol, require_profit=True)
@@ -1963,13 +2042,6 @@ def save_settings():
         print(f"[Settings] Error saving to {SETTINGS_FILE}: {e}")
 
 
-# NEW Mount Static Files
-FRONTEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../Frontend_Dashboard/dashboard_app/out"))
-if os.path.exists(FRONTEND_DIR):
-    print(f"INFO: Mounting Static Frontend from {FRONTEND_DIR}")
-    app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
-else:
-    print(f"WARN: Frontend build not found at {FRONTEND_DIR}. Run 'npm run build' in Frontend_Dashboard.")
 
 # Initialize Settings
 risk_settings = load_settings()
@@ -1988,6 +2060,15 @@ async def update_spider_web(symbols, shared_ticks=None):
     if not HAS_MT5 or not mt5_state["connected"]: return
     if not is_market_open(): return # Safety Check
 
+    def send_order_and_log(req):
+        res = mt5.order_send(req)
+        if res is None:
+            print(f"SPIDER WEB ERROR: order_send returned None for {req['symbol']}")
+        elif res.retcode == mt5.TRADE_RETCODE_DONE:
+            print(f"SPIDER WEB: Placed {req['type']} for {req['symbol']} @ {req['price']}")
+        else:
+            print(f"SPIDER WEB ERROR: Failed to place order for {req['symbol']}. Code: {res.retcode}, Comment: {res.comment}")
+
     for symbol in symbols:
         # Optimization: Use shared tick if available
         tick = None
@@ -1998,6 +2079,11 @@ async def update_spider_web(symbols, shared_ticks=None):
             
         if not tick: continue
         
+        sym_info = mt5.symbol_info(symbol)
+        if not sym_info: continue
+        digits = sym_info.digits
+        point = sym_info.point
+        
         # Validation
         # checking "BUY_LIMIT" logic means we intend to BUY eventually
         # So we check if "BUY" is allowed by Sentiment/Shield
@@ -2007,17 +2093,20 @@ async def update_spider_web(symbols, shared_ticks=None):
         # If sentiment is strict, we might only place one side
         allow_buy = valid_buy
         allow_sell = valid_sell
+        
         # 1. Determine Grid Step based on Volatility (ATR)
         # Using default high volatility assumption if ATR missing
-        step_pips = 0.00050 # 5 Pips (Standard)
+        step_points = 50 # 5 Pips (Standard)
         
         atr = mt5_state.get("latest_atr")
         if atr:
-            # If Volatility is High (ATR > 0.0010), Expand Web
-            if atr > 0.0010:
-                step_pips = 0.0020 # 20 Pips
-            elif atr < 0.0002:
-                 step_pips = 0.00020 # 2 Pips (Scalp Grid)
+            # Check volatility relative to points to be asset-agnostic
+            if atr > (100 * point):   # High Volatility (>10 pips)
+                step_points = 200     # 20 Pips
+            elif atr < (20 * point):  # Low Volatility (<2 pips)
+                step_points = 20      # 2 Pips (Scalp Grid)
+        
+        step_pips = step_points * point
         
         # 2. Check Existing Orders
         open_orders = mt5.orders_get(symbol=symbol)
@@ -2038,8 +2127,8 @@ async def update_spider_web(symbols, shared_ticks=None):
         ask = tick.ask
         bid = tick.bid
         
-        target_buy_price = bid - step_pips
-        target_sell_price = ask + step_pips
+        target_buy_price = round(bid - step_pips, digits)
+        target_sell_price = round(ask + step_pips, digits)
         
         # A. Place BUY LIMIT if missing (Web Floor)
         if not buy_limits and allow_buy:
@@ -2049,16 +2138,15 @@ async def update_spider_web(symbols, shared_ticks=None):
                 "volume": 0.01,
                 "type": mt5.ORDER_TYPE_BUY_LIMIT,
                 "price": target_buy_price,
-                "sl": target_buy_price - (step_pips * 2), # Safety Net
-                "tp": target_buy_price + step_pips, # Scalp Target
+                "sl": round(target_buy_price - (step_pips * 2), digits), # Safety Net
+                "tp": round(target_buy_price + step_pips, digits), # Scalp Target
                 "magic": 888888,
                 "comment": "Spidy Web Buy",
                 "type_time": mt5.ORDER_TIME_DAY,
-                "type_filling": get_filling_mode(symbol),  # FIX 8: use broker-correct filling mode
+                "type_filling": get_filling_mode(symbol),
             }
             # P3 FIX: Pending order placement via executor — keeps event loop free.
-            _req_buy = request
-            await asyncio.get_event_loop().run_in_executor(None, lambda: mt5.order_send(_req_buy))
+            await asyncio.get_event_loop().run_in_executor(None, send_order_and_log, request)
 
         # B. Place SELL LIMIT if missing (Web Ceiling)
         if not sell_limits and allow_sell:
@@ -2068,16 +2156,15 @@ async def update_spider_web(symbols, shared_ticks=None):
                 "volume": 0.01,
                 "type": mt5.ORDER_TYPE_SELL_LIMIT,
                 "price": target_sell_price,
-                "sl": target_sell_price + (step_pips * 2),
-                "tp": target_sell_price - step_pips,
+                "sl": round(target_sell_price + (step_pips * 2), digits),
+                "tp": round(target_sell_price - step_pips, digits),
                 "magic": 888888,
                 "comment": "Spidy Web Sell",
                 "type_time": mt5.ORDER_TIME_DAY,
-                "type_filling": get_filling_mode(symbol),  # FIX 8: use broker-correct filling mode
+                "type_filling": get_filling_mode(symbol),
             }
             # P3 FIX: Wrap in executor so the spider-web sell-limit order doesn't block the event loop.
-            _req_sell = request
-            await asyncio.get_event_loop().run_in_executor(None, lambda: mt5.order_send(_req_sell))
+            await asyncio.get_event_loop().run_in_executor(None, send_order_and_log, request)
 
 
 def calculate_atr(rates, period=14):
@@ -2109,33 +2196,7 @@ def calculate_sma(prices, period):
         return None
     return sum(prices[-period:]) / period
 
-def calculate_rsi(prices, period=14):
-    """Calculates RSI for a given price list."""
-    if len(prices) < period + 1:
-        return None
-        
-    gains = []
-    losses = []
-    
-    for i in range(1, len(prices)):
-        delta = prices[i] - prices[i-1]
-        if delta > 0:
-            gains.append(delta)
-            losses.append(0)
-        else:
-            gains.append(0)
-            losses.append(abs(delta))
-            
-    # Simple average for first RSI step (approximation for speed)
-    avg_gain = sum(gains[-period:]) / period
-    avg_loss = sum(losses[-period:]) / period
-    
-    if avg_loss == 0:
-        return 100.0
-        
-    rs = avg_gain / avg_loss
-    rsi = 100 - (100 / (1 + rs))
-    return rsi
+# calculate_rsi duplicate removed. Using standard smoothed implementation.
 
 def analyze_trend(closes, period=50):
     """Determines trend based on Price vs SMA."""
@@ -2529,17 +2590,47 @@ async def ai_general_loop():
                      await enforce_sentiment_bias(new_sentiment)
                      last_sentiment = new_sentiment
 
-                # 5. STRATEGY OPTIMIZATION (Dynamic Risk)
+                # 5. STRATEGY OPTIMIZATION (Dynamic Risk & Self-Healing)
                 if headlines:
-                    pack = strategy_engine.generate_strategy_pack(headlines)
-                    new_mode = pack.get("mode", "TIGHT") # Default to safe in HFT
+                    loop = asyncio.get_running_loop()
+                    trade_history = await loop.run_in_executor(None, financial_db.get_trade_history, 50)
                     
-                    # Respect User JSON settings if manually set? 
-                    # No, AI Resource should optimize.
+                    pack = strategy_engine.generate_strategy_pack(headlines, trade_history)
                     
-                    if risk_settings.get("mode") != new_mode:
-                        risk_settings["mode"] = new_mode
+                    # Update optimized settings in risk_settings
+                    changed = False
+                    for key in ["mode", "fixed_lot_size", "max_daily_loss", "atr_multiplier"]:
+                        if key in pack and risk_settings.get(key) != pack[key]:
+                            risk_settings[key] = pack[key]
+                            changed = True
+                            
+                    # Update auto-trading state if optimizer requests pause/resume
+                    if "auto_trade_enabled" in pack:
+                        new_auto_trade = pack["auto_trade_enabled"]
+                        if risk_settings.get("auto_trade_enabled") != new_auto_trade:
+                            # If the optimizer wants to disable auto-trading, check if we've already halted for this trade sequence
+                            if not new_auto_trade:
+                                latest_ticket = trade_history[0]["ticket"] if trade_history else None
+                                if latest_ticket and risk_settings.get("last_halt_ticket") == latest_ticket:
+                                    # We have already halted for the latest closed trade. Since the user manually re-enabled it,
+                                    # do not turn it off again.
+                                    pass
+                                else:
+                                    risk_settings["auto_trade_enabled"] = new_auto_trade
+                                    auto_trade_state["running"] = new_auto_trade
+                                    if latest_ticket:
+                                        risk_settings["last_halt_ticket"] = latest_ticket
+                                    changed = True
+                                    await broadcast_log(f"🧠 AI OPTIMIZER: Set auto_trade_enabled = {new_auto_trade}")
+                            else:
+                                risk_settings["auto_trade_enabled"] = new_auto_trade
+                                auto_trade_state["running"] = new_auto_trade
+                                changed = True
+                                await broadcast_log(f"🧠 AI OPTIMIZER: Set auto_trade_enabled = {new_auto_trade}")
+                            
+                    if changed:
                         save_settings()
+                        await broadcast_log(f"🧠 AI OPTIMIZER: Dynamic parameters updated -> mode={risk_settings.get('mode')}, lot={risk_settings.get('fixed_lot_size')}, max_loss={risk_settings.get('max_daily_loss')}, atr_mult={risk_settings.get('atr_multiplier')}")
 
             else:
                 pass
@@ -2551,6 +2642,20 @@ async def ai_general_loop():
              print(f"General AI Error: {e}")
              await asyncio.sleep(60)
 
+
+def get_hft_velocity_threshold(symbol: str) -> float:
+    """Returns the pct_change threshold for HFT velocity based on asset type."""
+    symbol = symbol.upper()
+    if "BTC" in symbol or "ETH" in symbol or "LTC" in symbol or "XRP" in symbol:
+        return 0.000250  # Crypto: 0.025%
+    elif any(idx in symbol for idx in ["US30", "SP500", "NAS100", "GER30", "UK100"]):
+        return 0.000120  # Indices: 0.012%
+    elif "XAU" in symbol or "XAG" in symbol:
+        return 0.000080  # Metals: 0.008%
+    elif "WTI" in symbol or "BRENT" in symbol:
+        return 0.000150  # Energy: 0.015%
+    else:
+        return 0.000020  # Forex: 0.002% (2 points approx)
 
 async def auto_trader_loop():
     """
@@ -2575,6 +2680,7 @@ async def auto_trader_loop():
     grid_last_update = 0
     scanner_last_update = 0 # Technical Analysis Timer
     symbols_refresh_time = 0
+    last_stacking_blocked_log_time = 0.0
     
     while True:
         try:
@@ -2599,6 +2705,21 @@ async def auto_trader_loop():
                 await asyncio.sleep(5)
                 continue
 
+            # 0. GLOBAL MAX POSITIONS CHECK
+            try:
+                global_risk = load_global_risk_settings()
+                max_positions = global_risk.get("max_open_positions", 3)
+                all_positions = await safe_mt5_call(mt5.positions_get)
+                if all_positions is not None and len(all_positions) >= max_positions:
+                    current_time = time.time()
+                    if current_time - last_stacking_blocked_log_time >= 15.0:
+                        last_stacking_blocked_log_time = current_time
+                        await broadcast_log(f"🛡️ HFT FILTER: Stacking Blocked. Active positions ({len(all_positions)}) >= Max allowed ({max_positions})")
+                    await asyncio.sleep(1.0)
+                    continue
+            except Exception as e:
+                print(f"Error checking global position cap: {e}")
+
             # 0. Refresh Symbol List (Every 10s to pick up new Market Watch items)
             if datetime.now().timestamp() - symbols_refresh_time > 10:
                 # Optimized Candidate List for Maximum Opportunity
@@ -2612,7 +2733,7 @@ async def auto_trader_loop():
                     # Indices
                     "US30", "SP500", "NAS100", "GER30", "UK100",
                     # Crypto
-                    "BTCUSD", "ETHUSD", "LTCUSD", "XRPUSD"
+                    "BTC", "ETHUSD", "LTCUSD", "XRPUSD"
                 ]
                 
                 new_symbols = []
@@ -2651,12 +2772,11 @@ async def auto_trader_loop():
                 # Velocity Analysis (Milliseconds)
                 pct_change = (curr_price - prev_price) / prev_price if prev_price else 0
                 
-                # SENSITIVITY ADJUSTMENT: Ultra-Sensitive for "Every Second" request
-                # 0.0001 = 1 pip approx. 
-                # 0.00001 = 1 point approx.
-                # Let's set to ~1.5 points to avoid pure noise but catch micro-moves.
-                is_pump = pct_change > 0.000015 
-                is_dump = pct_change < -0.000015
+                # SENSITIVITY ADJUSTMENT: Dynamic Symbol-Specific Thresholds
+                # Avoids noise on Gold/Crypto/Indices while keeping Forex sensitive
+                thresh = get_hft_velocity_threshold(symbol)
+                is_pump = pct_change > thresh
+                is_dump = pct_change < -thresh
                 
                 signal = None
                 
@@ -2829,6 +2949,12 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
     pos = positions[0]
     symbol = pos.symbol
 
+    # Fetch symbol specifications early to round stops correctly
+    sym_info = mt5.symbol_info(symbol)
+    if not sym_info:
+        return
+    digits = sym_info.digits
+
     # FIX: Define entry_price and current_price early so all sub-blocks can use them
     entry_price = pos.price_open
     tick_now = mt5.symbol_info_tick(symbol)
@@ -2836,6 +2962,34 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
         current_price = tick_now.bid if pos.type == 0 else tick_now.ask
     else:
         current_price = entry_price  # fallback
+
+    # --- 0. TIGHT RISK GUARDRAILS (Time expiration & Proportional USD Loss Cut) ---
+    try:
+        # A. Expiration Check (HFT scalp positions should expire within 30 minutes)
+        duration_minutes = (datetime.now().timestamp() - pos.time) / 60.0
+        if duration_minutes > 30.0:
+            if loop: asyncio.run_coroutine_threadsafe(broadcast_log(f"⏰ TIME EXPIRATION: Closing {symbol} #{pos.ticket} (Held {duration_minutes:.1f}m > 30m)"), loop)
+            print(f"TIME EXPIRATION: {symbol} #{pos.ticket} (Held {duration_minutes:.1f}m) - Closing...")
+            res, msg, _, _ = _close_position_sync(pos.ticket, symbol, "TimeExpiration", require_profit=False)
+            if res:
+                return
+
+        # B. Tighter Proportional USD Loss Cut (Base: -$3.00 for 0.05 volume)
+        comm = getattr(pos, 'commission', 0.0)
+        swap = getattr(pos, 'swap', 0.0)
+        net_profit_lc = pos.profit + comm + swap
+        
+        lot_scale = pos.volume / 0.05
+        max_loss_limit = -3.00 * lot_scale
+        
+        if net_profit_lc <= max_loss_limit:
+            if loop: asyncio.run_coroutine_threadsafe(broadcast_log(f"🛡️ TIGHT LOSS CUT: Closing {symbol} #{pos.ticket} (Net: ${net_profit_lc:.2f} <= Limit: ${max_loss_limit:.2f})"), loop)
+            print(f"TIGHT LOSS CUT: {symbol} #{pos.ticket} (Net: ${net_profit_lc:.2f}) - Closing...")
+            res, msg, _, _ = _close_position_sync(pos.ticket, symbol, "LossCut", require_profit=False)
+            if res:
+                return
+    except Exception as e:
+        print(f"Tight Risk Guardrails Error: {e}")
 
     # --- 0. ROI GUARD (30% Loss / 70% Profit) ---
     # Logic: ROI = (Net Profit / Estimated Margin) * 100
@@ -2912,7 +3066,7 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
         
         # Calculate Net Profit (Gross + Swap + Commission)
         # Commission is usually negative, so adding it reduces profit
-        net_profit = pos.profit + pos.swap + pos.commission
+        net_profit = pos.profit + getattr(pos, 'swap', 0.0) + getattr(pos, 'commission', 0.0)
 
         # --- NEW: TRACK PROFIT PEAK (High Water Mark) ---
         current_peak = profit_peaks.get(pos.ticket, 0.0)
@@ -2983,10 +3137,10 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
                              
                              # GREED LOCK: Ensure we lock at least enough to cover Cost + Profit
                              current_sl = pos.sl
-                             cost_usd = abs(pos.commission + pos.swap)
+                             cost_usd = abs(getattr(pos, 'commission', 0.0) + getattr(pos, 'swap', 0.0))
                              req_dist = get_required_breakeven_distance(symbol, pos.volume, cost_usd, 0.50)
                              
-                             lock_price = entry_price + req_dist
+                             lock_price = round(entry_price + req_dist, digits)
                              if current_sl < lock_price:
                                  # Place Lock
                                  req = {
@@ -2997,7 +3151,13 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
                                      "tp": pos.tp,
                                      "magic": 234000
                                  }
-                                 mt5.order_send(req)
+                                 res = mt5.order_send(req)
+                                 if res is None:
+                                     print(f"GREED LOCK ERROR: order_send returned None for {symbol}")
+                                 elif res.retcode == mt5.TRADE_RETCODE_DONE:
+                                     print(f"GREED LOCK: Locked SL for {symbol} @ {lock_price}")
+                                 else:
+                                     print(f"GREED LOCK ERROR: Failed to lock SL for {symbol}. Code: {res.retcode}, Comment: {res.comment}")
                          
                  elif pos.type == 1: # SELL
                      if trend == "BEARISH" and rsi > 30:
@@ -3007,10 +3167,10 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
 
                              # GREED LOCK for SELL
                              current_sl = pos.sl
-                             cost_usd = abs(pos.commission + pos.swap)
+                             cost_usd = abs(getattr(pos, 'commission', 0.0) + getattr(pos, 'swap', 0.0))
                              req_dist = get_required_breakeven_distance(symbol, pos.volume, cost_usd, 0.50)
                              
-                             lock_price = entry_price - req_dist
+                             lock_price = round(entry_price - req_dist, digits)
                              if current_sl == 0 or current_sl > lock_price:
                                  req = {
                                      "action": mt5.TRADE_ACTION_SLTP,
@@ -3020,7 +3180,13 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
                                      "tp": pos.tp,
                                      "magic": 234000
                                  }
-                                 mt5.order_send(req)
+                                 res = mt5.order_send(req)
+                                 if res is None:
+                                     print(f"GREED LOCK ERROR: order_send returned None for {symbol}")
+                                 elif res.retcode == mt5.TRADE_RETCODE_DONE:
+                                     print(f"GREED LOCK: Locked SL for {symbol} @ {lock_price}")
+                                 else:
+                                     print(f"GREED LOCK ERROR: Failed to lock SL for {symbol}. Code: {res.retcode}, Comment: {res.comment}")
              
              if should_close:
                  # LOG for verification
@@ -3060,9 +3226,9 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
     # Detect if we are at a statistical peak to capture profit
     try:
          # 1. Get Data (M5 for precision)
-         # We need ~20 candles for BB
-         rates = mt5.copy_rates_from_pos(pos.symbol, mt5.TIMEFRAME_M5, 0, 25)
-         if rates is not None and len(rates) > 20:
+         # We need ~35+ candles for MACD (slow + signal) and 20 for BB
+         rates = mt5.copy_rates_from_pos(pos.symbol, mt5.TIMEFRAME_M5, 0, 50)
+         if rates is not None and len(rates) > 35:
              closes = [x['close'] for x in rates]
              current_price = closes[-1]
              
@@ -3130,7 +3296,7 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
          print(f"Smart Exit Error: {e}")
 
     # Estimate Cost (Commission + Swap) in PIPS
-    cost_usd = abs(pos.commission + pos.swap)
+    cost_usd = abs(getattr(pos, 'commission', 0.0) + getattr(pos, 'swap', 0.0))
     # Estimate Value Per Pip (Approximate for speed, assuming standard lot 1.0 = $10/pip, 0.01 = $0.10/pip)
     # A safer way requires tick_value from symbol_info but let's be conservative.
     # Cost Pips = Cost USD / (Volume * 10) roughly for typical pairs.
@@ -3147,7 +3313,7 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
     
     # Calculate Precise Monetary Distance needed
     # FIX: safe_commission / safe_swap were undefined — use pos attributes directly
-    cost_usd = abs(pos.commission + pos.swap)
+    cost_usd = abs(getattr(pos, 'commission', 0.0) + getattr(pos, 'swap', 0.0))
     secure_pips_dist = get_required_breakeven_distance(symbol, pos.volume, cost_usd, 0.50)
     
     # Log the calcs occasionally for debugging
@@ -3173,7 +3339,7 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
         if current_price > (entry_price + trigger_dist):
             # It is safe to lock.
             # Lock Level: Entry + SecureDist (Guarantees $0.50 Net)
-            test_sl = entry_price + secure_pips_dist
+            test_sl = round(entry_price + secure_pips_dist, digits)
               
             # Final Validity Check (Must be below current price by at least spread?)
             # Let's verify against current Bid (which is current_price for Buy exit logic check)
@@ -3184,7 +3350,7 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
     elif pos.type == 1: # SELL
         # We want Current < Entry - Trigger
         if current_price < (entry_price - trigger_dist):
-            test_sl = entry_price - secure_pips_dist
+            test_sl = round(entry_price - secure_pips_dist, digits)
               
             if test_sl > current_price:
                 new_sl = test_sl
@@ -3219,8 +3385,12 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
                     "magic": 234000
                 }
                 res = mt5.order_send(request)
-                if res.retcode == mt5.TRADE_RETCODE_DONE:
+                if res is None:
+                    print(f"GUARDIAN ERROR: order_send returned None for {symbol} (Profit Lock)")
+                elif res.retcode == mt5.TRADE_RETCODE_DONE:
                     print(f"GUARDIAN: Moved SL to {reason_log} {symbol} @ {new_sl} (Profit Locked)")
+                else:
+                    print(f"GUARDIAN ERROR: Failed to move SL to {new_sl} for {symbol}. Code: {res.retcode}, Comment: {res.comment}")
 
     # --- 2. ATR Trailing Stop ---
     # Re-calc ATR
@@ -3234,8 +3404,8 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
     ideal_sl = 0.0
     
     if pos.type == 0: # BUY
-        ideal_sl = current_price - stop_dist
-        min_profit_sl = entry_price + secure_pips_dist 
+        ideal_sl = round(current_price - stop_dist, digits)
+        min_profit_sl = round(entry_price + secure_pips_dist, digits)
         
         if ideal_sl > min_profit_sl:
              if ideal_sl > pos.sl:
@@ -3251,17 +3421,21 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
                 "magic": 234000
             }
             res = mt5.order_send(request)
-            if res.retcode == mt5.TRADE_RETCODE_DONE:
+            if res is None:
+                print(f"GUARDIAN ERROR: order_send returned None for {symbol} (Trailing Stop)")
+            elif res.retcode == mt5.TRADE_RETCODE_DONE:
                  print(f"GUARDIAN: Trailing Stop {symbol} @ {ideal_sl}")
+            else:
+                 print(f"GUARDIAN ERROR: Failed Trailing Stop to {ideal_sl} for {symbol}. Code: {res.retcode}, Comment: {res.comment}")
             
     elif pos.type == 1: # SELL
-        ideal_sl = current_price + stop_dist
-        min_profit_sl = entry_price - secure_pips_dist 
+        ideal_sl = round(current_price + stop_dist, digits)
+        min_profit_sl = round(entry_price - secure_pips_dist, digits)
         
         if ideal_sl < min_profit_sl:
              if pos.sl == 0 or ideal_sl < pos.sl: 
                  should_update = True
-                 
+                   
         if should_update:
             request = {
                 "action": mt5.TRADE_ACTION_SLTP,
@@ -3272,11 +3446,12 @@ def _process_single_pos_guardian_sync(pos_ticket, loop=None):
                 "magic": 234000
             }
             res = mt5.order_send(request)
-            if res.retcode == mt5.TRADE_RETCODE_DONE:
+            if res is None:
+                print(f"GUARDIAN ERROR: order_send returned None for {symbol} (Trailing Stop)")
+            elif res.retcode == mt5.TRADE_RETCODE_DONE:
                  print(f"GUARDIAN: Trailing Stop {symbol} @ {ideal_sl}")
-
-    # --- 2. ATR Trailing Stop ---
-    # ... (Replaced by snippet above for brevity, keeping context)
+            else:
+                 print(f"GUARDIAN ERROR: Failed Trailing Stop to {ideal_sl} for {symbol}. Code: {res.retcode}, Comment: {res.comment}")
 
     # --- DEBUG: High Profit Watch ---
     if pos.profit > 5.0:
@@ -3374,6 +3549,7 @@ async def trailing_stop_manager():
     await broadcast_log("INFO: Profit Guardian (ATR Trailing) Started.")
     
     loop = asyncio.get_running_loop()
+    last_heartbeat_time = 0.0
     
     while True:
         try:
@@ -3385,7 +3561,9 @@ async def trailing_stop_manager():
                  
                  if positions:
                      # LOG Heartbeat periodically
-                     if datetime.now().second % 60 == 0: # Slower heartbeat to reduce spam
+                     current_time = time.time()
+                     if current_time - last_heartbeat_time >= 60.0: # Slower heartbeat to reduce spam
+                          last_heartbeat_time = current_time
                           # print(f"DEBUG: Guardian Scanning {len(positions)} positions...") # Stdout isn't helping
                           await broadcast_log(f"DEBUG: Guardian Scanning {len(positions)} positions...")
 
@@ -3554,9 +3732,9 @@ async def history_sync_manager():
 @app.post("/reset_stops")
 async def reset_stops(api_key: str = Depends(verify_api_key)):
     """Reset to standard risk."""
-    risk_settings["atr_multiplier"] = 4.0
+    risk_settings["atr_multiplier"] = 2.0
     risk_settings["mode"] = "STANDARD"
-    await broadcast_log("INFO: Risk settings reset to STANDARD.")
+    await broadcast_log("INFO: Risk settings reset to STANDARD (ATR Multiplier: 2.0).")
     save_settings() # Persist
     return {"status": "RESET", "multiplier": 2.0}
 
@@ -3590,6 +3768,30 @@ async def update_auto_secure(payload: dict = Body(...), api_key: str = Depends(v
     await broadcast_log(f"SETTINGS: Auto-Secure {status} (Target: ${thresh})")
     save_settings() # Persist
     return {"status": "UPDATED", "config": risk_settings["auto_secure"]}
+
+@app.post("/settings")
+async def update_settings(payload: dict = Body(...), api_key: str = Depends(verify_api_key)):
+    """
+    Update general risk settings.
+    Payload: { "max_daily_loss": float, "fixed_lot_size": float, "atr_multiplier": float, "scalp_target_usd": float, "breakeven_pct": float, "mode": str }
+    """
+    updated_keys = []
+    for key in ["max_daily_loss", "fixed_lot_size", "atr_multiplier", "scalp_target_usd", "breakeven_pct"]:
+        val = payload.get(key)
+        if val is not None:
+            risk_settings[key] = float(val)
+            updated_keys.append(f"{key}={val}")
+            
+    mode = payload.get("mode")
+    if mode is not None:
+        risk_settings["mode"] = str(mode)
+        updated_keys.append(f"mode={mode}")
+        
+    if updated_keys:
+        await broadcast_log(f"SETTINGS: Updated -> {', '.join(updated_keys)}")
+        save_settings() # Persist
+        return {"status": "UPDATED", "settings": risk_settings}
+    return {"status": "NO_CHANGES", "settings": risk_settings}
 
 
 # REMOVED: Duplicate /set_sentiment (broken — referenced undefined 'new_sentiment')
@@ -3633,12 +3835,6 @@ async def debug_force_sync(api_key: str = Depends(verify_api_key)):
 async def toggle_auto(payload: dict = Body(...), api_key: str = Depends(verify_api_key)):
     """Toggles Auto-Trading On/Off."""
     enable = payload.get("enable", True)
-    auto_trade_state["technical"] = technical_cache
-    
-    # Verbose Log (Heartbeat)
-    count = len(technical_cache)
-    if count > 0:
-        await broadcast_log(f"INFO: Technical Analysis Updated for {count} symbols.")
     
     # Update Persistence
     risk_settings["auto_trade_enabled"] = enable
@@ -3648,7 +3844,7 @@ async def toggle_auto(payload: dict = Body(...), api_key: str = Depends(verify_a
     auto_trade_state["running"] = enable
     
     status_str = "ENABLED" if enable else "DISABLED"
-    await broadcast_log(f"INFO: Auto-Trading {status_str}")
+    await broadcast_log(f"SETTINGS: Auto-Trade Toggle -> {status_str}")
     return {"status": status_str, "running": enable}
 
 # REMOVED: Duplicate /close_trade endpoint (canonical version with better validation is at line ~1422)
@@ -3664,6 +3860,18 @@ def get_status():
     mt5_state["oil"] = auto_trade_state.get("oil", {}) # <--- Expose Oil
     mt5_state["dxy"] = auto_trade_state.get("dxy", {}) # <--- Expose DXY
     mt5_state["risk_settings"] = risk_settings
+    
+    # Inject Watchdog Diagnostics
+    global watchdog_instance
+    if 'watchdog_instance' in globals() and watchdog_instance is not None:
+        mt5_state["watchdog"] = {
+            "running": watchdog_instance.running,
+            "max_daily_loss": watchdog_instance.max_daily_loss,
+            "current_daily_pnl": watchdog_instance.current_daily_pnl,
+            "kill_event_set": watchdog_instance._kill_event.is_set()
+        }
+    else:
+        mt5_state["watchdog"] = {"running": False, "status": "Not initialized"}
 
     # --- REAL-TIME UPDATE LOGIC ---
     if HAS_MT5 and mt5_state["connected"]:
@@ -3718,7 +3926,9 @@ def get_status():
             tick = mt5.symbol_info_tick("EURUSD") # Proxy for global market
             if tick:
                 last_tick_ts = tick.time
-                if (datetime.now().timestamp() - last_tick_ts) > 60: # No ticks for 60s
+                time_offset = mt5_state.get("time_offset", 7200)
+                server_tick_local = last_tick_ts - time_offset
+                if (datetime.now().timestamp() - server_tick_local) > 60: # No ticks for 60s
                      status_label = "STALLED / CLOSED"
             else:
                  status_label = "NO_DATA"
@@ -4045,6 +4255,13 @@ def _maybe_write_influx_performance():
     except Exception:
         pass
 
+# NEW Mount Static Files (placed at the end to avoid intercepting active API endpoints)
+FRONTEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../Frontend_Dashboard/dashboard_app/out"))
+if os.path.exists(FRONTEND_DIR):
+    print(f"INFO: Mounting Static Frontend from {FRONTEND_DIR}")
+    app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+else:
+    print(f"WARN: Frontend build not found at {FRONTEND_DIR}. Run 'npm run build' in Frontend_Dashboard.")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

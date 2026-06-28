@@ -5,6 +5,14 @@ import os
 import time
 import shutil
 
+# Force console output to use UTF-8 to prevent cp1252 UnicodeEncodeErrors on Windows
+if sys.platform.startswith('win'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
 # Ensure we can import from local directories
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -112,10 +120,13 @@ def verify_system_logic():
         signals = []
         conf_engine = ConfidenceEngine()
         for s in active:
-            sig, conf = s.generate_signal(df)
-            if sig != 0:
+            res = s.generate_signal(df)
+            sig = res.get('signal', 'NEUTRAL')
+            conf = res.get('confidence', 0.0)
+            if sig != 'NEUTRAL':
                 score = conf_engine.calculate_score(s, sig, conf, regime)
                 signals.append((s.name, score))
+
         
         # Aggregator
         agg = SignalAggregator(threshold=0.1) # low threshold

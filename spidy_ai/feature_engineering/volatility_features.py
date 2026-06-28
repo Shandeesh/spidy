@@ -42,3 +42,9 @@ class VolatilityFeatures:
         df.drop(columns=[c for c in cols_to_drop if c in df.columns], inplace=True)
 
         return df
+
+    @staticmethod
+    def add_features(df: pd.DataFrame) -> pd.DataFrame:
+        """Wrapper method forwarding to add_all_volatility_features"""
+        return VolatilityFeatures.add_all_volatility_features(df)
+

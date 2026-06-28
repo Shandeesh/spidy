@@ -80,8 +80,25 @@ class ExecutorAgent(BaseAgent):
     async def setup(self) -> None:
         import MetaTrader5 as mt5
         self._mt5 = mt5
-        if not mt5.initialize():
-            raise RuntimeError("[Executor] MetaTrader5.initialize() failed.")
+        
+        # Load MT5 connection details from config
+        mt5_cfg = self.config.get("mt5", {})
+        login = int(mt5_cfg.get("login", 0))
+        password = mt5_cfg.get("password", "")
+        server = mt5_cfg.get("server", "")
+        path = mt5_cfg.get("path", "")
+        
+        # Initialize with credentials if login is set
+        initialized = False
+        if login > 0:
+            self.logger.info("[Executor] Initializing MT5 with credentials (login: %d, server: %s)", login, server)
+            initialized = mt5.initialize(path=path, login=login, password=password, server=server)
+        else:
+            self.logger.info("[Executor] Initializing MT5 (path: %s)", path)
+            initialized = mt5.initialize(path=path)
+            
+        if not initialized:
+            raise RuntimeError(f"[Executor] MetaTrader5.initialize() failed: {mt5.last_error()}")
 
         self._inbox = await self.bus.subscribe(
             Topic.TRADE_SIGNAL,
@@ -137,7 +154,7 @@ class ExecutorAgent(BaseAgent):
         atr       = signal["atr"]
 
         # ── Staleness check ───────────────────────────────────────────────────
-        tick = await asyncio.to_thread(self._mt5.symbol_info_tick, symbol)
+        tick = await asyncio.to_thread(self._get_symbol_tick, symbol)
         if tick is None:
             await self._report(
                 "SKIP", symbol, None, direction, lot_size, entry, sl, tp,
@@ -192,8 +209,12 @@ class ExecutorAgent(BaseAgent):
         price: float,
         sl: float,
         tp: float,
+        position: int | None = None,
     ) -> int | None:
         """Synchronous MT5 order submission (run via to_thread)."""
+        if not self._ensure_connection():
+            self.logger.error("[Executor] Cannot place order: MT5 connection unavailable.")
+            return None
         mt5        = self._mt5
         order_type = mt5.ORDER_TYPE_BUY if direction == "BUY" else mt5.ORDER_TYPE_SELL
 
@@ -211,6 +232,9 @@ class ExecutorAgent(BaseAgent):
             "type_time":    mt5.ORDER_TIME_GTC,
             "type_filling": mt5.ORDER_FILLING_IOC,
         }
+        if position is not None:
+            request["position"] = position
+
         result = mt5.order_send(request)
 
         if result and result.retcode == mt5.TRADE_RETCODE_DONE:
@@ -255,46 +279,103 @@ class ExecutorAgent(BaseAgent):
                     self._open_tickets.discard(ticket)
                     break
 
-                tick = await asyncio.to_thread(self._mt5.symbol_info_tick, symbol)
+                tick = await asyncio.to_thread(self._get_symbol_tick, symbol)
                 if tick is None:
                     continue
 
                 current = tick.bid if direction == "BUY" else tick.ask
-                if best is None:
-                    best = current
+                
+                # Dynamic Breakeven and Profit Locking Logic (from verify_logic.py)
+                swap = pos.get("swap", 0.0)
+                commission = pos.get("commission", 0.0)
+                net_profit = pos["profit"] + swap + commission
+                cost_usd = abs(commission + swap)
+                entry_price = pos["price_open"]
+                
+                trigger_val = cost_usd + 0.20  # $0.20 buffer above cost cover
+                new_sl = None
+                reason_log = ""
+                
+                if net_profit > trigger_val:
+                    if net_profit > 1.00:
+                        # Stage 2 (Secure Profit): Lock 40% of floating profit
+                        secure_ratio = 0.40
+                        lock_pips = (current - entry_price) * secure_ratio if direction == "BUY" else (entry_price - current) * secure_ratio
+                        if direction == "BUY": 
+                            new_sl_candidate = round(entry_price + abs(lock_pips), 5)
+                            if new_sl_candidate > pos["sl"] + 0.00001:
+                                new_sl = new_sl_candidate
+                                reason_log = f"Stage 2 Profit Lock (+${net_profit:.2f})"
+                        else:
+                            new_sl_candidate = round(entry_price - abs(lock_pips), 5)
+                            if new_sl_candidate < pos["sl"] - 0.00001 or pos["sl"] == 0.0:
+                                new_sl = new_sl_candidate
+                                reason_log = f"Stage 2 Profit Lock (+${net_profit:.2f})"
+                    elif net_profit > 0.30:
+                        # Stage 1 (Cover Costs): Move SL past entry to cover costs
+                        point = 0.00001 if "JPY" not in symbol else 0.001
+                        if "XAU" in symbol: point = 0.01
+                        elif "BTC" in symbol: point = 1.0
+                        
+                        safe_dist = 20 * point
+                        if net_profit > 0.40:
+                            safe_dist = 30 * point
+                            
+                        if direction == "BUY":
+                            new_sl_candidate = round(entry_price + safe_dist, 5)
+                            if new_sl_candidate > pos["sl"] + 0.00001:
+                                new_sl = new_sl_candidate
+                                reason_log = f"Stage 1 Cost Cover (+${net_profit:.2f})"
+                        else:
+                            new_sl_candidate = round(entry_price - safe_dist, 5)
+                            if new_sl_candidate < pos["sl"] - 0.00001 or pos["sl"] == 0.0:
+                                new_sl = new_sl_candidate
+                                reason_log = f"Stage 1 Cost Cover (+${net_profit:.2f})"
 
-                if direction == "BUY":
-                    best   = max(best, current)
-                    new_sl = round(best - trail_dist, 5)
-                    if new_sl > pos["sl"] + 0.00001:
-                        await asyncio.to_thread(
-                            self._modify_sl, ticket, symbol, new_sl
-                        )
-                        self.logger.debug(
-                            "[Executor] Trail BUY ticket=%d sl %.5f → %.5f",
-                            ticket, pos["sl"], new_sl,
-                        )
-                        await self._report(
-                            "TRAIL", symbol, ticket, direction, pos["volume"],
-                            current, new_sl, pos["tp"],
-                            reason="Trailing stop ratcheted",
-                        )
+                # If locked profit/breakeven, modify SL. Otherwise, standard ATR Trailing
+                if new_sl is not None:
+                    await asyncio.to_thread(self._modify_sl, ticket, symbol, new_sl)
+                    await self._report(
+                        "TRAIL", symbol, ticket, direction, pos["volume"],
+                        current, new_sl, pos["tp"],
+                        reason=reason_log,
+                    )
                 else:
-                    best   = min(best, current)
-                    new_sl = round(best + trail_dist, 5)
-                    if new_sl < pos["sl"] - 0.00001:
-                        await asyncio.to_thread(
-                            self._modify_sl, ticket, symbol, new_sl
-                        )
-                        self.logger.debug(
-                            "[Executor] Trail SELL ticket=%d sl %.5f → %.5f",
-                            ticket, pos["sl"], new_sl,
-                        )
-                        await self._report(
-                            "TRAIL", symbol, ticket, direction, pos["volume"],
-                            current, new_sl, pos["tp"],
-                            reason="Trailing stop ratcheted",
-                        )
+                    if best is None:
+                        best = current
+
+                    if direction == "BUY":
+                        best = max(best, current)
+                        new_sl_atr = round(best - trail_dist, 5)
+                        if new_sl_atr > pos["sl"] + 0.00001:
+                            await asyncio.to_thread(
+                                self._modify_sl, ticket, symbol, new_sl_atr
+                            )
+                            self.logger.debug(
+                                "[Executor] Trail BUY ticket=%d sl %.5f → %.5f",
+                                ticket, pos["sl"], new_sl_atr,
+                            )
+                            await self._report(
+                                "TRAIL", symbol, ticket, direction, pos["volume"],
+                                current, new_sl_atr, pos["tp"],
+                                reason="Trailing stop ratcheted (ATR)",
+                            )
+                    else:
+                        best = min(best, current)
+                        new_sl_atr = round(best + trail_dist, 5)
+                        if new_sl_atr < pos["sl"] - 0.00001 or pos["sl"] == 0.0:
+                            await asyncio.to_thread(
+                                self._modify_sl, ticket, symbol, new_sl_atr
+                            )
+                            self.logger.debug(
+                                "[Executor] Trail SELL ticket=%d sl %.5f → %.5f",
+                                ticket, pos["sl"], new_sl_atr,
+                            )
+                            await self._report(
+                                "TRAIL", symbol, ticket, direction, pos["volume"],
+                                current, new_sl_atr, pos["tp"],
+                                reason="Trailing stop ratcheted (ATR)",
+                            )
         except asyncio.CancelledError:
             pass
         finally:
@@ -303,11 +384,11 @@ class ExecutorAgent(BaseAgent):
     # ── Kill-switch: close all positions ──────────────────────────────────────
 
     async def _close_all(self, reason: str) -> None:
-        positions = await asyncio.to_thread(self._mt5.positions_get) or []
+        positions = await asyncio.to_thread(self._get_positions)
         for pos in positions:
             close_dir   = "SELL" if pos.type == 0 else "BUY"
             tick        = await asyncio.to_thread(
-                self._mt5.symbol_info_tick, pos.symbol
+                self._get_symbol_tick, pos.symbol
             )
             if tick is None:
                 continue
@@ -316,7 +397,7 @@ class ExecutorAgent(BaseAgent):
             if self._live_mode:
                 await asyncio.to_thread(
                     self._place_market_order,
-                    pos.symbol, close_dir, pos.volume, close_price, 0.0, 0.0,
+                    pos.symbol, close_dir, pos.volume, close_price, 0.0, 0.0, pos.ticket
                 )
             self._open_tickets.discard(pos.ticket)
             await self._report(
@@ -327,14 +408,65 @@ class ExecutorAgent(BaseAgent):
 
     # ── MT5 helpers ───────────────────────────────────────────────────────────
 
+    def _ensure_connection(self) -> bool:
+        """Ensure connection to MetaTrader 5 is active and authenticated."""
+        try:
+            info = self._mt5.terminal_info()
+            if info is None or not info.connected:
+                self.logger.warning("[%s] MT5 connection dead or not initialized. Attempting reconnection...", self.name)
+                mt5_cfg = self.config.get("mt5", {})
+                login = int(mt5_cfg.get("login", 0))
+                password = mt5_cfg.get("password", "")
+                server = mt5_cfg.get("server", "")
+                path = mt5_cfg.get("path", "")
+                
+                if login > 0:
+                    initialized = self._mt5.initialize(path=path, login=login, password=password, server=server)
+                else:
+                    initialized = self._mt5.initialize(path=path)
+                
+                if not initialized:
+                    self.logger.error("[%s] MetaTrader5.initialize() failed: %s", self.name, self._mt5.last_error())
+                    return False
+                self.logger.info("[%s] MetaTrader 5 reconnected successfully.", self.name)
+            return True
+        except Exception as e:
+            self.logger.error("[%s] Error checking/restoring MT5 connection: %s", self.name, e)
+            return False
+
+    def _get_symbol_tick(self, symbol: str) -> Any:
+        if not self._ensure_connection():
+            return None
+        return self._mt5.symbol_info_tick(symbol)
+
+    def _get_positions(self) -> list:
+        if not self._ensure_connection():
+            return []
+        return self._mt5.positions_get() or []
+
     def _get_position(self, ticket: int) -> dict[str, Any] | None:
+        if not self._ensure_connection():
+            return None
         positions = self._mt5.positions_get(ticket=ticket)
         if not positions:
             return None
         p = positions[0]
-        return {"sl": p.sl, "tp": p.tp, "profit": p.profit, "volume": p.volume}
+        return {
+            "sl":            p.sl,
+            "tp":            p.tp,
+            "profit":        p.profit,
+            "volume":        p.volume,
+            "price_open":    p.price_open,
+            "price_current": p.price_current,
+            "swap":          getattr(p, "swap", 0.0),
+            "commission":    getattr(p, "commission", 0.0),
+            "type":          p.type,
+        }
 
     def _modify_sl(self, ticket: int, symbol: str, new_sl: float) -> None:
+        if not self._ensure_connection():
+            self.logger.error("[Executor] Cannot modify SL: MT5 connection unavailable.")
+            return
         self._mt5.order_send({
             "action":   self._mt5.TRADE_ACTION_SLTP,
             "position": ticket,

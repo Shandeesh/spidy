@@ -7,6 +7,7 @@ import AIChat from '../components/AIChat';
 import TradingDashboard from '../components/TradingDashboard';
 import FinancialAssistant from '../components/FinancialAssistant';
 import Shoonga from '../components/Shoonga';
+import ControlCenter from '../components/ControlCenter';
 
 const animeVariants = {
     initial: { opacity: 0, x: 100, scale: 0.9, filter: "blur(10px)" }, // More dramatic start
@@ -356,7 +357,15 @@ export default function Home() {
             />
 
             {/* Sidebar Navigation */}
-            <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} mt5Status={mt5Status} />
+            <Sidebar 
+                activeTab={activeTab} 
+                setActiveTab={setActiveTab} 
+                mt5Status={mt5Status} 
+                currentTheme={currentTheme}
+                onThemeChange={(newThemeName) => {
+                    setSessions(prev => prev.map(s => s.id === activeSessionId ? { ...s, theme: newThemeName } : s));
+                }}
+            />
 
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col min-w-0">
@@ -366,7 +375,8 @@ export default function Home() {
                         {activeTab === 'ai' ? 'AI Command Center' :
                             activeTab === 'trading' ? 'Live Trading Floor' :
                                 activeTab === 'shoonga' ? 'Shoonga Floor' :
-                                    'Financial Assistant'}
+                                    activeTab === 'control_center' ? 'Multi-Floor Control Center' :
+                                        'Financial Assistant'}
                     </h2>
                     <div className="flex gap-4 items-center">
                         {mt5Status.connected && (
@@ -442,6 +452,18 @@ export default function Home() {
                                 className="h-full w-full"
                             >
                                 <Shoonga />
+                            </motion.div>
+                        ) : activeTab === 'control_center' ? (
+                            <motion.div
+                                key="control_center"
+                                variants={animeVariants}
+                                initial="initial"
+                                animate="enter"
+                                exit="exit"
+                                transition={animeTransition}
+                                className="h-full w-full"
+                            >
+                                <ControlCenter />
                             </motion.div>
                         ) : (
                             <motion.div

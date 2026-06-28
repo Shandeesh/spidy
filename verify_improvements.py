@@ -5,10 +5,18 @@ import requests
 import sys
 import os
 
+# Force console output to use UTF-8 to prevent cp1252 UnicodeEncodeErrors on Windows
+if sys.platform.startswith('win'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
 def verify_ai():
     print("\n--- Verifying AI Persona ---")
     try:
-        sys.path.append(os.path.abspath("Member1_AI_Core/brain"))
+        sys.path.append(os.path.abspath("AI_Engine/brain"))
         from spidy_brain import SpidyBrain
         
         brain = SpidyBrain()
@@ -34,7 +42,7 @@ async def verify_bridge():
         async with websockets.connect(uri) as websocket:
             print("Connected to WebSocket.")
             try:
-                requests.post("http://localhost:8000/trade", json={"action": "BUY", "symbol": "TEST", "details": "Verification"})
+                requests.post("http://localhost:8000/trade", json={"action": "BUY", "symbol": "TEST", "details": "Verification"}, timeout=5)
             except:
                 print("[FAIL] Failed to trigger trade")
                 return
@@ -55,7 +63,7 @@ async def verify_bridge():
 def check_network_status():
     print("\n--- Verifying Bridge Status API ---")
     try:
-        res = requests.get("http://localhost:8000/status")
+        res = requests.get("http://localhost:8000/status", timeout=5)
         if res.status_code == 200:
             data = res.json()
             print(f"Status API Reachable: {data}")
@@ -73,7 +81,7 @@ def check_backend_api():
     try:
         # Test the ask endpoint with a simple query
         payload = {"query": "Hello"}
-        res = requests.post("http://localhost:5000/api/ask", json=payload)
+        res = requests.post("http://localhost:5000/api/ask", json=payload, timeout=5)
         
         if res.status_code == 200:
             print(f"Backend Reachable. Response: {res.json()}")

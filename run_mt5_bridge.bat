@@ -9,11 +9,17 @@ echo ===================================================
 if "%~1" neq "" (
     set "PYTHON_EXE=%~1"
 ) else (
-    set "PYTHON_EXE=python"
+    if exist "%~dp0..\..\.venv\Scripts\python.exe" (
+        set "PYTHON_EXE=%~dp0..\..\.venv\Scripts\python.exe"
+    ) else if exist "%~dp0.venv\Scripts\python.exe" (
+        set "PYTHON_EXE=%~dp0.venv\Scripts\python.exe"
+    ) else (
+        set "PYTHON_EXE=python"
+    )
 )
 
 echo Using Python: "%PYTHON_EXE%"
-"$PYTHON_EXE%" --version >nul 2>&1
+"%PYTHON_EXE%" --version >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
     echo [ERROR] Python not found or invalid path!
     echo Path: "%PYTHON_EXE%"
@@ -22,7 +28,7 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 :: Validate Imports
-"$PYTHON_EXE%" -c "import pandas, fastapi, MetaTrader5; print('Environment OK')" >nul 2>&1  
+"%PYTHON_EXE%" -c "import pandas, fastapi, MetaTrader5; print('Environment OK')" >nul 2>&1  
 if %ERRORLEVEL% NEQ 0 (
     echo [ERROR] Python environment is broken or missing dependencies!
     pause
@@ -30,7 +36,7 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 echo Starting Bridge Server...
-"$PYTHON_EXE%" bridge_server.py
+"%PYTHON_EXE%" bridge_server.py
 if %ERRORLEVEL% NEQ 0 (
     echo.
     echo [ERROR] Server Crashed! Code: %ERRORLEVEL%

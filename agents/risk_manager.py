@@ -64,7 +64,10 @@ class RiskManagerAgent(BaseAgent):
         self._inbox:  asyncio.Queue[AgentMessage] | None = None
         self._mt5:    Any = None
 
-        # Cache latest data from each upstream agent
+        # Cache latest data from each upstream agent keyed by symbol
+        self._latest_snapshots:  dict[str, dict[str, Any]] = {}
+        self._latest_sentiments: dict[str, dict[str, Any]] = {}
+        # Legacy placeholders for compatibility
         self._latest_snapshot:  dict[str, Any] = {}
         self._latest_sentiment: dict[str, Any] = {}
 
@@ -88,8 +91,25 @@ class RiskManagerAgent(BaseAgent):
     async def setup(self) -> None:
         import MetaTrader5 as mt5
         self._mt5 = mt5
-        if not mt5.initialize():
-            raise RuntimeError("[RiskManager] MetaTrader5.initialize() failed.")
+        
+        # Load MT5 connection details from config
+        mt5_cfg = self.config.get("mt5", {})
+        login = int(mt5_cfg.get("login", 0))
+        password = mt5_cfg.get("password", "")
+        server = mt5_cfg.get("server", "")
+        path = mt5_cfg.get("path", "")
+        
+        # Initialize with credentials if login is set
+        initialized = False
+        if login > 0:
+            self.logger.info("[RiskManager] Initializing MT5 with credentials (login: %d, server: %s)", login, server)
+            initialized = mt5.initialize(path=path, login=login, password=password, server=server)
+        else:
+            self.logger.info("[RiskManager] Initializing MT5 (path: %s)", path)
+            initialized = mt5.initialize(path=path)
+            
+        if not initialized:
+            raise RuntimeError(f"[RiskManager] MetaTrader5.initialize() failed: {mt5.last_error()}")
 
         self._inbox = await self.bus.subscribe(
             Topic.MARKET_SNAPSHOT,
@@ -116,25 +136,34 @@ class RiskManagerAgent(BaseAgent):
             )
             return
 
+        sym = msg.payload.get("symbol", "EURUSD")
+
         if msg.topic == Topic.MARKET_SNAPSHOT:
+            self._latest_snapshots[sym] = msg.payload
+            # For backward compatibility
             self._latest_snapshot = msg.payload
         elif msg.topic == Topic.SENTIMENT:
+            self._latest_sentiments[sym] = msg.payload
+            # For backward compatibility
             self._latest_sentiment = msg.payload
 
-        # Need BOTH before we can make a decision
-        if not self._latest_snapshot or not self._latest_sentiment:
+        # Need BOTH for this symbol before we can make a decision
+        if sym not in self._latest_snapshots or sym not in self._latest_sentiments:
             return
+
+        snapshot = self._latest_snapshots[sym]
+        sentiment = self._latest_sentiments[sym]
 
         account = await asyncio.to_thread(self._query_account)
         if account is None:
             self.logger.warning("[RiskManager] MT5 account query failed.")
             return
 
-        state = self._evaluate_risk(account)
+        state = self._evaluate_risk(account, snapshot, sentiment)
         await self.publish(Topic.RISK_STATE, asdict(state))
 
         if state.can_trade:
-            signal = self._build_signal(state, account)
+            signal = self._build_signal(state, account, snapshot, sentiment)
             if signal:
                 await self.publish(Topic.TRADE_SIGNAL, signal)
                 self.logger.info(
@@ -143,12 +172,41 @@ class RiskManagerAgent(BaseAgent):
                     signal["lot_size"],  signal["entry"],
                 )
         else:
-            self.logger.debug("[RiskManager] Trading paused — %s", state.reason)
+            self.logger.debug("[RiskManager] Trading paused for %s — %s", sym, state.reason)
 
     # ── Risk evaluation ───────────────────────────────────────────────────────
 
+    def _ensure_connection(self) -> bool:
+        """Ensure connection to MetaTrader 5 is active and authenticated."""
+        try:
+            info = self._mt5.terminal_info()
+            if info is None or not info.connected:
+                self.logger.warning("[%s] MT5 connection dead or not initialized. Attempting reconnection...", self.name)
+                mt5_cfg = self.config.get("mt5", {})
+                login = int(mt5_cfg.get("login", 0))
+                password = mt5_cfg.get("password", "")
+                server = mt5_cfg.get("server", "")
+                path = mt5_cfg.get("path", "")
+                
+                if login > 0:
+                    initialized = self._mt5.initialize(path=path, login=login, password=password, server=server)
+                else:
+                    initialized = self._mt5.initialize(path=path)
+                
+                if not initialized:
+                    self.logger.error("[%s] MetaTrader5.initialize() failed: %s", self.name, self._mt5.last_error())
+                    return False
+                self.logger.info("[%s] MetaTrader 5 reconnected successfully.", self.name)
+            return True
+        except Exception as e:
+            self.logger.error("[%s] Error checking/restoring MT5 connection: %s", self.name, e)
+            return False
+
     def _query_account(self) -> dict[str, Any] | None:
         """Synchronous MT5 account query (called via to_thread)."""
+        if not self._ensure_connection():
+            self.logger.warning("[RiskManager] MT5 connection check failed during account query.")
+            return None
         info = self._mt5.account_info()
         if info is None:
             return None
@@ -160,7 +218,9 @@ class RiskManagerAgent(BaseAgent):
             "open_count": len(positions),
         }
 
-    def _evaluate_risk(self, account: dict[str, Any]) -> RiskState:
+    def _evaluate_risk(
+        self, account: dict[str, Any], snapshot: dict[str, Any], sentiment: dict[str, Any]
+    ) -> RiskState:
         balance  = account["balance"]
         equity   = account["equity"]
         leverage = int(account.get("leverage", 100))
@@ -205,8 +265,8 @@ class RiskManagerAgent(BaseAgent):
             )
 
         # ── Guardrail 4: researcher hold_off ─────────────────────────────────
-        if self._latest_sentiment.get("hold_off", True):
-            events = self._latest_sentiment.get("risk_events", [])
+        if sentiment.get("hold_off", True):
+            events = sentiment.get("risk_events", [])
             return RiskState(
                 can_trade=False,
                 reason=f"Researcher hold_off: {events or 'risk event flagged'}",
@@ -214,7 +274,7 @@ class RiskManagerAgent(BaseAgent):
             )
 
         # ── Guardrail 5: regime veto ──────────────────────────────────────────
-        regime = self._latest_snapshot.get("regime", "UNKNOWN")
+        regime = snapshot.get("regime", "UNKNOWN")
         if regime in self._regime_veto:
             return RiskState(
                 can_trade=False,
@@ -223,7 +283,7 @@ class RiskManagerAgent(BaseAgent):
             )
 
         # ── Guardrail 6: minimum signal confidence ────────────────────────────
-        confidence = float(self._latest_sentiment.get("confidence", 0.0))
+        confidence = float(sentiment.get("confidence", 0.0))
         if confidence < self._min_confidence:
             return RiskState(
                 can_trade=False,
@@ -232,24 +292,52 @@ class RiskManagerAgent(BaseAgent):
             )
 
         # ── Guardrail 7: sentiment must be directional ────────────────────────
-        sentiment = self._latest_sentiment.get("sentiment", "NEUTRAL")
-        if sentiment == "NEUTRAL":
+        sent_val = sentiment.get("sentiment", "NEUTRAL")
+        if sent_val == "NEUTRAL":
             return RiskState(
                 can_trade=False,
                 reason="Sentiment is NEUTRAL",
                 **base,
             )
 
+        # ── Guardrail 8: Technical-Macro Consensus Check ──────────────────────
+        strategy_signals = snapshot.get("strategy_signals", {})
+        if strategy_signals:
+            required_dir = "BUY" if sent_val == "BULLISH" else "SELL"
+            
+            # Find technical votes for the required direction
+            matching_votes = [
+                name for name, res in strategy_signals.items()
+                if res.get("signal") == required_dir
+            ]
+            
+            # Find conflicting technical votes
+            conflicting_votes = [
+                name for name, res in strategy_signals.items()
+                if res.get("signal") in ["BUY", "SELL"] and res.get("signal") != required_dir
+            ]
+            
+            if not matching_votes:
+                return RiskState(
+                    can_trade=False,
+                    reason=f"Technical Veto: No technical strategies agree with macro {sent_val} sentiment",
+                    **base,
+                )
+            
+            if conflicting_votes and len(conflicting_votes) > len(matching_votes):
+                return RiskState(
+                    can_trade=False,
+                    reason=f"Technical Veto: Conflicting technical consensus ({len(conflicting_votes)} conflict vs {len(matching_votes)} match)",
+                    **base,
+                )
+
         return RiskState(can_trade=True, reason="All guardrails passed", **base)
 
     # ── Signal construction ───────────────────────────────────────────────────
 
     def _build_signal(
-        self, state: RiskState, account: dict[str, Any]
+        self, state: RiskState, account: dict[str, Any], snap: dict[str, Any], sent: dict[str, Any]
     ) -> dict[str, Any] | None:
-        snap = self._latest_snapshot
-        sent = self._latest_sentiment
-
         symbol    = snap.get("symbol", "EURUSD")
         regime    = snap.get("regime", "UNKNOWN")
         sentiment = sent.get("sentiment", "NEUTRAL")
@@ -260,7 +348,7 @@ class RiskManagerAgent(BaseAgent):
 
         if close == 0 or atr == 0:
             self.logger.warning(
-                "[RiskManager] close=0 or ATR=0 — cannot build signal."
+                f"[RiskManager] close=0 or ATR=0 for {symbol} — cannot build signal."
             )
             return None
 
@@ -278,10 +366,21 @@ class RiskManagerAgent(BaseAgent):
         # Position sizing: 1% of balance per trade
         # pip_value = $10 per pip per standard lot for EURUSD
         risk_amount = account["balance"] * self._risk_per_trade
-        pip_value   = 10.0
-        sl_pips     = sl_dist / 0.0001
-        lot_raw     = risk_amount / max(sl_pips * pip_value, 0.01)
-        lot_size    = round(max(0.01, min(lot_raw, self._max_lot)), 2)
+        
+        # Adjust pip value dynamically based on symbol (Forex vs Crypto/Indices/Metals)
+        sym_upper = symbol.upper()
+        if "XAU" in sym_upper:
+            # Gold: 1 lot = 100 oz. 1 point ($0.01) = $1.
+            lot_raw = risk_amount / max(sl_dist * 100.0, 0.01)
+        elif "BTC" in sym_upper or "ETH" in sym_upper:
+            # Crypto: 1 lot = 1 coin. 1 point ($1.00) = $1.
+            lot_raw = risk_amount / max(sl_dist, 0.01)
+        else:
+            # Default Forex: 1 lot = 100,000 units. 1 pip (0.0001) = $10.
+            sl_pips = sl_dist / 0.0001
+            lot_raw = risk_amount / max(sl_pips * 10.0, 0.01)
+            
+        lot_size = round(max(0.01, min(lot_raw, self._max_lot)), 2)
 
         return {
             "symbol":     symbol,

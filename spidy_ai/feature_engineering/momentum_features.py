@@ -53,3 +53,9 @@ class MomentumFeatures:
         df['cci'] = (tp - sma_tp) / (0.015 * mad)
 
         return df
+
+    @staticmethod
+    def add_features(df: pd.DataFrame) -> pd.DataFrame:
+        """Wrapper method forwarding to add_all_momentum_features"""
+        return MomentumFeatures.add_all_momentum_features(df)
+

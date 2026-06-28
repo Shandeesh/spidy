@@ -38,3 +38,9 @@ class VolumeFeatures:
         df['cmf'] = mf_volume.rolling(window=20).sum() / df['tick_volume'].rolling(window=20).sum()
 
         return df
+
+    @staticmethod
+    def add_features(df: pd.DataFrame) -> pd.DataFrame:
+        """Wrapper method forwarding to add_all_volume_features"""
+        return VolumeFeatures.add_all_volume_features(df)
+
