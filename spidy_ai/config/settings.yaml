@@ -9,7 +9,7 @@ mt5:
   login:    108598772                                          # Fill in your MT5 login
   password: "-jV4VzRf"                                        # Fill in your MT5 password
   server:   "MetaQuotes-Demo"
-  path:     "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
+  path:     "C:\\Program Files\\HFM Metatrader 5\\terminal64.exe"
 
 # ── System ────────────────────────────────────────────────────────────────────
 system:

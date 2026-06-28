@@ -1,5 +1,5 @@
 @echo off
-cd /d "c:\Users\Shandeesh R P\spidy\Trading_Backend\mt5_bridge"
+cd /d "%~dp0Trading_Backend\mt5_bridge"
 echo ===================================================
 echo   SPIDY MT5 BRIDGE LAUNCHER
 title Spidy MT5 Bridge

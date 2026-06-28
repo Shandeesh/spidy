@@ -1100,8 +1100,8 @@ def discover_mt5_path():
                 # List directories only
                 dirs = [d for d in os.listdir(root) if os.path.isdir(os.path.join(root, d))]
                 for d in dirs:
-                    # Filter keywords
-                    if any(x in d for x in ["MetaTrader", "MT5", "Forex", "Market", "Global", "Trade"]):
+                    # Filter keywords (case-insensitive to support 'HFM Metatrader 5', 'metatrader 5', etc.)
+                    if any(x.lower() in d.lower() for x in ["MetaTrader", "MT5", "Forex", "Market", "Global", "Trade", "HFM"]):
                         candidate = os.path.join(root, d, "terminal64.exe")
                         if os.path.exists(candidate):
                             print(f"INFO: Found MT5 Candidate: {candidate}")

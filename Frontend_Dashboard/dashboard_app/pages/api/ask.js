@@ -1,6 +1,8 @@
 import { spawn } from 'child_process';
 import path from 'path';
 
+import fs from 'fs';
+
 export default function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ message: 'Method not allowed' });
@@ -12,13 +14,14 @@ export default function handler(req, res) {
         return res.status(400).json({ error: 'Query is required' });
     }
 
-    // Path to the Python script
-    // Adjust the path to navigate from: 
-    // .../dashboard_app/.next/... or .../dashboard_app/pages/api 
-    // to .../Member1_AI_Core/brain/spidy_brain.py
-    // Simplest is to use the absolute path we know.
-    const scriptPath = String.raw`c:\Users\Shandeesh R P\spidy\AI_Engine\brain\spidy_brain.py`;
-    const pythonPath = String.raw`c:\Users\Shandeesh R P\spidy\.venv\Scripts\python.exe`;
+    const rootPath = path.resolve(process.cwd(), '..', '..');
+    const scriptPath = path.join(rootPath, 'AI_Engine', 'brain', 'spidy_brain.py');
+    
+    let pythonPath = 'python';
+    const venvPythonPath = path.join(rootPath, '.venv', 'Scripts', 'python.exe');
+    if (fs.existsSync(venvPythonPath)) {
+        pythonPath = venvPythonPath;
+    }
 
     const pythonProcess = spawn(pythonPath, [scriptPath, query]);
 
