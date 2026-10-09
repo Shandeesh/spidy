@@ -1,6 +1,7 @@
 langchain
 langchain-openai
 langchain-google-genai
+google-genai
 python-dotenv
 pydantic
 requests

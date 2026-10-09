@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import date
 from .position_sizer import PositionSizer
 
 class RiskManager:
@@ -7,6 +8,8 @@ class RiskManager:
         self.position_sizer = PositionSizer()
         self.start_balance = start_balance
         self.current_balance = start_balance
+        self.daily_start_balance = start_balance
+        self.daily_start_date = date.today().isoformat()
         self.max_daily_dd_pct = max_daily_dd_pct
         self.max_total_dd_pct = max_total_dd_pct
         self.state_file = state_file
@@ -22,6 +25,11 @@ class RiskManager:
                 with open(self.state_file, 'r') as f:
                     data = json.load(f)
                     self.current_balance = data.get('current_balance', self.start_balance)
+                    if data.get('daily_start_date') == date.today().isoformat():
+                        self.daily_start_balance = data.get('daily_start_balance', self.current_balance)
+                    else:
+                        self.daily_start_balance = self.current_balance
+                        self.daily_start_date = date.today().isoformat()
             except Exception:
                 pass
 
@@ -29,11 +37,18 @@ class RiskManager:
         if self.state_file:
             try:
                 with open(self.state_file, 'w') as f:
-                    json.dump({'current_balance': self.current_balance}, f)
+                    json.dump({
+                        'current_balance': self.current_balance,
+                        'daily_start_balance': self.daily_start_balance,
+                        'daily_start_date': self.daily_start_date,
+                    }, f)
             except Exception:
                 pass
 
     def update_balance(self, new_balance: float):
+        if self.daily_start_date != date.today().isoformat():
+            self.daily_start_balance = self.current_balance
+            self.daily_start_date = date.today().isoformat()
         self.current_balance = new_balance
         self.save_state()
 
@@ -41,8 +56,11 @@ class RiskManager:
         """
         Checks if current drawdown allows trading.
         """
-        drawdown = (self.start_balance - self.current_balance) / self.start_balance
-        if drawdown > self.max_total_dd_pct:
+        if self.start_balance <= 0 or self.daily_start_balance <= 0:
+            return False
+        total_drawdown = (self.start_balance - self.current_balance) / self.start_balance
+        daily_drawdown = (self.daily_start_balance - self.current_balance) / self.daily_start_balance
+        if total_drawdown >= self.max_total_dd_pct or daily_drawdown >= self.max_daily_dd_pct:
             return False
         return True
 

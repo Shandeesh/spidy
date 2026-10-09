@@ -3,6 +3,7 @@ import pandas as pd
 import sys
 import os
 import yaml
+from dotenv import load_dotenv
 
 # Force console output to use UTF-8 to prevent cp1252 UnicodeEncodeErrors on Windows
 if sys.platform.startswith('win'):
@@ -41,6 +42,24 @@ def load_config():
     print("⚠️ Config not found, using defaults.")
     return {}
 
+
+def get_mt5_connection_config(config):
+    """Read MT5 credentials from environment variables named by configuration."""
+    mt5_cfg = config.get("mt5", {})
+    load_dotenv()
+    login_value = os.getenv(mt5_cfg.get("login_env", "SPIDY_MT5_LOGIN"), "")
+    try:
+        login = int(login_value) if login_value else None
+    except ValueError:
+        raise ValueError("SPIDY_MT5_LOGIN must be an integer account number")
+
+    return {
+        "login": login,
+        "password": os.getenv(mt5_cfg.get("password_env", "SPIDY_MT5_PASSWORD")) or None,
+        "server": os.getenv(mt5_cfg.get("server_env", "SPIDY_MT5_SERVER")) or None,
+        "path": os.getenv(mt5_cfg.get("path_env", "SPIDY_MT5_PATH")) or None,
+    }
+
 def run_spidy_ai():
     print("🕷️ Spidy AI - Enterprise Trading System Initializing...")
     
@@ -58,7 +77,8 @@ def run_spidy_ai():
     print(f"   Symbol: {symbol}")
 
     # 1. Initialize Components
-    feed = MetaTraderFeed(symbol, 5) 
+    mt5_connection = get_mt5_connection_config(config)
+    feed = MetaTraderFeed(symbol=symbol, timeframe=5, **mt5_connection)
     if not feed.connect():
         print("❌ Failed to connect to Data Feed (MT5). Exiting.")
         return
@@ -79,7 +99,10 @@ def run_spidy_ai():
         max_total_dd_pct=risk_cfg.get("max_total_drawdown_pct", 0.15)
     )
     
-    position_sizer = PositionSizer(risk_per_trade_pct=risk_cfg.get("risk_per_trade_pct", 0.01))
+    position_sizer = PositionSizer(
+        risk_per_trade_pct=risk_cfg.get("risk_per_trade_pct", 0.01),
+        max_lot_size=risk_cfg.get("max_lot_size", 1.0),
+    )
     
     order_router = OrderRouter(broker=exec_cfg.get("broker", "MT5"), live_mode=live_mode)
     vwap_executor = VWAPExecutor(order_router)
@@ -150,7 +173,9 @@ def run_spidy_ai():
                     size = position_sizer.calculate_size(risk_manager.current_balance, current_close, sl_price)
                     
                     if size > 0:
-                        success = vwap_executor.execute_carefully(symbol, "BUY", size, current_close, current_close) # Mock VWAP
+                        success = vwap_executor.execute_carefully(
+                            symbol, "BUY", size, current_close, current_close, sl_price, tp_price
+                        )
                         if success: current_position = "LONG"
             
             elif decision == "SELL":
@@ -167,7 +192,9 @@ def run_spidy_ai():
                     size = position_sizer.calculate_size(risk_manager.current_balance, current_close, sl_price)
                     
                     if size > 0:
-                        success = vwap_executor.execute_carefully(symbol, "SELL", size, current_close, current_close)
+                        success = vwap_executor.execute_carefully(
+                            symbol, "SELL", size, current_close, current_close, sl_price, tp_price
+                        )
                         if success: current_position = "SHORT"
 
             # E. PnL % Auto-Close Monitor (Net PnL)

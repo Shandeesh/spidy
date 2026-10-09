@@ -1,4 +1,7 @@
-import MetaTrader5 as mt5
+try:
+    import MetaTrader5 as mt5
+except ImportError:  # Allows simulation-only installs to import the engine.
+    mt5 = None
 
 class OrderRouter:
     """
@@ -42,6 +45,12 @@ class OrderRouter:
         """
         Internal MT5 Entry Logic.
         """
+        if order_type not in {"BUY", "SELL"} or volume <= 0:
+            return False
+        if mt5 is None:
+            print("OrderRouter: MetaTrader5 is unavailable.")
+            return False
+
         # Mapping string order types to MT5 constants
         type_op = mt5.ORDER_TYPE_BUY if order_type == "BUY" else mt5.ORDER_TYPE_SELL
         
@@ -70,7 +79,10 @@ class OrderRouter:
         
         if self.live_mode:
             result = mt5.order_send(request)
-            if result.retcode != mt5.TRADE_RETCODE_DONE:
+            if not result or result.retcode != mt5.TRADE_RETCODE_DONE:
+                if not result:
+                    print("MT5 Entry Failed: order_send returned no result")
+                    return False
                 print(f"❌ MT5 Entry Failed: {result.comment} (Code: {result.retcode})")
                 return False
             print(f"✅ MT5 Entry Executed: {order_type} {volume} {symbol} @ {price}")
@@ -87,7 +99,10 @@ class OrderRouter:
             print(f"[MT5 SIM] Closing Position for {symbol}")
             return True
 
-        # Ge positions
+        if mt5 is None:
+            return False
+
+        # Get positions
         positions = mt5.positions_get(symbol=symbol)
         if not positions:
             print(f"OrderRouter: No positions found for {symbol} to close.")
@@ -100,7 +115,11 @@ class OrderRouter:
                 
             # Close is an opposing order
             type_op = mt5.ORDER_TYPE_SELL if pos.type == mt5.ORDER_TYPE_BUY else mt5.ORDER_TYPE_BUY
-            price = mt5.symbol_info_tick(symbol).bid if type_op == mt5.ORDER_TYPE_SELL else mt5.symbol_info_tick(symbol).ask
+            tick = mt5.symbol_info_tick(symbol)
+            if not tick:
+                print(f"OrderRouter: Failed to get close price for {symbol}")
+                return False
+            price = tick.bid if type_op == mt5.ORDER_TYPE_SELL else tick.ask
             
             request = {
                 "action": mt5.TRADE_ACTION_DEAL,
@@ -117,7 +136,10 @@ class OrderRouter:
             }
             
             result = mt5.order_send(request)
-            if result.retcode != mt5.TRADE_RETCODE_DONE:
+            if not result or result.retcode != mt5.TRADE_RETCODE_DONE:
+                if not result:
+                    print("MT5 Close Failed: order_send returned no result")
+                    continue
                 print(f"❌ MT5 Close Failed: {result.comment}")
             else:
                 print(f"✅ MT5 Closed Ticket {pos.ticket}")
@@ -133,6 +155,9 @@ class OrderRouter:
             # Mock position for simulation
             return [] # In sim, main.py tracks simple state, but for this feature we might want mock PnL
         
+        if mt5 is None:
+            return []
+
         if symbol:
             positions = mt5.positions_get(symbol=symbol)
         else:

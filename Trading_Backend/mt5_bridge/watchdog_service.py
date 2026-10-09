@@ -16,9 +16,13 @@ class Watchdog:
         self.check_interval = 2.0 # Check every 2 seconds
         self._stop_event = threading.Event()
         self._kill_event = threading.Event()
+        self._state_lock = threading.Lock()  # Lock for shared state mutations
+        self._last_reset_date = None  # Track date for daily equity reset
         self._thread = None
         self.running = False
         self.current_daily_pnl = 0.0
+        self.start_equity = None  # Baseline equity for daily reset
+        self.peak_equity = None   # Peak equity for daily reset
 
     @property
     def max_daily_loss(self):
@@ -53,6 +57,18 @@ class Watchdog:
         print("[WATCHDOG] Active and Monitoring.")
         while self.running and not self._stop_event.is_set():
             try:
+                # 0. Daily Equity Reset — reset baseline on date change
+                current_equity = self._get_current_equity()
+                today = datetime.now().strftime('%Y-%m-%d')
+                if self._last_reset_date != today:
+                    self.start_equity = current_equity  # Reset baseline
+                    self.peak_equity = current_equity
+                    self._last_reset_date = today
+                    print(f"[WATCHDOG] Daily equity reset: baseline={current_equity:.2f}, date={today}")
+                elif current_equity is not None:
+                    if self.peak_equity is None or current_equity > self.peak_equity:
+                        self.peak_equity = current_equity
+
                 # 1. Calculate P&L
                 pnl = self._calculate_daily_pnl()
                 self.current_daily_pnl = pnl
@@ -72,9 +88,10 @@ class Watchdog:
                     if self._kill_event.is_set():
                         print(f"[WATCHDOG RESET] Daily P&L ${pnl:.2f} is within limit -${self.max_daily_loss:.2f}. Monitoring restored.")
                         self._kill_event.clear()
-                        if hasattr(self.bridge, 'auto_trade_state') and self.bridge.auto_trade_state is not None:
-                            if self.bridge.auto_trade_state.get("sentiment") == "HALTED_BY_WATCHDOG":
-                                self.bridge.auto_trade_state["sentiment"] = "NEUTRAL"
+                        with self._state_lock:
+                            if hasattr(self.bridge, 'auto_trade_state') and self.bridge.auto_trade_state is not None:
+                                if self.bridge.auto_trade_state.get("sentiment") == "HALTED_BY_WATCHDOG":
+                                    self.bridge.auto_trade_state["sentiment"] = "NEUTRAL"
                         
             except Exception as e:
                 print(f"Watchdog Error: {e}")
@@ -122,20 +139,46 @@ class Watchdog:
         
         # 1. Disable Auto-Trading Logic immediately
         print("[WATCHDOG] Disabling Auto-Trade...")
-        self.bridge.auto_trade_state["running"] = False
-        self.bridge.auto_trade_state["sentiment"] = "HALTED_BY_WATCHDOG"
+        with self._state_lock:
+            self.bridge.auto_trade_state["running"] = False
+            self.bridge.auto_trade_state["sentiment"] = "HALTED_BY_WATCHDOG"
         
         # 2. Trigger Close All (Async via Bridge)
         # We need to call the async function from this sync thread.
+        # Use call_soon_threadsafe / run_coroutine_threadsafe for cross-thread async calls.
         try:
             loop = self.bridge.loop # Ensure bridge has loop reference
             if loop and loop.is_running():
                 print("[WATCHDOG] Requesting Emergency Close All... [DISABLED by User Request]")
-                asyncio.run_coroutine_threadsafe(self.bridge.broadcast_log("[KILL SWITCH ACTIVATED] Auto-Trade HALTED. (Positions HELD for Recovery)"), loop)
+                loop.call_soon_threadsafe(
+                    asyncio.ensure_future,
+                    self.bridge.broadcast_log("[KILL SWITCH ACTIVATED] Auto-Trade HALTED. (Positions HELD for Recovery)")
+                )
                 # FIX: Do NOT Close positions. Just Stop Buying.
-                # asyncio.run_coroutine_threadsafe(self.bridge._process_close_all_background(profitable_only=False), loop) 
+                # loop.call_soon_threadsafe(
+                #     asyncio.ensure_future,
+                #     self.bridge._process_close_all_background(profitable_only=False)
+                # )
         except Exception as e:
             print(f"Watchdog Fail-Safe Error: {e}")
             
         # 3. Notification (Mock)
         # print("Sending SMS Alert...")
+
+    def _get_current_equity(self):
+        """Fetches the current account equity from MT5."""
+        if not self.bridge.mt5_state.get("connected", False):
+            return self.start_equity or 0.0
+        try:
+            if not mt5.initialize():
+                return self.start_equity or 0.0
+            account_info = mt5.account_info()
+            if account_info:
+                return account_info.equity
+        except Exception:
+            pass
+        return self.start_equity or 0.0
+
+    def get_state_lock(self):
+        """Returns the state lock for external synchronization (e.g., auto-trader in bridge_server.py)."""
+        return self._state_lock

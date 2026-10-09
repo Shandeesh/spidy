@@ -1,9 +1,13 @@
 import '../styles/globals.css';
 import axios from 'axios';
 
-// Add global API Key to all Axios requests
+// The API key is supplied only by the local deployment environment. Never
+// embed a control credential in the browser bundle or source repository.
 axios.interceptors.request.use((config) => {
-    config.headers['X-API-KEY'] = "spidy_secure_123";
+    const apiKey = process.env.NEXT_PUBLIC_SPIDY_API_KEY;
+    if (apiKey) {
+        config.headers['X-API-KEY'] = apiKey;
+    }
     return config;
 }, (error) => {
     return Promise.reject(error);

@@ -7,7 +7,7 @@ class VWAPExecutor:
     def __init__(self, order_router):
         self.router = order_router
 
-    def execute_carefully(self, symbol, decision, volume, current_price, current_vwap):
+    def execute_carefully(self, symbol, decision, volume, current_price, current_vwap, sl=None, tp=None):
         """
         Execute trade if price is favorable relative to VWAP.
         
@@ -17,7 +17,7 @@ class VWAPExecutor:
         if decision == "BUY":
             if current_price <= current_vwap * 1.002: # Allow 0.2% tolerance
                 print(f"VWAP EXEC: Buying {symbol} (Price {current_price} <= VWAP {current_vwap})")
-                return self.router.send_order(symbol, "BUY", volume)
+                return self.router.send_order(symbol, "BUY", volume, current_price, sl, tp)
             else:
                 print(f"VWAP BLOCK: Price {current_price} too high above VWAP {current_vwap}. Waiting.")
                 return False
@@ -25,7 +25,7 @@ class VWAPExecutor:
         elif decision == "SELL":
             if current_price >= current_vwap * 0.998:
                 print(f"VWAP EXEC: Selling {symbol} (Price {current_price} >= VWAP {current_vwap})")
-                return self.router.send_order(symbol, "SELL", volume)
+                return self.router.send_order(symbol, "SELL", volume, current_price, sl, tp)
             else:
                  print(f"VWAP BLOCK: Price {current_price} too low below VWAP {current_vwap}. Waiting.")
                  return False

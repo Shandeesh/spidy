@@ -61,6 +61,10 @@ app.get('/', (req, res) => {
     res.send('Spidy Backend Relay Server 🕷️ (AI Chat Proxy + Socket.IO)');
 });
 
+app.get('/health', (req, res) => {
+    res.json({ status: 'healthy' });
+});
+
 // ── Agent Event Bridge ────────────────────────────────────────────────────────
 // Receives events from BusBridgeAgent (Python agents/bus_bridge.py) and
 // broadcasts them to every connected frontend client via Socket.IO.

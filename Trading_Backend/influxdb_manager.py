@@ -28,8 +28,8 @@ class InfluxDBManager:
         self.org = org
         self.bucket = bucket
         
-        # Use token from environment or default
-        self.token = token or os.getenv("INFLUXDB_TOKEN", "my-super-secret-admin-token")
+        # Metrics are optional; never fall back to a public default token.
+        self.token = token or os.getenv("INFLUXDB_TOKEN", "")
         
         self.client = None
         self.write_api = None
@@ -43,6 +43,9 @@ class InfluxDBManager:
         
     def connect(self):
         """Establish connection to InfluxDB."""
+        if not self.token:
+            print("InfluxDB is disabled: INFLUXDB_TOKEN is not configured.")
+            return False
         try:
             self.client = InfluxDBClient(url=self.url, token=self.token, org=self.org)
             

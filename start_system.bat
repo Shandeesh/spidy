@@ -9,7 +9,7 @@ echo Starting Shoonya Bridge Server...
 :: start "Spidy Shoonya Bridge" cmd /k "cd /d "%~dp0Trading_Backend\shoonya_bridge" && "%PYTHON_EXE%" shoonya_server.py"
 
 :: Optional: Start MT5 Bridge (The Scout) on separate port if needed
-start "Spidy MT5 Bridge" cmd /k "call "%~dp0run_mt5_bridge.bat" "%PYTHON_EXE%""
+start "Spidy MT5 Bridge" cmd /k ""%~dp0run_mt5_bridge.bat" "%PYTHON_EXE%""
 
 :: 2. Start Backend API (Node.js)
 start "Spidy Backend API" cmd /k "cd /d "%~dp0Trading_Backend\backend_api" && node server.js"

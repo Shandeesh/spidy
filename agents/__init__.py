@@ -1,2 +1,5 @@
-# agents/__init__.py
-# Spidy Multi-Agent System package
+"""Public API for the Spidy multi-agent system."""
+
+from .orchestrator import Orchestrator
+
+__all__ = ["Orchestrator"]

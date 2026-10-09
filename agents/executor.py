@@ -48,7 +48,15 @@ Publishes
 from __future__ import annotations
 
 import asyncio
+import sys
+import os
 from typing import Any
+
+# Ensure mt5_bridge is in path for financial_db
+_backend_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Trading_Backend', 'mt5_bridge'))
+if _backend_path not in sys.path:
+    sys.path.insert(0, _backend_path)
+import financial_db
 
 from .base_agent import BaseAgent
 from .message_bus import AgentMessage, MessageBus, Topic
@@ -100,6 +108,20 @@ class ExecutorAgent(BaseAgent):
         if not initialized:
             raise RuntimeError(f"[Executor] MetaTrader5.initialize() failed: {mt5.last_error()}")
 
+        positions = self._get_positions()
+        reconciled = 0
+        for pos in positions:
+            if getattr(pos, "magic", 0) == self._magic_number:
+                self._open_tickets.add(pos.ticket)
+                direction = "BUY" if pos.type == mt5.ORDER_TYPE_BUY else "SELL"
+                self._trail_tasks[pos.ticket] = asyncio.create_task(
+                    self._trail_monitor(pos.ticket, pos.symbol, direction, 0.0, pos.sl),
+                    name=f"trail-{pos.ticket}",
+                )
+                reconciled += 1
+        if reconciled > 0:
+            self.logger.info("[Executor] Cold-start: reconciled %d existing positions", reconciled)
+
         self._inbox = await self.bus.subscribe(
             Topic.TRADE_SIGNAL,
             Topic.RISK_STATE,
@@ -145,6 +167,7 @@ class ExecutorAgent(BaseAgent):
     # ── Trade signal handler ──────────────────────────────────────────────────
 
     async def _on_trade_signal(self, signal: dict[str, Any]) -> None:
+        signal_id = signal.get("signal_id")
         symbol    = signal["symbol"]
         direction = signal["direction"]
         lot_size  = signal["lot_size"]
@@ -152,6 +175,14 @@ class ExecutorAgent(BaseAgent):
         sl        = signal["sl"]
         tp        = signal["tp"]
         atr       = signal["atr"]
+
+        if signal_id:
+            if financial_db.is_signal_processed(signal_id):
+                self.logger.info("[Executor] Signal %s already processed, skipping", signal_id)
+                return
+            if not financial_db.record_signal(signal_id, symbol, direction):
+                self.logger.info("[Executor] Signal %s already exists but not processed, skipping duplicate", signal_id)
+                return
 
         # ── Staleness check ───────────────────────────────────────────────────
         tick = await asyncio.to_thread(self._get_symbol_tick, symbol)
@@ -175,6 +206,9 @@ class ExecutorAgent(BaseAgent):
             return
 
         # ── Order placement ───────────────────────────────────────────────────
+        if signal_id:
+            financial_db.update_signal_status(signal_id, 'SENT')
+
         if self._live_mode:
             ticket = await asyncio.to_thread(
                 self._place_market_order,
@@ -189,6 +223,8 @@ class ExecutorAgent(BaseAgent):
             )
 
         if ticket:
+            if signal_id:
+                financial_db.update_signal_status(signal_id, 'CONFIRMED', ticket)
             self._open_tickets.add(ticket)
             self._trail_tasks[ticket] = asyncio.create_task(
                 self._trail_monitor(ticket, symbol, direction, atr, sl),
@@ -198,6 +234,9 @@ class ExecutorAgent(BaseAgent):
                 "OPEN", symbol, ticket, direction, lot_size,
                 live_price, sl, tp, reason="Order placed",
             )
+        else:
+            if signal_id:
+                financial_db.update_signal_status(signal_id, 'FAILED')
 
     # ── MT5 order placement ───────────────────────────────────────────────────
 

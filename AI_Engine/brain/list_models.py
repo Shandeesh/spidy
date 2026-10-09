@@ -1,4 +1,4 @@
-import google.generativeai as genai
+from google import genai
 import os
 from dotenv import load_dotenv
 
@@ -8,9 +8,10 @@ api_key = os.getenv("GOOGLE_API_KEY")
 if not api_key:
     print("No API Key found")
 else:
-    genai.configure(api_key=api_key)
+    client = genai.Client(api_key=api_key)
     with open("models.txt", "w") as f:
-        for m in genai.list_models():
-            if 'generateContent' in m.supported_generation_methods:
-                f.write(f"{m.name}\n")
+        for model in client.models.list():
+            supported_actions = getattr(model, "supported_actions", [])
+            if "generateContent" in supported_actions or not supported_actions:
+                f.write(f"{model.name}\n")
     print("Models written to models.txt")

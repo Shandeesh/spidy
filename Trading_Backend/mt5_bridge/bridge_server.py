@@ -1,4 +1,11 @@
 import sys
+from pathlib import Path
+
+# Keep legacy sibling imports working when the bridge is launched as a module.
+BRIDGE_DIR = str(Path(__file__).resolve().parent)
+if BRIDGE_DIR not in sys.path:
+    sys.path.insert(0, BRIDGE_DIR)
+
 # Force console output to use UTF-8 to prevent cp1252 UnicodeEncodeErrors on Windows
 if sys.platform.startswith('win'):
     try:
@@ -114,6 +121,8 @@ async def lifespan(app: FastAPI):
     asyncio.create_task(sentiment_sync_loop()) # SENTIMENT BRAIN (Phase 2)
     asyncio.create_task(monitor_mt5_process()) # NEW: Monitor MT5 Process Liveness
     asyncio.create_task(sanitize_old_trades()) # FIX: Remove SL from Pre-Update Trades
+    if HAS_ML:
+        asyncio.create_task(ml_retraining_loop())
 
     
     # --- WATCHDOG START ---
@@ -283,11 +292,14 @@ app = FastAPI(lifespan=lifespan)
 
 # API Auth Setup
 from dotenv import load_dotenv
-load_dotenv(dotenv_path=os.path.abspath(os.path.join(os.path.dirname(__file__), "../../Shared_Data/configs/.env")))
+# Local development keeps secrets in the repository-root .env. Docker mounts
+# Shared_Data/configs/.env, so load both without putting either in source.
+load_dotenv(dotenv_path=os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.env")))
+load_dotenv(dotenv_path=os.path.abspath(os.path.join(os.path.dirname(__file__), "../../Shared_Data/configs/.env")), override=True)
 
 # P8 FIX: Attempt to load API key from encrypted store (cipher_suite.py).
 # Falls back transparently to plaintext .env value if encryption not configured.
-_API_KEY_RAW = os.getenv("SPIDY_API_KEY", "spidy_secure_123")
+_API_KEY_RAW = os.getenv("SPIDY_API_KEY", "")
 try:
     import sys as _sys
     _sec_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../Security_Module/encryption_utils"))
@@ -310,6 +322,11 @@ except Exception as _e:
 api_key_header = APIKeyHeader(name="X-API-KEY", auto_error=False)
 
 async def verify_api_key(api_key: str = Security(api_key_header)):
+    if not API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Trading API is disabled: configure SPIDY_API_KEY before enabling control endpoints.",
+        )
     if api_key != API_KEY:
         # F6: record auth failure in audit log
         if HAS_AUDIT:
@@ -344,7 +361,7 @@ app.add_middleware(
 
 # Mock shared state (fallback)
 mt5_state = {"connected": False, "equity": 10000.0}
-auto_trade_state = {"running": True, "sentiment": "NEUTRAL", "analysis": {}} # Default to True
+auto_trade_state = {"running": False, "sentiment": "NEUTRAL", "analysis": {}}
 risk_settings = {"auto_secure": {"enabled": False, "threshold": 10.0}, "use_technical_filters": True}
 
 # PHASE 3: Performance Optimization - Bar Cache
@@ -475,6 +492,11 @@ async def get_history(api_key: str = Depends(verify_api_key)):
 @app.get("/test")
 def get_test():
     return {"status": "ok"}
+
+
+@app.get("/health")
+def get_health():
+    return {"status": "healthy", "mt5_available": HAS_MT5}
 
 # ══════════════════════════════════════════════════════════════════════════════
 # API INTELLIGENCE HUB ENDPOINTS
@@ -693,6 +715,7 @@ async def websocket_endpoint(websocket: WebSocket):
 async def broadcast_log(message):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     formatted_msg = f"[{timestamp}] {message}"
+    print(formatted_msg)
     
     # UPGRADE 3: Write to file with log rotation (cap at 5000 lines)
     try:
@@ -1647,7 +1670,16 @@ async def place_market_order(symbol: str, action: str, volume: float = 0.01, str
     # Save to DB
     trade_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     current_sentiment = auto_trade_state.get("sentiment", "NEUTRAL")
-    financial_db.save_trade(result.order, symbol, action, volume, price, trade_time, strategy=strategy_tag, sentiment=current_sentiment)
+    live_features = technical_cache.get(symbol, {})
+    financial_db.save_trade(
+        result.order, symbol, action, volume, price, trade_time,
+        strategy=strategy_tag, sentiment=current_sentiment,
+        model_features={
+            "rsi": live_features.get("rsi", 50.0),
+            "adx": live_features.get("adx", 20.0),
+            "trend": live_features.get("trend", "NEUTRAL"),
+        },
+    )
 
     # F4: Write trade to InfluxDB metrics
     if influx_db and influx_db.connected:
@@ -2004,16 +2036,16 @@ SETTINGS_FILE = os.path.join(os.path.dirname(__file__), "server_settings.json")
 
 # Default Settings
 DEFAULT_SETTINGS = {
-    "atr_multiplier": 1.5, # Aggressive Trailing
-    "fixed_lot_size": 0.05, # Higher Volume
-    "scalp_target_usd": 1.0, # Rapid Scalping Target
+    "atr_multiplier": 1.5,
+    "fixed_lot_size": 0.01,
+    "scalp_target_usd": 1.0,
     "breakeven_pct": 0.005, # 0.5% profit triggers BE
-    "mode": "TIGHT", # Default to TIGHT
+    "mode": "STANDARD",
     "auto_secure": {
         "enabled": True,
         "threshold": 1.0 # Secure quickly
     },
-    "auto_trade_enabled": True, # Force Auto-Mode Default
+    "auto_trade_enabled": False,
     "max_daily_loss": 50.0 # WATCHDOG LIMIT
 }
 
@@ -2028,6 +2060,9 @@ def load_settings():
                 for k, v in DEFAULT_SETTINGS.items():
                     if k not in saved:
                         saved[k] = v
+                # A persisted setting must never re-arm live automation after
+                # restart without an explicit operator opt-in.
+                saved["auto_trade_enabled"] = bool(saved.get("auto_trade_enabled")) and os.getenv("SPIDY_ENABLE_AUTO_TRADING") == "1"
                 return saved
         except Exception as e:
             print(f"Error loading settings: {e}")
@@ -4051,6 +4086,27 @@ async def reload_strategy(api_key: str = Depends(verify_api_key)):
 # ══════════════════════════════════════════════════════════════════════════════
 # F5 — ML SIGNAL ENDPOINTS
 # ══════════════════════════════════════════════════════════════════════════════
+
+async def ml_retraining_loop():
+    """Periodically retrain from *closed* trades without bypassing the model gate."""
+    try:
+        interval_hours = max(float(os.getenv("SPIDY_ML_RETRAIN_HOURS", "24")), 1.0)
+    except ValueError:
+        interval_hours = 24.0
+
+    # Let history synchronization and database initialization finish first.
+    await asyncio.sleep(300)
+    while True:
+        try:
+            report = await asyncio.get_running_loop().run_in_executor(None, _get_classifier().train)
+            outcome = report.get("status", "rejected")
+            await broadcast_log(
+                f"INFO: ML retraining {outcome}; {report.get('reason', 'see /ml_train for metrics')}"
+            )
+        except Exception as exc:
+            await broadcast_log(f"WARN: ML retraining skipped: {exc}")
+        await asyncio.sleep(interval_hours * 3600)
+
 
 @app.get("/ml_signal")
 async def get_ml_signal_endpoint(symbol: str = "EURUSD", action: str = "BUY"):

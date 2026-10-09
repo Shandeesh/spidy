@@ -1,0 +1,44 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  Spidy Multi-Agent System — Master Configuration
+#  Copy to:  spidy_ai/config/settings.yaml
+#  All values can be changed without touching Python code.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── System ────────────────────────────────────────────────────────────────────
+system:
+  symbol:                EURUSD          # Primary trading pair
+  mode:                  SIMULATION      # SIMULATION | LIVE
+  poll_interval_seconds: 5               # DataEngineer fetch cadence (seconds)
+  candle_lookback:       500             # Number of candles to fetch per TF
+
+# ── Risk guardrails (RiskManagerAgent) ───────────────────────────────────────
+risk:
+  start_balance:            10000.0      # Reference balance for DD calculations
+  max_daily_drawdown_pct:   0.03         # 3% daily loss limit → pause trading
+  max_total_drawdown_pct:   0.10         # 10% total DD → kill switch
+  max_open_positions:       3            # Hard cap on simultaneous positions
+  risk_per_trade_pct:       0.01         # 1% of balance risked per trade
+  max_lot_size:             1.0          # Absolute lot size cap
+  min_signal_confidence:    0.55         # Minimum Gemini confidence to trade
+  regime_veto:                           # Regimes where we never trade
+    - VOLATILE
+
+# ── Execution (ExecutorAgent) ─────────────────────────────────────────────────
+execution:
+  atr_sl_multiplier:   1.5              # Stop-loss distance = ATR × this
+  rr_ratio:            2.0              # Take-profit = SL distance × this (2:1 R:R)
+  trailing_atr_mult:   1.0              # Trailing stop distance = ATR × this
+  staleness_atr_factor: 1.0            # Skip signal if price moved > ATR × this
+  slippage_pips:       3               # Allowed slippage on market orders
+  magic_number:        20260101        # MT5 magic number for Spidy orders
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+logging:
+  dir: logs                            # Directory for agent log files
+
+# ── Backtesting (run_backtest.py) ─────────────────────────────────────────────
+backtesting:
+  start_date:  "2024-01-01"
+  end_date:    "2024-12-31"
+  initial_balance: 10000.0
+  commission_per_lot: 7.0              # USD commission per round-trip lot

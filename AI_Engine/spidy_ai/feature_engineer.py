@@ -4,6 +4,8 @@ Produces a DataFrame ready for classifier training and inference.
 """
 import os
 import sys
+import hashlib
+import math
 from datetime import datetime
 
 # Add financial_db to path
@@ -24,6 +26,24 @@ except ImportError:
 _SENTIMENT_MAP = {"BULLISH": 1, "NEUTRAL": 0, "BEARISH": -1}
 _TREND_MAP     = {"BULLISH": 1, "NEUTRAL": 0, "BEARISH": -1}
 _ACTION_MAP    = {"BUY": 1, "SELL": 0}
+
+
+def _stable_bucket(value: str, buckets: int = 100) -> int:
+    """Return a process-stable categorical encoding.
+
+    Python's built-in ``hash`` is randomized for each interpreter process,
+    which previously made persisted models receive different category values
+    after a service restart.
+    """
+    digest = hashlib.sha256(value.encode("utf-8")).digest()
+    return int.from_bytes(digest[:4], "big") % buckets
+
+
+def _bounded_float(value, default: float) -> float:
+    try:
+        return min(max(float(value), 0.0), 100.0)
+    except (TypeError, ValueError):
+        return default
 
 
 def extract_features_from_db(limit: int = 2000) -> "pd.DataFrame":
@@ -61,21 +81,35 @@ def extract_features_from_db(limit: int = 2000) -> "pd.DataFrame":
             hour = ct.hour
             dow  = ct.weekday()
         except Exception:
+            ct = datetime.min
             hour, dow = 12, 2  # defaults
 
         sentiment_raw = t.get("sentiment", "NEUTRAL") or "NEUTRAL"
         sentiment_enc = _SENTIMENT_MAP.get(sentiment_raw.upper(), 0)
 
         strategy_raw  = t.get("strategy", "Manual") or "Manual"
-        strategy_enc  = abs(hash(strategy_raw)) % 100  # deterministic bucket
+        strategy_enc  = _stable_bucket(strategy_raw)
+        symbol_enc    = _stable_bucket(t.get("symbol", "UNKNOWN").upper())
+        volume        = max(float(t.get("volume") or 0.0), 0.0)
+        live_features = t.get("model_features") or {}
+        rsi = _bounded_float(live_features.get("rsi"), 50.0) / 100.0
+        adx = _bounded_float(live_features.get("adx"), 20.0) / 100.0
+        trend = _TREND_MAP.get(str(live_features.get("trend", "NEUTRAL")).upper(), 0)
 
         rows.append({
             "action_enc":   _ACTION_MAP.get(action, 1),
             "profit_label": 1 if float(profit) > 0 else 0,
+            "profit":       float(profit),
+            "closed_at":    ct,
             "sentiment":    sentiment_enc,
             "hour":         hour,
             "day_of_week":  dow,
             "strategy_enc": strategy_enc,
+            "symbol_enc":   symbol_enc,
+            "volume_log":   math.log1p(volume),
+            "rsi":          rsi,
+            "adx":          adx,
+            "trend":        trend,
         })
 
     df = pd.DataFrame(rows)
@@ -83,7 +117,9 @@ def extract_features_from_db(limit: int = 2000) -> "pd.DataFrame":
 
 
 def build_inference_row(action: str, sentiment: str, hour: int,
-                        day_of_week: int, strategy: str) -> "pd.DataFrame":
+                        day_of_week: int, strategy: str, symbol: str = "UNKNOWN",
+                        volume: float = 0.0, rsi: float = 50.0,
+                        adx: float = 20.0, trend: str = "NEUTRAL") -> "pd.DataFrame":
     """
     Build a single-row DataFrame for live inference — same schema as training.
     """
@@ -96,6 +132,11 @@ def build_inference_row(action: str, sentiment: str, hour: int,
         "sentiment":    _SENTIMENT_MAP.get(sentiment.upper(), 0),
         "hour":         int(hour),
         "day_of_week":  int(day_of_week),
-        "strategy_enc": abs(hash(strategy)) % 100,
+        "strategy_enc": _stable_bucket(strategy),
+        "symbol_enc":   _stable_bucket(symbol.upper()),
+        "volume_log":   math.log1p(max(float(volume), 0.0)),
+        "rsi":          _bounded_float(rsi, 50.0) / 100.0,
+        "adx":          _bounded_float(adx, 20.0) / 100.0,
+        "trend":        _TREND_MAP.get(str(trend).upper(), 0),
     }
     return pd.DataFrame([row])

@@ -30,6 +30,8 @@ services:
     volumes:
       - ./Shared_Data:/app/Shared_Data
       - ./AI_Engine/spidy_ai:/app/AI_Engine/spidy_ai  # ML model persistence
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
@@ -48,10 +50,10 @@ services:
     environment:
       DOCKER_INFLUXDB_INIT_MODE:        setup
       DOCKER_INFLUXDB_INIT_USERNAME:    spidy_admin
-      DOCKER_INFLUXDB_INIT_PASSWORD:    spidy_influx_pass  # Change in production
+      DOCKER_INFLUXDB_INIT_PASSWORD:    ${SPIDY_INFLUXDB_PASSWORD:?Set SPIDY_INFLUXDB_PASSWORD in .env}
       DOCKER_INFLUXDB_INIT_ORG:         spidy
       DOCKER_INFLUXDB_INIT_BUCKET:      trading_metrics
-      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: spidy_influx_token_change_me
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_TOKEN:?Set INFLUXDB_TOKEN in .env}
     volumes:
       - influxdb_data:/var/lib/influxdb2
     restart: unless-stopped

@@ -14,7 +14,7 @@ if sys.platform.startswith('win'):
 
 # Load dependencies
 # Imports moved to inside class for lazy loading
-# import google.generativeai as genai
+# from google import genai
 # from langchain_openai import ChatOpenAI
 # from langchain_core.prompts import PromptTemplate
 # from langchain_core.output_parsers import StrOutputParser
@@ -64,14 +64,15 @@ class SpidyBrain:
         self.gemini_models = {}
         if self.google_api_key:
             try:
-                import google.generativeai as genai
-                genai.configure(api_key=self.google_api_key)
+                from google import genai
+
+                client = genai.Client(api_key=self.google_api_key)
                 # Primary: Fastest
-                self.gemini_models["flash"] = genai.GenerativeModel('gemini-2.5-flash')
+                self.gemini_models["flash"] = (client, "gemini-2.5-flash")
                 # Backup: More Capable / Different Quota
-                self.gemini_models["pro"] = genai.GenerativeModel('gemini-2.5-pro')
+                self.gemini_models["pro"] = (client, "gemini-2.5-pro")
             except ImportError:
-                 sys.stderr.write("[WARN] Google GenAI Library not found. Install `google-generativeai`.\n")
+                 sys.stderr.write("[WARN] Google GenAI Library not found. Install `google-genai`.\n")
             except Exception as e:
                  sys.stderr.write(f"[WARN] Failed to initialize Gemini: {e}\n")
         
@@ -110,10 +111,15 @@ class SpidyBrain:
         for model_key in model_order:
             if model_key in self.gemini_models:
                 try:
+                    client, model_name = self.gemini_models[model_key]
                     if image:
-                        response = self.gemini_models[model_key].generate_content([prompt_text, image])
+                        contents = [prompt_text, image]
                     else:
-                        response = self.gemini_models[model_key].generate_content(prompt_text)
+                        contents = prompt_text
+                    response = client.models.generate_content(
+                        model=model_name,
+                        contents=contents,
+                    )
                     return response.text
                 except Exception as e:
                     if "429" in str(e) or "ResourceExhausted" in str(e):
@@ -387,7 +393,10 @@ class SpidyBrain:
             else:
                 mt5_url = _raw_url
 
-            bridge_headers = {"X-API-KEY": os.getenv("SPIDY_API_KEY", "spidy_secure_123")}
+            api_key = os.getenv("SPIDY_API_KEY", "").strip()
+            if not api_key:
+                return "Trading command rejected: configure SPIDY_API_KEY before enabling bridge control."
+            bridge_headers = {"X-API-KEY": api_key}
             
             details_str = str(details).lower()
             

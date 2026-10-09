@@ -6,10 +6,11 @@
 
 # ── MT5 Connection (existing settings preserved) ──────────────────────────────
 mt5:
-  login:    108598772                                          # Fill in your MT5 login
-  password: "-jV4VzRf"                                        # Fill in your MT5 password
-  server:   "MetaQuotes-Demo"
-  path:     "C:\\Program Files\\HFM Metatrader 5\\terminal64.exe"
+  # Keep credentials out of version control. Set these in a local .env file.
+  login_env:    SPIDY_MT5_LOGIN
+  password_env: SPIDY_MT5_PASSWORD
+  server_env:   SPIDY_MT5_SERVER
+  path_env:     SPIDY_MT5_PATH
 
 # ── System ────────────────────────────────────────────────────────────────────
 system:

@@ -13,19 +13,14 @@ pip install --upgrade NorenRestApiPy pyotp
 ECHO.
 
 ECHO [2] Configuring Environment...
-REM Production API Keys (Provided by User)
-SET SHOONYA_USER=TIOPS3465L
-SET SHOONYA_PWD=Shandeesh8667
-SET SHOONYA_VC=TIOPS3465L_U
-SET SHOONYA_API_KEY=97b50207a82e998c37bfea64c90ce846
-SET SHOONYA_IMEI=abc1234
-SET SHOONYA_FACTOR2=tiops3465l
-
-REM CRITICAL: Enter your TOTP Secret (Text Code) below for Auto-Login
-REM Example: SET SHOONYA_TOTP_SECRET=JBSWY3DPEHPK3PXP
-SET SHOONYA_TOTP_SECRET=
-
-ECHO Credentials Loaded.
+REM shoonya_server.py loads credentials from the repository-root .env file.
+REM Keep that file local and use .env.example as the template.
+IF NOT EXIST "%~dp0..\..\.env" (
+    ECHO [ERROR] Missing root .env file. Copy .env.example and configure Shoonya credentials first.
+    PAUSE
+    EXIT /B 1
+)
+ECHO Local credentials file found.
 ECHO.
 
 ECHO [3] Launching Shoonya Bridge (Production Mode on Port 8001)...

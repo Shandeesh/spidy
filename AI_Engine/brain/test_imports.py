@@ -1,9 +1,9 @@
 
 try:
-    import google.generativeai as genai
-    print("SUCCESS: google.generativeai imported")
+    from google import genai
+    print("SUCCESS: google-genai imported")
 except ImportError as e:
-    print(f"FAILURE: google.generativeai - {e}")
+    print(f"FAILURE: google-genai - {e}")
 
 try:
     import torch

@@ -15,6 +15,12 @@ build/
 # Environment Variables
 .env
 .env.local
+.env.*
+!.env.example
+!Frontend_Dashboard/dashboard_app/.env.local.example
+
+# Local TLS certificates
+nginx/certs/
 
 # IDE
 .vscode/
@@ -83,6 +89,7 @@ Trading_Backend/mt5_bridge/bridge_startup.log
 
 # Sensitive secret files
 secret.key
+AI_Engine/spidy_ai/model.pkl
 
 # Integration test results
 integration_results.txt

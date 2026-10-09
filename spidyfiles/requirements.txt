@@ -1,0 +1,25 @@
+# Spidy Multi-Agent Trading System — Python Dependencies
+# Install with: pip install -r requirements.txt
+
+# Core async + config
+pyyaml>=6.0                           # YAML config parsing
+python-dotenv>=1.0.0                  # .env environment variables
+
+# Trading data
+MetaTrader5>=5.0.40                   # MT5 broker bridge
+pandas>=2.0.0                         # Time series + data frames
+pandas-ta>=0.3.14b                    # Technical analysis indicators
+numpy>=1.24.0                         # Numerical computing
+
+# Generative AI (LLM for Researcher agent)
+google-genai>=1.0.0                   # Gemini API client
+
+# Optional: monitoring & persistence
+influxdb-client>=1.18.0               # InfluxDB time series DB (optional)
+pydantic>=2.0.0                       # Data validation (optional)
+
+# Development (optional)
+pytest>=7.0.0                         # Unit testing
+pytest-asyncio>=0.21.0                # Async test support
+ruff>=0.1.0                           # Linter + formatter
+mypy>=1.0.0                           # Type checking

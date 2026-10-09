@@ -74,6 +74,11 @@ async def listen_brain():
 async def status():
     return {"status": "online", "model": "Gemini/GPT"}
 
+
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
+
 class ConfigUpdateRequest(BaseModel):
     floor: str
     auto_update: bool

@@ -44,6 +44,7 @@ def get_ml_signal(symbol: str, action: str, technical_cache: dict,
 
     tech = technical_cache.get(symbol, {})
     strategy = tech.get("strategy", "Live_Auto")
+    volume = tech.get("volume", 0.0)
 
     result = clf.predict(
         action=action,
@@ -51,6 +52,11 @@ def get_ml_signal(symbol: str, action: str, technical_cache: dict,
         hour=hour,
         day_of_week=day_of_week,
         strategy=strategy,
+        symbol=symbol,
+        volume=volume,
+        rsi=tech.get("rsi", 50.0),
+        adx=tech.get("adx", 20.0),
+        trend=tech.get("trend", "NEUTRAL"),
     )
 
     result["symbol"] = symbol

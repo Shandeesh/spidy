@@ -37,6 +37,9 @@ Publishes
 from __future__ import annotations
 
 import asyncio
+import datetime
+import hashlib
+import time
 from dataclasses import asdict, dataclass
 from typing import Any
 
@@ -81,6 +84,10 @@ class RiskManagerAgent(BaseAgent):
         self._max_lot        = cfg.get("max_lot_size",                    1.0)
         self._min_confidence = cfg.get("min_signal_confidence",          0.55)
         self._regime_veto    = set(cfg.get("regime_veto", ["VOLATILE"]))
+        self._signal_cooldown_secs = cfg.get("signal_cooldown_secs", 300.0)
+        self._signal_latch: dict[str, float] = {}
+        self._day_start_equity: float | None = None
+        self._last_reset_date: str | None = None
 
         exec_cfg = config.get("execution", {})
         self._atr_sl_mult    = exec_cfg.get("atr_sl_multiplier",         1.5)
@@ -163,14 +170,19 @@ class RiskManagerAgent(BaseAgent):
         await self.publish(Topic.RISK_STATE, asdict(state))
 
         if state.can_trade:
-            signal = self._build_signal(state, account, snapshot, sentiment)
-            if signal:
-                await self.publish(Topic.TRADE_SIGNAL, signal)
-                self.logger.info(
-                    "[RiskManager] Signal approved — %s %s %.2f lots entry=%.5f",
-                    signal["direction"], signal["symbol"],
-                    signal["lot_size"],  signal["entry"],
-                )
+            now = time.time()
+            if sym in self._signal_latch and now - self._signal_latch[sym] < self._signal_cooldown_secs:
+                self.logger.info(f"[RiskManager] Signal cooldown active for {sym}, skipping")
+            else:
+                self._signal_latch[sym] = now
+                signal = self._build_signal(state, account, snapshot, sentiment)
+                if signal:
+                    await self.publish(Topic.TRADE_SIGNAL, signal)
+                    self.logger.info(
+                        "[RiskManager] Signal approved — %s %s %.2f lots entry=%.5f",
+                        signal["direction"], signal["symbol"],
+                        signal["lot_size"],  signal["entry"],
+                    )
         else:
             self.logger.debug("[RiskManager] Trading paused for %s — %s", sym, state.reason)
 
@@ -218,6 +230,14 @@ class RiskManagerAgent(BaseAgent):
             "open_count": len(positions),
         }
 
+    def _check_daily_reset(self, current_equity: float) -> None:
+        today = datetime.date.today().isoformat()
+        if self._last_reset_date != today:
+            self._day_start_equity = current_equity
+            self._last_reset_date = today
+        if self._day_start_equity is None:
+            self._day_start_equity = current_equity
+
     def _evaluate_risk(
         self, account: dict[str, Any], snapshot: dict[str, Any], sentiment: dict[str, Any]
     ) -> RiskState:
@@ -225,6 +245,8 @@ class RiskManagerAgent(BaseAgent):
         equity   = account["equity"]
         leverage = int(account.get("leverage", 100))
         open_cnt = account["open_count"]
+
+        self._check_daily_reset(equity)
 
         daily_dd = max(0.0, (self._start_balance - equity)  / self._start_balance)
         total_dd = max(0.0, (self._start_balance - balance) / self._start_balance)
@@ -253,6 +275,19 @@ class RiskManagerAgent(BaseAgent):
             return RiskState(
                 can_trade=False,
                 reason=f"Daily DD {daily_dd*100:.1f}% ≥ limit {self._max_daily_dd*100:.0f}%",
+                **base,
+            )
+
+        # ── Guardrail 2.5: Pre-Trade Daily Loss Gate ─────────────────────────
+        daily_loss = self._day_start_equity - equity
+        max_daily_loss = self._start_balance * self._max_daily_dd
+        remaining_budget = max_daily_loss - daily_loss
+        risk_amount = balance * self._risk_per_trade
+
+        if remaining_budget < risk_amount or daily_loss >= max_daily_loss * 0.8:
+            return RiskState(
+                can_trade=False,
+                reason=f"Daily loss budget exhausted ({daily_loss:.2f} of {max_daily_loss:.2f}), blocking new trades",
                 **base,
             )
 
@@ -356,6 +391,10 @@ class RiskManagerAgent(BaseAgent):
         sl_dist   = atr * self._atr_sl_mult
         tp_dist   = sl_dist * self._rr_ratio
 
+        bar_timestamp = m5.get("timestamp", m5.get("time", ""))
+        strategy_name = "RiskManager"
+        signal_id = hashlib.sha256(f"{symbol}:{direction}:{bar_timestamp}:{strategy_name}".encode()).hexdigest()[:16]
+
         if direction == "BUY":
             sl_price = close - sl_dist
             tp_price = close + tp_dist
@@ -383,6 +422,7 @@ class RiskManagerAgent(BaseAgent):
         lot_size = round(max(0.01, min(lot_raw, self._max_lot)), 2)
 
         return {
+            "signal_id":  signal_id,
             "symbol":     symbol,
             "direction":  direction,
             "lot_size":   lot_size,

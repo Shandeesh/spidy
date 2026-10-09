@@ -75,9 +75,11 @@ class MarketDataProvider:
                 oil_ticker = "CL=F" # Crude Oil Futures
                 oil = yf.Ticker(oil_ticker)
                 hist = oil.history(period="1d")
-                if not hist.empty:
+                if hist is not None and not hist.empty and {'Close', 'Open'}.issubset(hist.columns):
                     close = hist['Close'].iloc[-1]
                     open_price = hist['Open'].iloc[-1]
+                    if open_price == 0:
+                        return signal
                     pct_change = (close - open_price) / open_price
                     
                     if pct_change > 0.02: # +2% Spike
@@ -89,9 +91,11 @@ class MarketDataProvider:
                 dxy_ticker = "DX-Y.NYB" # US Dollar Index
                 dxy = yf.Ticker(dxy_ticker)
                 hist = dxy.history(period="1d")
-                if not hist.empty:
+                if hist is not None and not hist.empty and {'Close', 'Open'}.issubset(hist.columns):
                     close = hist['Close'].iloc[-1]
                     open_price = hist['Open'].iloc[-1]
+                    if open_price == 0:
+                        return signal
                     pct_change = (close - open_price) / open_price
                     
                     if pct_change > 0.005: # +0.5% Spike (Significant for DXY)
